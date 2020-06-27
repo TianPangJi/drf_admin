@@ -15,10 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-
+from rest_framework.documentation import include_docs_urls
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path(r'api/system', include('system.urls')),
-    path(r'api/oauth', include('oauth.urls')),
+    path('admin/', admin.site.urls),  # 后台管理
+    path(r'api/system/', include('system.urls')),  # 系统管理模块
+    path(r'api/oauth/', include('oauth.urls')),  # 用户鉴权模块
+    path(r'docs/', include_docs_urls(title='My API Docs')),  # API文档
 ]
