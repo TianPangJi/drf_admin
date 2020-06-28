@@ -140,12 +140,12 @@ AUTH_USER_MODEL = 'oauth.Users'
 # DRF配置
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
-        # 'rest_framework.permissions.IsAuthenticated',
+        'utils.permissions.RbacPermission',  # 自定义权限认证
     ),
     "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework_jwt.authentication.JSONWebTokenAuthentication",
+        "rest_framework_jwt.authentication.JSONWebTokenAuthentication",  # DRF-JWT认证
     ),
-    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',  # DRF-API文档
 }
 
 JWT_AUTH = {
@@ -154,3 +154,5 @@ JWT_AUTH = {
     'JWT_ALLOW_REFRESH': True,  # 允许刷新Token
     'JWT_AUTH_HEADER_PREFIX': 'Bearer',  # 定义Token携带头信息, Authorization: Bearer ...
 }
+SAFE_URL = []  # 权限认证白名单
+REGEX_URL = '^{}$'  # 严格正则url

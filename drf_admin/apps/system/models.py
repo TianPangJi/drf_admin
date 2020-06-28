@@ -9,6 +9,7 @@ class Permissions(models.Model):
     method = models.CharField(max_length=50, null=True, blank=True, verbose_name='方法')
     path = models.CharField(max_length=200, null=True, blank=True, verbose_name='请求路径正则')
     pid = models.ForeignKey('self', null=True, blank=True, on_delete=models.SET_NULL, verbose_name='父权限')
+    desc = models.CharField(max_length=30, blank=True, default='', verbose_name='权限描述')
 
     def __str__(self):
         return self.name
