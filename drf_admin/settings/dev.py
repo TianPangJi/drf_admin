@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'rest_framework',
     # 解决跨域问题
     'corsheaders',
+    # model过滤
+    'django_filters'
     # 注册apps
     'oauth',
     'system',
@@ -154,5 +156,5 @@ JWT_AUTH = {
     'JWT_ALLOW_REFRESH': True,  # 允许刷新Token
     'JWT_AUTH_HEADER_PREFIX': 'Bearer',  # 定义Token携带头信息, Authorization: Bearer ...
 }
-SAFE_URL = []  # 权限认证白名单
-REGEX_URL = '^{}$'  # 严格正则url
+WHITE_LIST = []  # 权限认证白名单
+REGEX_URL = '^{url}$'  # 严格正则url

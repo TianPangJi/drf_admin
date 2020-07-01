@@ -42,8 +42,8 @@ class RbacPermission(BasePermission):
     def has_permission(self, request, view):
         request_url = request.path_info
         # 如果请求url在白名单，放行
-        for url in settings.SAFE_URL:
-            if re.match(settings.REGEX_URL.format(url), request_url):
+        for safe_url in settings.WHITE_LIST:
+            if re.match(settings.REGEX_URL.format(url=safe_url), request_url):
                 return True
         method = request.method
         request_perms = self.get_user_permissions(request)
