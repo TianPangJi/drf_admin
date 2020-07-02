@@ -7,11 +7,10 @@
 """
 from rest_framework import status
 from rest_framework.decorators import action
-from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 
 
-class MultipleDestroyModelMixin:
+class MultipleDestroyMixin:
     """
     自定义批量删除mixin, 与GenericViewSet配合使用
     """
@@ -20,10 +19,13 @@ class MultipleDestroyModelMixin:
     def multiple_delete(self, request, *args, **kwargs):
         delete_ids = request.data.get('ids')
         if not delete_ids:
-            return AttributeError('参数错误,ids为必传参数')
+            return Response(data={'error': '参数错误,ids为必传参数'}, status=status.HTTP_400_BAD_REQUEST)
         if not isinstance(delete_ids, list):
-            return AttributeError('ids格式错误,必须为List')
+            return Response(data={'error': 'ids格式错误,必须为List'}, status=status.HTTP_400_BAD_REQUEST)
         instance = self.get_object()
-        for pk in delete_ids:
-            get_object_or_404(instance, pk=int(pk)).delete()
+        querysets = instance.filter(id__in=delete_ids)
+        if len(delete_ids) != len(querysets):
+            return Response(data={'error': '删除数据不存在'}, status=status.HTTP_400_BAD_REQUEST)
+        for queryset in querysets:
+            queryset.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)

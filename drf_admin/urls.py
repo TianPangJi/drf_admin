@@ -15,11 +15,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.views.static import serve
 from rest_framework.documentation import include_docs_urls
+
+from drf_admin.settings.dev import MEDIA_ROOT
 
 urlpatterns = [
     path('admin/', admin.site.urls),  # 后台管理
     path(r'api/system/', include('system.urls')),  # 系统管理模块
     path(r'api/oauth/', include('oauth.urls')),  # 用户鉴权模块
     path(r'docs/', include_docs_urls(title='My API Docs')),  # API文档
+    path(r'media/(?P<path>.*)', serve, {"document_root": MEDIA_ROOT})
 ]
