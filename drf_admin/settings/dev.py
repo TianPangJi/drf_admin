@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     # 解决跨域问题
     'corsheaders',
     # model过滤
-    'django_filters'
+    'django_filters',
     # 注册apps
     'oauth',
     'system',
@@ -142,7 +142,7 @@ AUTH_USER_MODEL = 'oauth.Users'
 # DRF配置
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
-        'utils.permissions.RbacPermission',  # 自定义权限认证
+        'drf_admin.utils.permissions.RbacPermission',  # 自定义权限认证
     ),
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_jwt.authentication.JSONWebTokenAuthentication",  # DRF-JWT认证
