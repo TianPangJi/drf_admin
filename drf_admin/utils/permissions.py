@@ -40,7 +40,7 @@ class RbacPermission(BasePermission):
         return None
 
     def has_permission(self, request, view):
-        request_url = request.path_info
+        request_url = request.path
         # 如果请求url在白名单，放行
         for safe_url in settings.WHITE_LIST:
             if re.match(settings.REGEX_URL.format(url=safe_url), request_url):

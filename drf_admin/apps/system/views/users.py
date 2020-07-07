@@ -9,8 +9,8 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.viewsets import ModelViewSet
 
-from drf_admin.apps.oauth.models import Users
 from drf_admin.apps.system.serializers.users import UsersSerializer
+from oauth.models import Users
 
 
 class UsersViewSet(ModelViewSet):

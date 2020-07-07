@@ -156,5 +156,5 @@ JWT_AUTH = {
     'JWT_ALLOW_REFRESH': True,  # 允许刷新Token
     'JWT_AUTH_HEADER_PREFIX': 'Bearer',  # 定义Token携带头信息, Authorization: Bearer ...
 }
-WHITE_LIST = []  # 权限认证白名单
+WHITE_LIST = ['/api/oauth/login/', '/docs/.*']  # 权限认证白名单
 REGEX_URL = '^{url}$'  # 严格正则url

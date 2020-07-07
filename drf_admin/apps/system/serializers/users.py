@@ -7,7 +7,7 @@
 """
 from rest_framework import serializers
 
-from drf_admin.apps.oauth.models import Users
+from oauth.models import Users
 
 
 class UsersSerializer(serializers.ModelSerializer):

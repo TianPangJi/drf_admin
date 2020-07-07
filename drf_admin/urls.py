@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from django.views.static import serve
 from rest_framework.documentation import include_docs_urls
 
@@ -25,5 +25,5 @@ urlpatterns = [
     path(r'api/system/', include('system.urls')),  # 系统管理模块
     path(r'api/oauth/', include('oauth.urls')),  # 用户鉴权模块
     path(r'docs/', include_docs_urls(title='My API Docs')),  # API文档
-    path(r'media/(?P<path>.*)', serve, {"document_root": MEDIA_ROOT})
+    re_path(r'media/(?P<path>.*)', serve, {"document_root": MEDIA_ROOT})
 ]
