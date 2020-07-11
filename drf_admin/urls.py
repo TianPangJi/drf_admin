@@ -25,5 +25,5 @@ urlpatterns = [
     path(r'api/system/', include('system.urls')),  # 系统管理模块
     path(r'api/oauth/', include('oauth.urls')),  # 用户鉴权模块
     path(r'docs/', include_docs_urls(title='My API Docs')),  # API文档
-    re_path(r'media/(?P<path>.*)', serve, {"document_root": MEDIA_ROOT})
+    re_path(r'media/(?P<path>.*)', serve, {"document_root": MEDIA_ROOT})  # 用户头像
 ]

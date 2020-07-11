@@ -16,24 +16,23 @@ class UserInfoView(APIView):
     获取当前用户信息和权限
     """
 
-    def get_permission_from_role(self, request):
-        try:
-            if request.user:
-                perms_list = []
-                for item in request.user.roles.values('permissions__name').distinct():
-                    perms_list.append(item['permissions__name'])
-                return perms_list
-        except AttributeError:
-            return None
+    @staticmethod
+    def get_user_permissions(request):
+        permissions = []
+        for item in request.user.roles.values('permissions__name').distinct():
+            name = item.get('permissions__name')
+            if name:
+                permissions.append(name)
+        return permissions
 
     def get(self, request):
-        perms = self.get_permission_from_role(request)
+        permissions = self.get_user_permissions(request)
         data = {
             'username': request.user.username,
             'avatar': request._request._current_scheme_host + '/media/' + str(request.user.image),
             'email': request.user.email,
             'is_active': request.user.is_active,
-            'permissions': perms
+            'permissions': permissions
         }
         return Response(data, status=status.HTTP_200_OK)
 
