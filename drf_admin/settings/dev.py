@@ -141,13 +141,18 @@ AUTH_USER_MODEL = 'oauth.Users'
 
 # DRF配置
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': (
-        'drf_admin.utils.permissions.RbacPermission',  # 自定义权限认证
-    ),
-    "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework_jwt.authentication.JSONWebTokenAuthentication",  # DRF-JWT认证
-    ),
-    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',  # DRF-API文档
+    # 异常处理
+    'EXCEPTION_HANDLER': 'drf_admin.utils.exceptions.exception_handler',
+    'DEFAULT_PERMISSION_CLASSES':
+        (
+            'drf_admin.utils.permissions.RbacPermission',  # 自定义权限认证
+        ),
+    "DEFAULT_AUTHENTICATION_CLASSES":
+        (
+            "rest_framework_jwt.authentication.JSONWebTokenAuthentication",  # DRF-JWT认证
+        ),
+    # DRF-API文档
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
 }
 
 JWT_AUTH = {
@@ -158,3 +163,9 @@ JWT_AUTH = {
 }
 WHITE_LIST = ['/api/oauth/login/', '/docs/.*']  # 权限认证白名单
 REGEX_URL = '^{url}$'  # 严格正则url
+
+DEFAULT_PWD = '123456'  # 创建用户默认密码
+
+AUTHENTICATION_BACKENDS = [
+    'oauth.utils.UsernameMobileAuthBackend',
+]

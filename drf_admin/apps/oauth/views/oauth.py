@@ -8,11 +8,32 @@
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework_jwt.views import ObtainJSONWebToken
+
+
+class UserLoginView(ObtainJSONWebToken):
+    """
+    post:
+    用户鉴权获取Token值
+    """
+
+    def post(self, request, *args, **kwargs):
+        # 重写父类方法, 定义响应字段内容
+        response = super().post(request, *args, **kwargs)
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            return response
+        else:
+            if serializer.errors.get('non_field_errors'):
+                # 日后将增加用户多次登录错误,账户锁定功能(待完善)
+                return Response(data={'detail': '用户名或密码错误'}, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response(data={'detail': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserInfoView(APIView):
     """
-    get
+    get:
     获取当前用户信息和权限
     """
 
