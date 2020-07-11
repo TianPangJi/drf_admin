@@ -167,5 +167,5 @@ REGEX_URL = '^{url}$'  # 严格正则url
 DEFAULT_PWD = '123456'  # 创建用户默认密码
 
 AUTHENTICATION_BACKENDS = [
-    'oauth.utils.UsernameMobileAuthBackend',
+    'oauth.utils.UsernameMobileAuthBackend',  # 自定义用户认证方法
 ]
