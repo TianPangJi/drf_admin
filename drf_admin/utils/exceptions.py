@@ -37,12 +37,12 @@ def exception_handler(exc, context):
             headers['WWW-Authenticate'] = exc.auth_header
         if getattr(exc, 'wait', None):
             headers['Retry-After'] = '%d' % exc.wait
-
-        if isinstance(exc.detail, (list, dict)):
-            # data = exc.detail
-            data = {'detail': exc.detail}
-        else:
-            data = {'detail': exc.detail}
+        # if isinstance(exc.detail, (list, dict)):
+        #     data = exc.detail
+        #     # data = {'detail': exc.detail}
+        # else:
+        #     data = {'detail': exc.detail}
+        data = {'detail': exc.detail}
         set_rollback()
         response = Response(data, status=exc.status_code, headers=headers)
     elif isinstance(exc, DatabaseError) or isinstance(exc, RedisError):

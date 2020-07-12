@@ -11,5 +11,5 @@ from system.views import users
 
 urlpatterns = [
     path(r'users/', users.UsersViewSet.as_view({'get': 'list', 'post': 'create', 'delete': 'multiple_delete'})),
-    re_path(r'^users/(?P<path>\d+)$', users.UsersViewSet.as_view({'delete': 'destroy', 'put': 'update'}))
+    re_path(r'^users/(?P<pk>\d+)$', users.UsersViewSet.as_view({'delete': 'destroy', 'put': 'update'}))
 ]
