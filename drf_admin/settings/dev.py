@@ -143,6 +143,8 @@ AUTH_USER_MODEL = 'oauth.Users'
 REST_FRAMEWORK = {
     # 异常处理
     'EXCEPTION_HANDLER': 'drf_admin.utils.exceptions.exception_handler',
+    # 全局分页
+    'DEFAULT_PAGINATION_CLASS':  'drf_admin.utils.pagination.GlobalPagination',
     'DEFAULT_PERMISSION_CLASSES':
         (
             'drf_admin.utils.permissions.RbacPermission',  # 自定义权限认证
