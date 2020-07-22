@@ -6,6 +6,7 @@
 @create   : 2020/6/27 17:55 
 """
 from rest_framework.filters import SearchFilter, OrderingFilter
+from rest_framework.generics import UpdateAPIView
 from rest_framework.viewsets import ModelViewSet
 
 from drf_admin.utils.views import MultipleDestroyMixin
@@ -35,3 +36,11 @@ class RolesViewSet(ModelViewSet, MultipleDestroyMixin):
     filter_backends = (SearchFilter, OrderingFilter)
     search_fields = ('name', 'desc')
     ordering_fields = ('id', 'name')
+
+
+class RoleOauthAPIView(UpdateAPIView):
+    """
+
+    """
+    serializer_class = RoleOauthSerializer
+    queryset = Roles.objects.all()
