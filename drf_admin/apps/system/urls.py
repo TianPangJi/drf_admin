@@ -10,6 +10,10 @@ from django.urls import path, re_path
 from system.views import users
 
 urlpatterns = [
+    # 用户管理
     path(r'users/', users.UsersViewSet.as_view({'get': 'list', 'post': 'create', 'delete': 'multiple_delete'})),
-    re_path(r'^users/(?P<pk>\d+)$', users.UsersViewSet.as_view({'delete': 'destroy', 'put': 'update'}))
+    re_path(r'^users/(?P<pk>\d+)$',
+            users.UsersViewSet.as_view({'delete': 'destroy', 'put': 'update', 'patch': 'partial_update'}))
+    # 角色管理
+
 ]

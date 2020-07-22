@@ -6,6 +6,7 @@
 @create: 2020/6/24 20:48 
 """
 from rest_framework import status
+from rest_framework.exceptions import APIException
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_jwt.views import ObtainJSONWebToken
@@ -28,7 +29,7 @@ class UserLoginView(ObtainJSONWebToken):
                 # 日后将增加用户多次登录错误,账户锁定功能(待完善)
                 return Response(data={'detail': '用户名或密码错误'}, status=status.HTTP_400_BAD_REQUEST)
             else:
-                return Response(data={'detail': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+                raise APIException(serializer.errors)
 
 
 class UserInfoView(APIView):
@@ -66,4 +67,5 @@ class LogoutAPIView(APIView):
 
     def post(self, request):
         content = {'code': 0, 'data': {}, 'msg': '成功'}
+        # 后续将增加redis token黑名单功能
         return Response(data=content)
