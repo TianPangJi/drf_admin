@@ -49,10 +49,10 @@ class RbacPermission(BasePermission):
         flag_url = ''
         for values in permission_urls:
             if re.match(settings.REGEX_URL.format(url=values.get('path')), request_url):
-                flag=True
+                flag = True
                 flag_url = values.get('path')
         if flag:
-            permission = Permissions.objects.filter(path=flag_url,method=request_method)
+            permission = Permissions.objects.filter(path=flag_url, method=request_method)
             if permission:
                 pass
             else:

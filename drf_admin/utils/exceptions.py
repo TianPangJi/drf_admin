@@ -19,6 +19,36 @@ from rest_framework import status, exceptions
 logger = logging.getLogger('django')
 
 
+def errors_handler(exc):
+    """
+    自定义, 错误消息格式处理
+    :param exc:
+    :return: data: 错误消息
+    """
+    try:
+        if isinstance(exc.detail, list):
+            msg = ''.join([str(x) for x in exc.detail])
+        elif isinstance(exc.detail, dict):
+            msg = ''
+            for k, v in exc.detail.items():
+                if k == 'non_field_errors':
+                    if isinstance(v, list):
+                        msg += ''.join([str(x) for x in v])
+                    else:
+                        msg += str(v)
+                else:
+                    if isinstance(v, list):
+                        msg = str(k) + ':' + ''.join([str(x) for x in v])
+            if not msg:
+                msg = exc.detail
+        else:
+            msg = exc.detail
+    except Exception:
+        msg = exc.detail
+    data = {'detail': msg}
+    return data
+
+
 def exception_handler(exc, context):
     """
     自定义异常处理, 捕获或有异常
@@ -37,12 +67,7 @@ def exception_handler(exc, context):
             headers['WWW-Authenticate'] = exc.auth_header
         if getattr(exc, 'wait', None):
             headers['Retry-After'] = '%d' % exc.wait
-        # if isinstance(exc.detail, (list, dict)):
-        #     data = exc.detail
-        #     # data = {'detail': exc.detail}
-        # else:
-        #     data = {'detail': exc.detail}
-        data = {'detail': exc.detail}
+        data = errors_handler(exc)
         set_rollback()
         response = Response(data, status=exc.status_code, headers=headers)
     elif isinstance(exc, DatabaseError) or isinstance(exc, RedisError):
