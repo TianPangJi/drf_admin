@@ -38,9 +38,9 @@ class RolesViewSet(ModelViewSet, MultipleDestroyMixin):
     ordering_fields = ('id', 'name')
 
 
-class RoleOauthAPIView(UpdateAPIView):
-    """
-
-    """
-    serializer_class = RoleOauthSerializer
-    queryset = Roles.objects.all()
+# class RoleOauthAPIView(UpdateAPIView):
+#     """
+#
+#     """
+#     serializer_class = RoleOauthSerializer
+#     queryset = Roles.objects.all()

@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'corsheaders',
     # model过滤
     'django_filters',
+    # swagger
+    'drf_yasg',
     # 注册apps
     'oauth',
     'system',
@@ -144,7 +146,7 @@ REST_FRAMEWORK = {
     # 异常处理
     'EXCEPTION_HANDLER': 'drf_admin.utils.exceptions.exception_handler',
     # 全局分页
-    'DEFAULT_PAGINATION_CLASS':  'drf_admin.utils.pagination.GlobalPagination',
+    'DEFAULT_PAGINATION_CLASS': 'drf_admin.utils.pagination.GlobalPagination',
     'DEFAULT_PERMISSION_CLASSES':
         (
             'drf_admin.utils.permissions.RbacPermission',  # 自定义权限认证
@@ -171,3 +173,15 @@ DEFAULT_PWD = '123456'  # 创建用户默认密码
 AUTHENTICATION_BACKENDS = [
     'oauth.utils.UsernameMobileAuthBackend',  # 自定义用户认证方法
 ]
+
+# Swagger配置 https://github.com/axnsan12/drf-yasg/issues/58
+SWAGGER_SETTINGS = {
+    'USE_SESSION_AUTH': False,
+    'SECURITY_DEFINITIONS': {
+        'api_key': {
+            'type': 'apiKey',
+            'in': 'header',
+            'name': 'Authorization'
+        }
+    },
+}
