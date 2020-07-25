@@ -192,8 +192,8 @@ if not os.path.exists(LOGS_DIR):
     os.makedirs(LOGS_DIR)
 LOGGING = {
     'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
+    'disable_existing_loggers': False,  # 是否禁用已经存在的日志器
+    'formatters': {  # 日志信息显示的格式
         'standard': {
             'format': '[%(asctime)s][%(levelname)s]''[%(filename)s:%(lineno)d][%(message)s]'
         },
@@ -201,6 +201,11 @@ LOGGING = {
             'format': '[%(levelname)s][%(asctime)s]%(message)s'
         },
 
+    },
+    'filters': {  # 对日志进行过滤
+        'require_debug_true': {  # django在debug模式下才输出日志
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
     },
     'handlers': {
         'default': {
@@ -211,6 +216,12 @@ LOGGING = {
             'backupCount': 3,
             'formatter': 'simple',
             'encoding': 'utf-8',
+        },
+        'console': {  # 向终端中输出日志
+            'level': 'INFO',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
         },
         'error': {
             'level': 'ERROR',
@@ -224,17 +235,17 @@ LOGGING = {
     },
     'loggers': {
         'info': {
-            'handlers': ['default'],
+            'handlers': ['default', 'console'],
             'level': 'INFO',
             'propagate': True,
         },
         'warn': {
-            'handlers': ['default'],
+            'handlers': ['default', 'console'],
             'level': 'WARNING',
             'propagate': True,
         },
         'error': {
-            'handlers': ['error'],
+            'handlers': ['error', 'console'],
             'level': 'ERROR',
         }
     }
