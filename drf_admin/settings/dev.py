@@ -185,3 +185,56 @@ SWAGGER_SETTINGS = {
         }
     },
 }
+
+# 日志配置
+LOGS_DIR = os.path.join(os.path.dirname(BASE_DIR), 'logs')
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'standard': {
+            'format': '[%(asctime)s][%(levelname)s]''[%(filename)s:%(lineno)d][%(message)s]'
+        },
+        'simple': {
+            'format': '[%(levelname)s][%(asctime)s]%(message)s'
+        },
+
+    },
+    'handlers': {
+        'default': {
+            'level': 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(LOGS_DIR, "info_admin.log"),
+            'maxBytes': 1024 * 1024 * 50,
+            'backupCount': 3,
+            'formatter': 'simple',
+            'encoding': 'utf-8',
+        },
+        'error': {
+            'level': 'ERROR',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(LOGS_DIR, "err_admin.log"),
+            'backupCount': 5,
+            'formatter': 'standard',
+            'encoding': 'utf-8',
+        }
+
+    },
+    'loggers': {
+        'info': {
+            'handlers': ['default'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'warn': {
+            'handlers': ['default'],
+            'level': 'WARNING',
+            'propagate': True,
+        },
+        'error': {
+            'handlers': ['error'],
+            'level': 'ERROR',
+        }
+    }
+
+}

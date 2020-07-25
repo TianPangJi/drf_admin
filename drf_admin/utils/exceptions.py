@@ -16,7 +16,7 @@ from rest_framework.response import Response
 from rest_framework import status, exceptions
 
 # 获取在配置文件中定义的logger，用来记录日志
-logger = logging.getLogger('django')
+logger = logging.getLogger('error')
 
 
 def errors_handler(exc):
