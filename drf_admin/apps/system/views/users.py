@@ -10,29 +10,46 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.viewsets import ModelViewSet
 
 from drf_admin.apps.system.serializers.users import UsersSerializer, UsersPartialSerializer
-from drf_admin.utils.views import MultipleDestroyMixin
+from drf_admin.utils.views import MultipleDestroyMixin, AdminViewSet
 from oauth.models import Users
 
 
-class UsersViewSet(ModelViewSet, MultipleDestroyMixin):
+class UsersViewSet(AdminViewSet):
     """
     create:
-    用户--增加
+    用户--新增
+
+    用户新增, status: 201(成功), return: 新增用户信息
 
     destroy:
     用户--删除
 
+    用户删除, status: 204(成功), return: None
+
     multiple_delete:
     用户--批量删除
+
+    用户批量删除, status: 204(成功), return: None
 
     update:
     用户--修改
 
+    用户修改, status: 200(成功), return: 修改增用户信息
+
     partial_update:
     用户--局部修改
 
+    用户局部修改, status: 200(成功), return: 修改增用户信息
+
     list:
     用户--获取列表
+
+    用户列表信息, status: 200(成功), return: 用户信息列表
+
+    retrieve:
+    用户--详情
+    
+    用户详情信息, status: 200(成功), return: 单个用户信息详情
     """
     queryset = Users.objects.all()
     serializer_class = UsersSerializer

@@ -5,19 +5,16 @@
 @file: urls.py 
 @create: 2020/6/21 22:24 
 """
-from django.urls import path, re_path
+from django.urls import path, re_path, include
 
-from system.views import users, roles, permissions as  p
+from drf_admin.utils import routers
+from system.views import users, roles, permissions
+
+router = routers.AdminRouter()
+router.register(r'users', users.UsersViewSet, basename="users")  # 用户管理
+router.register(r'roles', roles.RolesViewSet, basename="roles")  # 角色管理
+router.register(r'permissions', permissions.PermissionsViewSet, basename="permissions")  # 权限管理
 
 urlpatterns = [
-    # 用户管理
-    path(r'users/', users.UsersViewSet.as_view({'get': 'list', 'post': 'create', 'delete': 'multiple_delete'})),
-    re_path(r'^users/(?P<pk>\d+)/$',
-            users.UsersViewSet.as_view({'delete': 'destroy', 'put': 'update', 'patch': 'partial_update'})),
-    # 角色管理
-    path(r'roles/', roles.RolesViewSet.as_view({'get': 'list', 'post': 'create', 'delete': 'multiple_delete'})),
-    re_path(r'^roles/(?P<pk>\d+)/$', roles.RolesViewSet.as_view({'delete': 'destroy', 'put': 'update'})),
-    # 权限管理
-    path(r'permissions/', p.PermissionsViewSet.as_view({'get': 'list', 'post': 'create', 'delete': 'multiple_delete'})),
-    re_path(r'^permissions/(?P<pk>\d+)/$', p.PermissionsViewSet.as_view({'delete': 'destroy', 'put': 'update'})),
+    path('', include(router.urls)),
 ]

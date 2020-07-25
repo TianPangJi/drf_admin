@@ -23,6 +23,7 @@ from rest_framework.documentation import include_docs_urls
 
 from drf_admin.settings.dev import MEDIA_ROOT
 
+# swagger API文档配置
 schema_view = get_schema_view(
     openapi.Info(
         title="My API",
@@ -38,11 +39,11 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('admin/', admin.site.urls),  # 后台管理
-    path(r'api/system/', include('system.urls')),  # 系统管理模块
-    path(r'api/oauth/', include('oauth.urls')),  # 用户鉴权模块
-    path(r'docs/', include_docs_urls(title='My API Docs')),  # API文档
+    path('api/oauth/', include('oauth.urls')),  # 用户鉴权模块
+    path('api/system/', include('system.urls')),  # 系统管理模块
+    path('docs/', include_docs_urls(title='My API Docs')),  # API文档(后续将取消)
     re_path(r'media/(?P<path>.*)/$', serve, {"document_root": MEDIA_ROOT}),  # 用户头像
-    # swagger
+    # swagger(后续将使用的API文档)
     re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     re_path(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     re_path(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),

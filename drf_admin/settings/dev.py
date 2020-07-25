@@ -188,6 +188,8 @@ SWAGGER_SETTINGS = {
 
 # 日志配置
 LOGS_DIR = os.path.join(os.path.dirname(BASE_DIR), 'logs')
+if not os.path.exists(LOGS_DIR):
+    os.makedirs(LOGS_DIR)
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
