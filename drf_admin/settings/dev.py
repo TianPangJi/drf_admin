@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'django_filters',
     # swagger
     'drf_yasg',
+    # WebSocket
+    'channels',
     # 注册apps
     'oauth',
     'system',
@@ -251,3 +253,6 @@ LOGGING = {
     }
 
 }
+
+# channels配置(用于实现WebSocket)
+ASGI_APPLICATION = "drf_admin.routing.application"

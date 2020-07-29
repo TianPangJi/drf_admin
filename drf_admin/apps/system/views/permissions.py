@@ -1,4 +1,5 @@
-""" 
+# -*- coding: utf-8 -*-
+"""
 @author   : Wang Meng
 @github   : https://github.com/tianpangji 
 @software : PyCharm 
@@ -6,14 +7,13 @@
 @create   : 2020/6/27 17:56 
 """
 from rest_framework.filters import SearchFilter, OrderingFilter
-from rest_framework.viewsets import ModelViewSet
 
-from drf_admin.utils.views import MultipleDestroyMixin
+from drf_admin.utils.views import AdminViewSet
 from system.models import Permissions
 from system.serializers.permissions import PermissionsSerializer
 
 
-class PermissionsViewSet(ModelViewSet, MultipleDestroyMixin):
+class PermissionsViewSet(AdminViewSet):
     """
     create:
     权限--新增

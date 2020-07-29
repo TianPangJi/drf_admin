@@ -10,6 +10,8 @@ class Users(AbstractUser):
     mobile = models.CharField(max_length=11, default="", verbose_name='手机号码')
     image = models.ImageField(upload_to='media/%Y/%m', default='default.png', blank=True, verbose_name='头像')
     roles = models.ManyToManyField('system.Roles', blank=True, verbose_name='角色')
+    department = models.ForeignKey('system.Departments', null=True, blank=True, on_delete=models.SET_NULL,
+                                   verbose_name='部门')
 
     class Meta:
         db_table = 'users'

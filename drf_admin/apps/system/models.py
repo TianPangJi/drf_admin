@@ -45,3 +45,19 @@ class Roles(models.Model):
         verbose_name = '角色'
         verbose_name_plural = verbose_name
         ordering = ['id']
+
+
+class Departments(models.Model):
+    """
+    组织架构 部门
+    """
+    name = models.CharField(max_length=32, unique=True, verbose_name='部门')
+    pid = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, verbose_name='父部门')
+
+    objects = models.Manager()
+
+    class Meta:
+        db_table = 'department'
+        verbose_name = '部门'
+        verbose_name_plural = verbose_name
+        ordering = ['id']

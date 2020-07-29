@@ -7,14 +7,13 @@
 """
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.generics import UpdateAPIView
-from rest_framework.viewsets import ModelViewSet
 
-from drf_admin.utils.views import MultipleDestroyMixin
+from drf_admin.utils.views import AdminViewSet
 from system.models import Roles
 from system.serializers.roles import RolesSerializer
 
 
-class RolesViewSet(ModelViewSet, MultipleDestroyMixin):
+class RolesViewSet(AdminViewSet):
     """
     create:
     角色--新增
