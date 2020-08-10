@@ -7,7 +7,7 @@
 @file     : tasks.py
 @create   : 2020/8/10 19:24
 """
-from drf_admin.celery_tasks.main import app
+from celery_tasks.main import app
 
 
 @app.task(name='send_sms_code')
