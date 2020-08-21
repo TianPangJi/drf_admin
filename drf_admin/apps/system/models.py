@@ -9,14 +9,16 @@ class Permissions(models.Model):
         (u'POST', u'增'),
         (u'DELETE', u'删'),
         (u'PUT', u'改'),
+        (u'PATCH', u'局部改'),
         (u'GET', u'查'),
     )
 
     name = models.CharField(max_length=30, unique=True, verbose_name='权限名')
+    sign = models.CharField(max_length=30, unique=True, verbose_name='权限标识')
     method = models.CharField(max_length=50, choices=method_choices, verbose_name='方法')
     path = models.CharField(max_length=200, verbose_name='请求路径正则')
     pid = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, verbose_name='父权限')
-    desc = models.CharField(max_length=30, unique=True, verbose_name='权限描述')
+    desc = models.CharField(max_length=30, blank=True, default='', verbose_name='权限描述')
 
     objects = models.Manager()
 

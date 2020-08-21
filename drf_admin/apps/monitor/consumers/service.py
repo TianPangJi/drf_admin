@@ -8,6 +8,7 @@
 @create   : 2020/7/29 20:24
 """
 import json
+import time
 from datetime import datetime
 
 import psutil
@@ -27,6 +28,7 @@ class ResourcesConsumer(AsyncWebsocketConsumer):
         while True:
             data = await self.get_data()
             await self.send(text_data=json.dumps(data))
+            time.sleep(2)
 
     @database_sync_to_async
     def get_data(self):
@@ -49,7 +51,7 @@ class ResourcesConsumer(AsyncWebsocketConsumer):
         disk_free = disk.free
         disk_used = disk.used
         disk_percent = disk.percent
-        data = {'cpu': {'percent': cpu_percent, 'count': cpu_count},
+        data = {'cpu': {'percent': str(cpu_percent) + ' %', 'count': str(cpu_count) + ' Cores'},
                 'mem': {'total': str(round(men_total / 1024 / 1024 / 1024, 2)) + ' MB',
                         'free': str(round(men_free / 1024 / 1024 / 1024, 2)) + ' MB',
                         'used': str(round(men_used / 1024 / 1024 / 1024, 2)) + ' MB',
@@ -60,6 +62,6 @@ class ResourcesConsumer(AsyncWebsocketConsumer):
                          'used': str(round(disk_used / 1024 / 1024 / 1024, 2)) + ' MB',
                          'percent': str(disk_percent) + ' %'
                          },
-                'run_time': {'time': f'{days} Days {hours} Hours'}
+                'sys': {'run_time': f'{days} Days {hours} Hours'}
                 }
         return data

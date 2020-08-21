@@ -61,6 +61,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # 下面两个中间件放置在最后位置, 且两者保证顺序
+    'drf_admin.utils.middleware.OperationLogMiddleware'
+    'drf_admin.utils.middleware.ResponseMiddleware'
 ]
 
 # CORS跨域设置(3.0版本后需增加http)
@@ -197,12 +200,11 @@ LOGGING = {
     'disable_existing_loggers': False,  # 是否禁用已经存在的日志器
     'formatters': {  # 日志信息显示的格式
         'standard': {
-            'format': '[%(asctime)s][%(levelname)s]''[%(filename)s:%(lineno)d][%(message)s]'
+            'format': '[%(asctime)s][%(levelname)s][%(filename)s:%(lineno)d]==>[%(message)s]'
         },
         'simple': {
-            'format': '[%(levelname)s][%(asctime)s]%(message)s'
+            'format': '[%(asctime)s][%(levelname)s]==>[%(message)s]'
         },
-
     },
     'filters': {  # 对日志进行过滤
         'require_debug_true': {  # django在debug模式下才输出日志
@@ -213,45 +215,74 @@ LOGGING = {
         'default': {
             'level': 'INFO',
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(LOGS_DIR, "info_admin.log"),
+            'filename': os.path.join(LOGS_DIR, "admin_info.log"),
             'maxBytes': 1024 * 1024 * 50,
-            'backupCount': 3,
+            'backupCount': 5,
+            'formatter': 'standard',
+            'encoding': 'utf-8',
+        },
+        # 向终端中输出日志
+        'console': {
+            'level': 'DEBUG',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'standard'
+        },
+        'operation': {
+            'level': 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(LOGS_DIR, 'admin_operation.log'),
+            'maxBytes': 1024 * 1024 * 50,  # 50 MB
+            'backupCount': 5,
             'formatter': 'simple',
             'encoding': 'utf-8',
         },
-        'console': {  # 向终端中输出日志
+        'query': {
             'level': 'INFO',
-            'filters': ['require_debug_true'],
-            'class': 'logging.StreamHandler',
-            'formatter': 'simple'
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(LOGS_DIR, 'admin_query.log'),
+            'maxBytes': 1024 * 1024 * 50,  # 50 MB
+            'backupCount': 5,
+            'formatter': 'simple',
+            'encoding': 'utf-8',
         },
         'error': {
             'level': 'ERROR',
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(LOGS_DIR, "err_admin.log"),
+            'filename': os.path.join(LOGS_DIR, "admin_error.log"),
+            'maxBytes': 1024 * 1024 * 50,  # 50 MB
             'backupCount': 5,
             'formatter': 'standard',
             'encoding': 'utf-8',
-        }
+        },
 
     },
     'loggers': {
+        # 记录视图中手动info日志
         'info': {
             'handlers': ['default', 'console'],
             'level': 'INFO',
             'propagate': True,
         },
-        'warn': {
-            'handlers': ['default', 'console'],
-            'level': 'WARNING',
+        # 非GET方法操作日志
+        'operation': {
+            'handlers': ['operation', 'console'],
+            'level': 'INFO',
             'propagate': True,
         },
+        # GET方法查询日志
+        'query': {
+            'handlers': ['query', 'console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        # 记录视图异常日志
         'error': {
             'handlers': ['error', 'console'],
             'level': 'ERROR',
+            'propagate': True,
         }
     }
-
 }
 
 # channels配置(用于实现WebSocket)
