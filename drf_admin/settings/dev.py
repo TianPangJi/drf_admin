@@ -62,8 +62,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     # 下面两个中间件放置在最后位置, 且两者保证顺序
-    'drf_admin.utils.middleware.OperationLogMiddleware'
-    'drf_admin.utils.middleware.ResponseMiddleware'
+    'drf_admin.utils.middleware.OperationLogMiddleware',
+    'drf_admin.utils.middleware.ResponseMiddleware',
 ]
 
 # CORS跨域设置(3.0版本后需增加http)

@@ -41,10 +41,13 @@ class UserInfoView(APIView):
     @staticmethod
     def get_user_permissions(request):
         permissions = []
-        for item in request.user.roles.values('permissions__name').distinct():
-            name = item.get('permissions__name')
-            if name:
-                permissions.append(name)
+        for roles in request.user.roles.values('name'):
+            if 'admin' == roles.get('name'):
+                permissions.append('admin')
+        for item in request.user.roles.values('permissions__sign').distinct():
+            sign = item.get('permissions__sign')
+            if sign:
+                permissions.append(sign)
         return permissions
 
     def get(self, request):
