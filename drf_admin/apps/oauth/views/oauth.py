@@ -15,7 +15,9 @@ from rest_framework_jwt.views import ObtainJSONWebToken
 class UserLoginView(ObtainJSONWebToken):
     """
     post:
-    用户鉴权获取Token值
+    用户鉴权
+
+    用户鉴权, status: 200(成功), return: Token信息
     """
 
     def post(self, request, *args, **kwargs):
@@ -35,7 +37,9 @@ class UserLoginView(ObtainJSONWebToken):
 class UserInfoView(APIView):
     """
     get:
-    获取当前用户信息和权限
+    当前用户信息
+
+    当前用户信息, status: 200(成功), return: 用户信息和权限
     """
 
     @staticmethod
@@ -65,10 +69,12 @@ class UserInfoView(APIView):
 class LogoutAPIView(APIView):
     """
     post:
-    退出登录(后端不做处理, 前端删除Token信息, 后期完善)
+    退出登录
+
+    退出登录, status: 200(成功), return: None
     """
 
     def post(self, request):
-        content = {'code': 0, 'data': {}, 'msg': '成功'}
+        content = {}
         # 后续将增加redis token黑名单功能
         return Response(data=content)
