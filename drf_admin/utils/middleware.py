@@ -84,4 +84,5 @@ class ResponseMiddleware(MiddlewareMixin):
             else:
                 return response
             response.data = {'msg': msg, 'errors': detail, 'code': code, 'data': data}
+            response.content = response.rendered_content
         return response

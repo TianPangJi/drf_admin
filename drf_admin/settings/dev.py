@@ -104,6 +104,36 @@ DATABASES = {
     }
 }
 
+# Redis
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://127.0.0.1:6379/0',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
+    },
+    # session
+    'session': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://127.0.0.1:6379/1',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
+    },
+    # 用户信息
+    'user_info': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://127.0.0.1:6379/2',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
+    },
+}
+# 设置Django session使用redis作为后端存储
+SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+SESSION_CACHE_ALIAS = 'session'
+
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
 
@@ -156,9 +186,9 @@ REST_FRAMEWORK = {
         (
             'drf_admin.utils.permissions.RbacPermission',  # 自定义权限认证
         ),
-    "DEFAULT_AUTHENTICATION_CLASSES":
+    'DEFAULT_AUTHENTICATION_CLASSES':
         (
-            "rest_framework_jwt.authentication.JSONWebTokenAuthentication",  # DRF-JWT认证
+            'rest_framework_jwt.authentication.JSONWebTokenAuthentication',  # DRF-JWT认证
         ),
     # DRF-API文档
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
@@ -215,7 +245,7 @@ LOGGING = {
         'default': {
             'level': 'INFO',
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(LOGS_DIR, "admin_info.log"),
+            'filename': os.path.join(LOGS_DIR, 'admin_info.log'),
             'maxBytes': 1024 * 1024 * 50,
             'backupCount': 5,
             'formatter': 'standard',
@@ -249,7 +279,7 @@ LOGGING = {
         'error': {
             'level': 'ERROR',
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(LOGS_DIR, "admin_error.log"),
+            'filename': os.path.join(LOGS_DIR, 'admin_error.log'),
             'maxBytes': 1024 * 1024 * 50,  # 50 MB
             'backupCount': 5,
             'formatter': 'standard',
@@ -286,4 +316,4 @@ LOGGING = {
 }
 
 # channels配置(用于实现WebSocket)
-ASGI_APPLICATION = "drf_admin.routing.application"
+ASGI_APPLICATION = 'drf_admin.routing.application'

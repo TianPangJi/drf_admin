@@ -8,6 +8,7 @@
 import re
 from collections import defaultdict
 from django.conf import settings
+from django_redis import get_redis_connection
 from rest_framework import status
 from rest_framework.exceptions import APIException
 from rest_framework.permissions import BasePermission
@@ -54,7 +55,13 @@ class RbacPermission(BasePermission):
         if flag:
             permission = Permissions.objects.filter(path=flag_url, method=request_method)
             if permission:
-                pass
+                # Redis验证权限是否存在
+                conn = get_redis_connection('user_info')
+                permissions = conn.hget('user_info_%s' % request.user.id, 'permissions')
+                if permission.name in permissions:
+                    return True
+                else:
+                    return False
             else:
                 return True
         else:

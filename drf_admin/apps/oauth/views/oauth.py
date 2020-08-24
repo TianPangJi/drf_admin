@@ -5,6 +5,7 @@
 @file: oauth.py 
 @create: 2020/6/24 20:48 
 """
+from django_redis import get_redis_connection
 from rest_framework import status
 from rest_framework.exceptions import APIException
 from rest_framework.response import Response
@@ -42,28 +43,14 @@ class UserInfoView(APIView):
     当前用户信息, status: 200(成功), return: 用户信息和权限
     """
 
-    @staticmethod
-    def get_user_permissions(request):
-        permissions = []
-        for roles in request.user.roles.values('name'):
-            if 'admin' == roles.get('name'):
-                permissions.append('admin')
-        for item in request.user.roles.values('permissions__sign').distinct():
-            sign = item.get('permissions__sign')
-            if sign:
-                permissions.append(sign)
-        return permissions
-
     def get(self, request):
-        permissions = self.get_user_permissions(request)
-        data = {
-            'username': request.user.username,
-            'avatar': request._request._current_scheme_host + '/media/' + str(request.user.image),
-            'email': request.user.email,
-            'is_active': request.user.is_active,
-            'permissions': permissions
-        }
-        return Response(data, status=status.HTTP_200_OK)
+        user_info = request.user.get_user_info()
+        # 将用户信息缓存到redis
+        conn = get_redis_connection('user_info')
+        user_info['permissions'] = ','.join(user_info.get('permission'))
+        conn.hmset('user_info_%s' % request.user.id, user_info)
+        user_info['permissions'] = user_info.get('permission').split(',') if user_info.get('permission') else []
+        return Response(user_info, status=status.HTTP_200_OK)
 
 
 class LogoutAPIView(APIView):

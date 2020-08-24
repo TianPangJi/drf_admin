@@ -6,6 +6,8 @@
 @create   : 2020/7/11 13:44
 """
 import logging
+import traceback
+
 from django.core.exceptions import PermissionDenied
 from django.http import Http404
 
@@ -73,11 +75,11 @@ def exception_handler(exc, context):
     elif isinstance(exc, DatabaseError) or isinstance(exc, RedisError):
         # 数据库异常
         view = context['view']
-        logger.error('[%s] %s' % (view, exc))
+        logger.error('[%s] %s' % (view, traceback.format_exc()))
         response = Response({'detail': '服务器内部错误'}, status=status.HTTP_507_INSUFFICIENT_STORAGE)
     else:
         # 未知错误
         view = context['view']
-        logger.error('[%s] %s' % (view, exc))
+        logger.error('[%s] %s' % (view, traceback.format_exc()))
         response = Response({'detail': '服务端未知错误'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     return response

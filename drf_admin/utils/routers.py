@@ -11,6 +11,7 @@ from rest_framework.routers import SimpleRouter, Route, DynamicRoute
 
 
 class AdminRouter(SimpleRouter):
+    # 添加multiple_delete动作
     routes = [
         # List route.
         Route(

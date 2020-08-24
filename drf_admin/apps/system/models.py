@@ -1,7 +1,9 @@
 from django.db import models
 
+from utils.models import BaseModel
 
-class Permissions(models.Model):
+
+class Permissions(BaseModel):
     """
     权限
     """
@@ -11,6 +13,7 @@ class Permissions(models.Model):
         (u'PUT', u'改'),
         (u'PATCH', u'局部改'),
         (u'GET', u'查'),
+        (u'None', u'None'),
     )
 
     name = models.CharField(max_length=30, unique=True, verbose_name='权限名')
@@ -26,13 +29,13 @@ class Permissions(models.Model):
         return self.name
 
     class Meta:
-        db_table = 'permissions'
+        db_table = 'admin_system_permissions'
         verbose_name = '权限'
         verbose_name_plural = verbose_name
         ordering = ['id']
 
 
-class Roles(models.Model):
+class Roles(BaseModel):
     """
     角色
     """
@@ -43,13 +46,13 @@ class Roles(models.Model):
     objects = models.Manager()
 
     class Meta:
-        db_table = 'roles'
+        db_table = 'admin_system_roles'
         verbose_name = '角色'
         verbose_name_plural = verbose_name
         ordering = ['id']
 
 
-class Departments(models.Model):
+class Departments(BaseModel):
     """
     组织架构 部门
     """
@@ -59,7 +62,7 @@ class Departments(models.Model):
     objects = models.Manager()
 
     class Meta:
-        db_table = 'department'
+        db_table = 'admin_system_departments'
         verbose_name = '部门'
         verbose_name_plural = verbose_name
         ordering = ['id']
