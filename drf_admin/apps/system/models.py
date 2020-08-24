@@ -1,6 +1,6 @@
 from django.db import models
 
-from utils.models import BaseModel
+from drf_admin.utils.models import BaseModel
 
 
 class Permissions(BaseModel):
@@ -29,7 +29,7 @@ class Permissions(BaseModel):
         return self.name
 
     class Meta:
-        db_table = 'admin_system_permissions'
+        db_table = 'system_permissions'
         verbose_name = '权限'
         verbose_name_plural = verbose_name
         ordering = ['id']
@@ -40,13 +40,14 @@ class Roles(BaseModel):
     角色
     """
     name = models.CharField(max_length=32, unique=True, verbose_name='角色')
-    permissions = models.ManyToManyField('Permissions', blank=True, verbose_name='权限')
+    permissions = models.ManyToManyField('Permissions', db_table='system_roles_to_system_permissions',
+                                         blank=True, verbose_name='权限')
     desc = models.CharField(max_length=50, blank=True, default='', verbose_name='描述')
 
     objects = models.Manager()
 
     class Meta:
-        db_table = 'admin_system_roles'
+        db_table = 'system_roles'
         verbose_name = '角色'
         verbose_name_plural = verbose_name
         ordering = ['id']
@@ -62,7 +63,7 @@ class Departments(BaseModel):
     objects = models.Manager()
 
     class Meta:
-        db_table = 'admin_system_departments'
+        db_table = 'system_departments'
         verbose_name = '部门'
         verbose_name_plural = verbose_name
         ordering = ['id']
