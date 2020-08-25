@@ -8,12 +8,12 @@
 """
 from rest_framework.filters import SearchFilter, OrderingFilter
 
-from drf_admin.utils.views import AdminViewSet
+from drf_admin.utils.views import AdminViewSet, TreeAPIView
 from system.models import Permissions
-from system.serializers.permissions import PermissionsSerializer
+from system.serializers.permissions import PermissionsSerializer, PermissionsTreeSerializer
 
 
-class PermissionsViewSet(AdminViewSet):
+class PermissionsViewSet(AdminViewSet, TreeAPIView):
     """
     create:
     权限--新增
@@ -51,3 +51,9 @@ class PermissionsViewSet(AdminViewSet):
     filter_backends = (SearchFilter, OrderingFilter)
     search_fields = ('name', 'desc', 'path')
     ordering_fields = ('id', 'name')
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return PermissionsTreeSerializer
+        else:
+            return PermissionsSerializer

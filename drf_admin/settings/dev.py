@@ -105,10 +105,15 @@ DATABASES = {
 }
 
 # Redis
+REDIS_PWD = ''
+if REDIS_PWD:
+    REDIS_STR = f':{REDIS_PWD}@'
+else:
+    REDIS_STR = ''
 CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': 'redis://127.0.0.1:6379/0',
+        'LOCATION': f'redis://{REDIS_STR}127.0.0.1:6379/0',
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
         }
@@ -116,7 +121,7 @@ CACHES = {
     # session
     'session': {
         'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': 'redis://127.0.0.1:6379/1',
+        'LOCATION': f'redis://{REDIS_STR}127.0.0.1:6379/1',
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
         }
@@ -124,7 +129,7 @@ CACHES = {
     # 用户信息
     'user_info': {
         'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': 'redis://127.0.0.1:6379/2',
+        'LOCATION': f'redis://{REDIS_STR}127.0.0.1:6379/2',
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
         }

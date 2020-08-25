@@ -38,10 +38,11 @@ class Users(AbstractUser):
     def get_user_info(self):
         # 获取用户信息
         user_info = {
+            'id': self.pk,
             'username': self.username,
+            'name': self.name,
             'avatar': '/media/' + str(self.image),
             'email': self.email,
-            'is_active': self.is_active,
             'permissions': self._get_user_permissions()
         }
         return user_info

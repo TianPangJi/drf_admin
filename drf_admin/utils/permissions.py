@@ -18,7 +18,7 @@ from system.models import Permissions
 
 class UserLock(APIException):
     status_code = status.HTTP_400_BAD_REQUEST
-    default_detail = {'detail': '用户已被锁定,请联系管理员'}
+    default_detail = '用户已被锁定,请联系管理员'
     default_code = 'not_authenticated'
 
 
@@ -53,16 +53,20 @@ class RbacPermission(BasePermission):
                 flag = True
                 flag_url = values.get('path')
         if flag:
-            permission = Permissions.objects.filter(path=flag_url, method=request_method)
-            if permission:
-                # Redis验证权限是否存在
+            try:
+                permission = Permissions.objects.get(path=flag_url, method=request_method)
+            except Permissions.DoesNotExist:
+                return True
+            else:
+                # Redis验证权限
                 conn = get_redis_connection('user_info')
                 permissions = conn.hget('user_info_%s' % request.user.id, 'permissions')
-                if permission.name in permissions:
-                    return True
+                if permissions:
+                    if permission.name in permissions.decode().split(','):  # redis存储为bytes类型
+                        return True
+                    else:
+                        return False
                 else:
                     return False
-            else:
-                return True
         else:
             return True

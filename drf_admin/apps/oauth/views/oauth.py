@@ -47,9 +47,11 @@ class UserInfoView(APIView):
         user_info = request.user.get_user_info()
         # 将用户信息缓存到redis
         conn = get_redis_connection('user_info')
-        user_info['permissions'] = ','.join(user_info.get('permission'))
+        user_info['permissions'] = ['sd', 'sdf']
+        user_info['permissions'] = ','.join(user_info.get('permissions'))
+        user_info['avatar'] = request._current_scheme_host + user_info.get('avatar')
         conn.hmset('user_info_%s' % request.user.id, user_info)
-        user_info['permissions'] = user_info.get('permission').split(',') if user_info.get('permission') else []
+        user_info['permissions'] = user_info.get('permissions').split(',') if user_info.get('permissions') else []
         return Response(user_info, status=status.HTTP_200_OK)
 
 

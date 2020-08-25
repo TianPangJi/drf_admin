@@ -20,3 +20,17 @@ class PermissionsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Permissions
         fields = '__all__'
+
+
+class PermissionsTreeSerializer(serializers.ModelSerializer):
+    """
+    权限数据序列化器(Element Tree)
+    """
+
+    id = serializers.IntegerField()
+    label = serializers.CharField(max_length=20, source='name')
+    pid = serializers.PrimaryKeyRelatedField(read_only=True)
+
+    class Meta:
+        model = Permissions
+        fields = '__all__'

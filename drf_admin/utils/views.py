@@ -6,6 +6,7 @@
 @create   : 2020/7/1 22:37 
 """
 from rest_framework import status
+from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
@@ -36,3 +37,42 @@ class AdminViewSet(ModelViewSet, MultipleDestroyMixin):
     添加multiple_delete action
     """
     pass
+
+
+# class TreeSerializer(serializers.Serializer):
+#     """
+#     TreeAPIView使用的序列化器
+#     """
+#     id = serializers.IntegerField()
+#     label = serializers.CharField(max_length=20, source='name')
+#     pid = serializers.PrimaryKeyRelatedField(read_only=True)
+
+
+class TreeAPIView(ListAPIView):
+    """
+    定义Element Tree树结构
+
+    """
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        page = self.paginate_queryset(queryset)
+        serializer = self.get_serializer(queryset, many=True)
+        tree_dict = {}
+        tree_data = []
+        try:
+            for item in serializer.data:
+                tree_dict[item['id']] = item
+            for i in tree_dict:
+                if tree_dict[i]['pid']:
+                    pid = tree_dict[i]['pid']
+                    parent = tree_dict[pid]
+                    parent.setdefault('children', []).append(tree_dict[i])
+                else:
+                    tree_data.append(tree_dict[i])
+            results = tree_data
+        except KeyError:
+            results = serializer.data
+        if page is not None:
+            return self.get_paginated_response(results)
+        return Response(results)
