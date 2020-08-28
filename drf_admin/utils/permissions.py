@@ -62,7 +62,7 @@ class RbacPermission(BasePermission):
                 conn = get_redis_connection('user_info')
                 permissions = conn.hget('user_info_%s' % request.user.id, 'permissions')
                 if permissions:
-                    if permission.name in permissions.decode().split(','):  # redis存储为bytes类型
+                    if permission.sign in permissions.decode().split(','):  # redis存储为bytes类型
                         return True
                     else:
                         return False

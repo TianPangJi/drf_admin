@@ -7,6 +7,8 @@
 @create   : 2020/6/27 17:56 
 """
 from rest_framework.filters import SearchFilter, OrderingFilter
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from drf_admin.utils.views import AdminViewSet, TreeAPIView
 from system.models import Permissions
@@ -57,3 +59,16 @@ class PermissionsViewSet(AdminViewSet, TreeAPIView):
             return PermissionsTreeSerializer
         else:
             return PermissionsSerializer
+
+
+class PermissionsMethodsAPIView(APIView):
+    """
+    get:
+    权限--models方法列表
+
+    权限models中的方法列表信息, status: 200(成功), return: 权限models中的方法列表
+    """
+
+    def get(self, request):
+        methods = [value[0] for value in Permissions.method_choices]
+        return Response(data={'methods': methods})

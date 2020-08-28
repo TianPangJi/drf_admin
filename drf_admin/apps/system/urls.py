@@ -17,5 +17,6 @@ router.register(r'permissions', permissions.PermissionsViewSet, basename="permis
 router.register(r'departments', departments.DepartmentsViewSet, basename="departments")  # 部门管理
 
 urlpatterns = [
+    path('permissions/methods/', permissions.PermissionsMethodsAPIView.as_view()),  # 权限models方法列表信息
     path('', include(router.urls)),
 ]
