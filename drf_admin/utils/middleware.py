@@ -8,9 +8,13 @@
 """
 import json
 import logging
+import time
 
 from django.utils.deprecation import MiddlewareMixin
+from django_redis import get_redis_connection
 from rest_framework.response import Response
+
+from oauth.utils import get_ip_address, get_request_browser, get_request_os
 
 
 class OperationLogMiddleware:
@@ -85,4 +89,23 @@ class ResponseMiddleware(MiddlewareMixin):
                 return response
             response.data = {'msg': msg, 'errors': detail, 'code': code, 'data': data}
             response.content = response.rendered_content
+        return response
+
+
+class OnlineUsersMiddleware(MiddlewareMixin):
+    """
+    在线用户监测, (采用类心跳机制,10分钟内无任何操作则任务该用户已下线)
+    """
+
+    def process_response(self, request, response):
+        if request.user.is_authenticated:
+            conn = get_redis_connection('online_user')
+            last_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
+            if conn.exists(f'online_user_{request.user.id}'):
+                conn.hset(f'online_user_{request.user.id}', 'last_time', last_time)
+            else:
+                online_info = {'ip': get_ip_address(request), 'browser': get_request_browser(request),
+                               'os': get_request_os(request), 'last_time': last_time}
+                conn.hmset(f'online_user_{request.user.id}', online_info)
+            conn.expire(f'online_user_{request.user.id}', 60 * 10)
         return response

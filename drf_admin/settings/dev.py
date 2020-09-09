@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     'drf_yasg',
     # WebSocket
     'channels',
+    # django_user_agents
+    'django_user_agents',
     # 注册apps
     'oauth',
     'system',
@@ -61,6 +63,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # django_user_agents
+    'django_user_agents.middleware.UserAgentMiddleware',
     # 下面两个中间件放置在最后位置, 且两者保证顺序
     'drf_admin.utils.middleware.OperationLogMiddleware',
     'drf_admin.utils.middleware.ResponseMiddleware',
@@ -68,8 +72,8 @@ MIDDLEWARE = [
 
 # CORS跨域设置(3.0版本后需增加http)
 CORS_ORIGIN_WHITELIST = (
-    'http://127.0.0.1:8080',
-    'http://localhost:8080',
+    'http://127.0.0.1:9527',
+    'http://localhost:9527',
 )
 # 允许携带cookie
 CORS_ALLOW_CREDENTIALS = True
@@ -130,6 +134,14 @@ CACHES = {
     'user_info': {
         'BACKEND': 'django_redis.cache.RedisCache',
         'LOCATION': f'redis://{REDIS_STR}127.0.0.1:6379/2',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
+    },
+    # 在线用户监测
+    'online_user': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': f'redis://{REDIS_STR}127.0.0.1:6379/3',
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
         }

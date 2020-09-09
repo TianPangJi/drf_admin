@@ -16,9 +16,9 @@ from rest_framework_jwt.views import ObtainJSONWebToken
 class UserLoginView(ObtainJSONWebToken):
     """
     post:
-    用户鉴权
+    用户登录
 
-    用户鉴权, status: 200(成功), return: Token信息
+    用户登录, status: 200(成功), return: Token信息
     """
 
     def post(self, request, *args, **kwargs):
@@ -50,6 +50,7 @@ class UserInfoView(APIView):
         user_info['permissions'] = ','.join(user_info.get('permissions'))
         user_info['avatar'] = request._current_scheme_host + user_info.get('avatar')
         conn.hmset('user_info_%s' % request.user.id, user_info)
+        conn.expire('user_info_%s' % request.user.id, 60 * 60 * 24)  # 设置过期时间为1天
         user_info['permissions'] = user_info.get('permissions').split(',') if user_info.get('permissions') else []
         return Response(user_info, status=status.HTTP_200_OK)
 
