@@ -14,7 +14,7 @@ from django.utils.deprecation import MiddlewareMixin
 from django_redis import get_redis_connection
 from rest_framework.response import Response
 
-from oauth.utils import get_ip_address, get_request_browser, get_request_os
+from oauth.utils import get_request_browser, get_request_os, get_request_ip
 
 
 class OperationLogMiddleware:
@@ -44,6 +44,9 @@ class OperationLogMiddleware:
         response = self.get_response(request)
         try:
             response_body = response.data
+            # 处理token, log中token已******替代真实token值
+            if response_body['data'].get('token'):
+                response_body['data']['token'] = '******'
         except Exception:
             response_body = dict()
         log_info = f'[{request.user} [Request: {request.method} {request.path} {request_body}] ' \
@@ -104,7 +107,7 @@ class OnlineUsersMiddleware(MiddlewareMixin):
             if conn.exists(f'online_user_{request.user.id}'):
                 conn.hset(f'online_user_{request.user.id}', 'last_time', last_time)
             else:
-                online_info = {'ip': get_ip_address(request), 'browser': get_request_browser(request),
+                online_info = {'ip': get_request_ip(request), 'browser': get_request_browser(request),
                                'os': get_request_os(request), 'last_time': last_time}
                 conn.hmset(f'online_user_{request.user.id}', online_info)
             conn.expire(f'online_user_{request.user.id}', 60 * 10)

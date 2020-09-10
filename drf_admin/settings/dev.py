@@ -65,6 +65,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     # django_user_agents
     'django_user_agents.middleware.UserAgentMiddleware',
+    # 在线用户监控
+    'drf_admin.utils.middleware.OnlineUsersMiddleware',
     # 下面两个中间件放置在最后位置, 且两者保证顺序
     'drf_admin.utils.middleware.OperationLogMiddleware',
     'drf_admin.utils.middleware.ResponseMiddleware',

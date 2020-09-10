@@ -56,7 +56,7 @@ def get_ip_address(ip):
     if res.status_code == 200:
         dict_data = json.loads(res.text)
         country = dict_data.get('country')
-        region_name = dict_data.get('region_name')
+        region_name = dict_data.get('regionName')
         city = dict_data.get('city')
         address = country + ' ' + region_name + ' ' + city
     else:
@@ -71,7 +71,7 @@ def get_request_browser(request):
     :return: 浏览器信息
     """
     family = request.user_agent.browser.family
-    version_string = request.user_agent.browser.family
+    version_string = request.user_agent.browser.version_string
     return family + ' ' + version_string
 
 
@@ -82,5 +82,5 @@ def get_request_os(request):
     :return: 系统信息
     """
     family = request.user_agent.os.family
-    version_string = request.user_agent.os.family
+    version_string = request.user_agent.os.version_string
     return family + ' ' + version_string

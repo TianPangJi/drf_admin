@@ -15,7 +15,7 @@ from oauth.models import Users
 
 class OnlineUsersSerializer(serializers.ModelSerializer):
     """
-    部门管理序列化器
+    在线用户监控
     """
     ip = serializers.SerializerMethodField()
     browser = serializers.SerializerMethodField()
