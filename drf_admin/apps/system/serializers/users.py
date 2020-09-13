@@ -23,7 +23,7 @@ class UsersSerializer(serializers.ModelSerializer):
     """
     roles_list = serializers.SerializerMethodField()
     roles = serializers.PrimaryKeyRelatedField(required=False, write_only=True, many=True, queryset=Roles.objects.all())
-    date_joined = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S')
+    date_joined = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S', read_only=True)
 
     class Meta:
         model = Users
