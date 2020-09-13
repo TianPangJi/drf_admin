@@ -7,10 +7,9 @@
 """
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
-from rest_framework.viewsets import ModelViewSet
 
 from drf_admin.apps.system.serializers.users import UsersSerializer, UsersPartialSerializer
-from drf_admin.utils.views import MultipleDestroyMixin, AdminViewSet
+from drf_admin.utils.views import AdminViewSet
 from oauth.models import Users
 
 

@@ -30,9 +30,11 @@ class UserLoginView(ObtainJSONWebToken):
         else:
             if serializer.errors.get('non_field_errors'):
                 # 日后将增加用户多次登录错误,账户锁定功能(待完善)
-                return Response(data={'detail': '用户名或密码错误'}, status=status.HTTP_400_BAD_REQUEST)
-            else:
-                raise APIException(serializer.errors)
+                if isinstance(serializer.errors.get('non_field_errors'), list) and len(
+                        serializer.errors.get('non_field_errors')) > 0:
+                    if serializer.errors.get('non_field_errors')[0].strip() == '无法使用提供的认证信息登录。':
+                        return Response(data={'detail': '用户名或密码错误'}, status=status.HTTP_400_BAD_REQUEST)
+            raise APIException(serializer.errors)
 
 
 class UserInfoView(APIView):

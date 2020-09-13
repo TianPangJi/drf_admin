@@ -10,12 +10,12 @@
 
 from rest_framework.filters import SearchFilter, OrderingFilter
 
-from drf_admin.utils.views import AdminViewSet
+from drf_admin.utils.views import AdminViewSet, TreeAPIView
 from system.models import Departments
-from system.serializers.departments import DepartmentsSerializer
+from system.serializers.departments import DepartmentsSerializer, DepartmentsTreeSerializer
 
 
-class DepartmentsViewSet(AdminViewSet):
+class DepartmentsViewSet(AdminViewSet, TreeAPIView):
     """
     create:
     部门--新增
@@ -53,3 +53,9 @@ class DepartmentsViewSet(AdminViewSet):
     filter_backends = (SearchFilter, OrderingFilter)
     search_fields = ('name',)
     ordering_fields = ('id', 'name')
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return DepartmentsTreeSerializer
+        else:
+            return DepartmentsSerializer
