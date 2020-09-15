@@ -11,6 +11,7 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 from drf_admin.apps.system.serializers.users import UsersSerializer, UsersPartialSerializer
 from drf_admin.utils.views import AdminViewSet
 from oauth.models import Users
+from system.filters.users import UsersFilter
 
 
 class UsersViewSet(AdminViewSet):
@@ -53,7 +54,7 @@ class UsersViewSet(AdminViewSet):
     queryset = Users.objects.all()
     serializer_class = UsersSerializer
     filter_backends = (DjangoFilterBackend, SearchFilter, OrderingFilter)
-    filter_fields = ('is_active',)
+    filter_class = UsersFilter
     search_fields = ('username', 'name', 'mobile', 'email')
     ordering_fields = ('id',)
 
