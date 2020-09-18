@@ -211,6 +211,8 @@ REST_FRAMEWORK = {
         ),
     # DRF-API文档
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '10/min', }
 }
 
 JWT_AUTH = {

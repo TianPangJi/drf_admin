@@ -9,6 +9,7 @@ from django_redis import get_redis_connection
 from rest_framework import status
 from rest_framework.exceptions import APIException
 from rest_framework.response import Response
+from rest_framework.throttling import AnonRateThrottle
 from rest_framework.views import APIView
 from rest_framework_jwt.views import ObtainJSONWebToken
 
@@ -20,6 +21,7 @@ class UserLoginView(ObtainJSONWebToken):
 
     用户登录, status: 200(成功), return: Token信息
     """
+    throttle_classes = [AnonRateThrottle]
 
     def post(self, request, *args, **kwargs):
         # 重写父类方法, 定义响应字段内容
