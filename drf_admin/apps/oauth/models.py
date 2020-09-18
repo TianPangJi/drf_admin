@@ -6,8 +6,8 @@ class Users(AbstractUser):
     """
     用户
     """
-    name = models.CharField(max_length=20, default='', verbose_name='真实姓名')
-    mobile = models.CharField(max_length=11, default='', verbose_name='手机号码')
+    name = models.CharField(max_length=20, default='', blank=True, verbose_name='真实姓名')
+    mobile = models.CharField(max_length=11, default='', blank=True, verbose_name='手机号码')
     image = models.ImageField(upload_to='media/%Y/%m', default='default.png', blank=True, verbose_name='头像')
     roles = models.ManyToManyField('system.Roles', db_table='oauth_users_to_system_roles', blank=True,
                                    verbose_name='角色')

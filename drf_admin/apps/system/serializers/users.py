@@ -22,7 +22,6 @@ class UsersSerializer(serializers.ModelSerializer):
     用户增删改查序列化器
     """
     roles_list = serializers.SerializerMethodField()
-    roles = serializers.PrimaryKeyRelatedField(required=False, write_only=True, many=True, queryset=Roles.objects.all())
     date_joined = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S', read_only=True)
     department_name = serializers.ReadOnlyField(source='department.name')
 
