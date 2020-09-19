@@ -6,11 +6,10 @@
 @create   : 2020/6/27 17:55 
 """
 from rest_framework.filters import SearchFilter, OrderingFilter
-from rest_framework.generics import UpdateAPIView
 
 from drf_admin.utils.views import AdminViewSet
 from system.models import Roles
-from system.serializers.roles import RolesSerializer
+from system.serializers.roles import RolesSerializer, RolesPartialSerializer
 
 
 class RolesViewSet(AdminViewSet):
@@ -51,9 +50,8 @@ class RolesViewSet(AdminViewSet):
     search_fields = ('name', 'desc')
     ordering_fields = ('id', 'name')
 
-# class RoleOauthAPIView(UpdateAPIView):
-#     """
-#
-#     """
-#     serializer_class = RoleOauthSerializer
-#     queryset = Roles.objects.all()
+    def get_serializer_class(self):
+        if self.action == 'partial_update':
+            return RolesPartialSerializer
+        else:
+            return RolesSerializer

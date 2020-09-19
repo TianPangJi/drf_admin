@@ -12,22 +12,23 @@ from system.models import Roles, Permissions
 
 class RolesSerializer(serializers.ModelSerializer):
     """角色管理序列化器"""
+    create_time = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S', read_only=True)
 
     class Meta:
         model = Roles
-        fields = '__all__'
+        fields = ['id', 'name', 'permissions', 'desc', 'create_time']
+        extra_kwargs = {
+            'permissions': {
+                'read_only': True,
+            },
+        }
 
 
-class RoleOauthSerializer(serializers.ModelSerializer):
-    """角色授权"""
-    permissions_list = serializers.SerializerMethodField()
-    permissions = serializers.PrimaryKeyRelatedField(required=False, write_only=True, many=True,
-                                                     queryset=Permissions.objects.all())
+class RolesPartialSerializer(serializers.ModelSerializer):
+    """
+    用户局部更新序列化器
+    """
 
     class Meta:
         model = Roles
-        fields = ['id', 'permissions', 'permissions_list']
-
-    def get_permissions_list(self, obj):
-        # 待修改
-        return [{'id': permission.id, 'desc': permission.desc} for permission in obj.permissions.all()]
+        fields = ['id', 'permissions']
