@@ -70,5 +70,5 @@ class PermissionsMethodsAPIView(APIView):
     """
 
     def get(self, request):
-        methods = [value[0] for value in Permissions.method_choices]
-        return Response(data={'methods': methods})
+        methods = [{'value': value[0], 'label': value[1]} for value in Permissions.method_choices]
+        return Response(data={'results': methods})
