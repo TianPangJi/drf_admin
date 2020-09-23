@@ -31,6 +31,7 @@ class DepartmentsTreeSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField()
     label = serializers.CharField(max_length=20, source='name')
     pid = serializers.PrimaryKeyRelatedField(read_only=True)
+    create_time = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S')
 
     class Meta:
         model = Departments

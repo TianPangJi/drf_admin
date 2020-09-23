@@ -8,6 +8,7 @@
 @create   : 2020/9/9 20:08
 """
 from django_redis import get_redis_connection
+from rest_framework.filters import SearchFilter
 from rest_framework.generics import ListAPIView
 
 from monitor.serializers.users import OnlineUsersSerializer
@@ -23,6 +24,8 @@ class OnlineUsersListAPIView(ListAPIView):
     """
 
     serializer_class = OnlineUsersSerializer
+    filter_backends = (SearchFilter,)
+    search_fields = ('username',)
 
     def get_queryset(self):
         conn = get_redis_connection('online_user')
