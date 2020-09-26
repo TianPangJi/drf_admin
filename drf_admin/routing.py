@@ -17,7 +17,7 @@ from monitor.consumers import service
 application = ProtocolTypeRouter({
     'websocket': TokenAuthMiddleware(
         URLRouter([
-            re_path(r'^ws/monitor', service.ResourcesConsumer),
+            re_path(r'^monitor/service', service.ResourcesConsumer),
         ])
     )
 })

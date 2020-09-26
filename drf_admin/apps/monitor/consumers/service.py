@@ -22,13 +22,38 @@ class ResourcesConsumer(AsyncWebsocketConsumer):
         if not self.scope['user']:
             await self.close()
         else:
+            await self.channel_layer.group_add(
+                self.scope['user'].username,
+                self.channel_name,
+            )
             await self.accept()
 
     async def receive(self, text_data=None, bytes_data=None):
+        # 接收消息
+        data = await self.get_data()
+        await self.channel_layer.group_send(
+            self.scope['user'].username,
+            {
+                'type': 'service.message',
+                'message': json.dumps(data),
+            }
+        )
+
         while True:
             data = await self.get_data()
             await self.send(text_data=json.dumps(data))
             time.sleep(2)
+
+    async def disconnect(self, code):
+        # 关闭
+        await self.channel_layer.group_discard(
+            self.scope['user'].username,
+            self.channel_name
+        )
+
+    async def service_message(self, event):
+        # 发送信息
+        await self.send(event['message'])
 
     @database_sync_to_async
     def get_data(self):
@@ -51,16 +76,16 @@ class ResourcesConsumer(AsyncWebsocketConsumer):
         disk_free = disk.free
         disk_used = disk.used
         disk_percent = disk.percent
-        data = {'cpu': {'percent': str(cpu_percent) + ' %', 'count': str(cpu_count) + ' Cores'},
+        data = {'cpu': {'percent': float(cpu_percent), 'count': str(cpu_count) + ' Cores'},
                 'mem': {'total': str(round(men_total / 1024 / 1024 / 1024, 2)) + ' MB',
                         'free': str(round(men_free / 1024 / 1024 / 1024, 2)) + ' MB',
                         'used': str(round(men_used / 1024 / 1024 / 1024, 2)) + ' MB',
-                        'percent': str(men_percent) + ' %'
+                        'percent': float(men_percent)
                         },
                 'disk': {'total': str(round(disk_total / 1024 / 1024 / 1024, 2)) + ' MB',
                          'free': str(round(disk_free / 1024 / 1024 / 1024, 2)) + ' MB',
                          'used': str(round(disk_used / 1024 / 1024 / 1024, 2)) + ' MB',
-                         'percent': str(disk_percent) + ' %'
+                         'percent': float(disk_percent)
                          },
                 'sys': {'run_time': f'{days} Days {hours} Hours'}
                 }

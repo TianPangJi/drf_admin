@@ -112,7 +112,9 @@ DATABASES = {
 }
 
 # Redis
-REDIS_PWD = ''
+REDIS_PWD = os.getenv('REDIS_PWD', '')
+REDIS_HOST = os.getenv('REDIS_HOST', '127.0.0.1')
+REDIS_PORT = os.getenv('REDIS_PORT', '6379')
 if REDIS_PWD:
     REDIS_STR = f':{REDIS_PWD}@'
 else:
@@ -120,7 +122,7 @@ else:
 CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': f'redis://{REDIS_STR}127.0.0.1:6379/0',
+        'LOCATION': f'redis://{REDIS_STR}{REDIS_HOST}:{REDIS_PORT}/0',
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
         }
@@ -128,7 +130,7 @@ CACHES = {
     # session
     'session': {
         'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': f'redis://{REDIS_STR}127.0.0.1:6379/1',
+        'LOCATION': f'redis://{REDIS_STR}{REDIS_HOST}:{REDIS_PORT}/1',
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
         }
@@ -136,7 +138,7 @@ CACHES = {
     # 用户信息
     'user_info': {
         'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': f'redis://{REDIS_STR}127.0.0.1:6379/2',
+        'LOCATION': f'redis://{REDIS_STR}{REDIS_HOST}:{REDIS_PORT}/2',
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
         }
@@ -144,7 +146,7 @@ CACHES = {
     # 在线用户监测
     'online_user': {
         'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': f'redis://{REDIS_STR}127.0.0.1:6379/3',
+        'LOCATION': f'redis://{REDIS_STR}{REDIS_HOST}:{REDIS_PORT}/3',
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
         }
@@ -225,7 +227,7 @@ JWT_AUTH = {
 WHITE_LIST = ['/api/oauth/login/', '/docs/.*']  # 权限认证白名单
 REGEX_URL = '^{url}$'  # 严格正则url
 
-DEFAULT_PWD = '123456'  # 创建用户默认密码
+DEFAULT_PWD = os.getenv('DEFAULT_PWD', '123456')  # 创建用户默认密码
 
 AUTHENTICATION_BACKENDS = [
     'oauth.utils.UsernameMobileAuthBackend',  # 自定义用户认证方法
@@ -337,5 +339,16 @@ LOGGING = {
     }
 }
 
-# channels配置(用于实现WebSocket)
+# channels配置(配置ASGI, 用于实现WebSocket)
 ASGI_APPLICATION = 'drf_admin.routing.application'
+
+# django-channels配置
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': "channels_redis.core.RedisChannelLayer",
+        'CONFIG': {
+            'hosts': [f'redis://{REDIS_STR}{REDIS_HOST}:{REDIS_PORT}/4'],
+            'symmetric_encryption_keys': [SECRET_KEY],
+        },
+    },
+}
