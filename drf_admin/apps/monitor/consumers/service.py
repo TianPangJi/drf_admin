@@ -8,7 +8,6 @@
 @create   : 2020/7/29 20:24
 """
 import json
-import time
 from datetime import datetime
 
 import psutil
@@ -39,11 +38,6 @@ class ResourcesConsumer(AsyncWebsocketConsumer):
             }
         )
 
-        while True:
-            data = await self.get_data()
-            await self.send(text_data=json.dumps(data))
-            time.sleep(2)
-
     async def disconnect(self, code):
         # 关闭
         await self.channel_layer.group_discard(
@@ -69,7 +63,7 @@ class ResourcesConsumer(AsyncWebsocketConsumer):
         # 系统运行时间
         run_time = datetime.now() - datetime.fromtimestamp(psutil.boot_time())
         days = run_time.days
-        hours = round(run_time.seconds / 60, 1)
+        hours = round(run_time.seconds / 60 / 60, 1)
         # 磁盘信息
         disk = psutil.disk_usage('/')
         disk_total = disk.total
@@ -77,16 +71,17 @@ class ResourcesConsumer(AsyncWebsocketConsumer):
         disk_used = disk.used
         disk_percent = disk.percent
         data = {'cpu': {'percent': float(cpu_percent), 'count': str(cpu_count) + ' Cores'},
-                'mem': {'total': str(round(men_total / 1024 / 1024 / 1024, 2)) + ' MB',
-                        'free': str(round(men_free / 1024 / 1024 / 1024, 2)) + ' MB',
-                        'used': str(round(men_used / 1024 / 1024 / 1024, 2)) + ' MB',
+                'mem': {'total': str(round(men_total / 1024 / 1024 / 1024, 2)) + ' GB',
+                        'free': str(round(men_free / 1024 / 1024 / 1024, 2)) + ' GB',
+                        'used': str(round(men_used / 1024 / 1024 / 1024, 2)) + ' GB',
                         'percent': float(men_percent)
                         },
-                'disk': {'total': str(round(disk_total / 1024 / 1024 / 1024, 2)) + ' MB',
-                         'free': str(round(disk_free / 1024 / 1024 / 1024, 2)) + ' MB',
-                         'used': str(round(disk_used / 1024 / 1024 / 1024, 2)) + ' MB',
+                'disk': {'total': str(round(disk_total / 1024 / 1024 / 1024, 2)) + ' GB',
+                         'free': str(round(disk_free / 1024 / 1024 / 1024, 2)) + ' GB',
+                         'used': str(round(disk_used / 1024 / 1024 / 1024, 2)) + ' GB',
                          'percent': float(disk_percent)
                          },
-                'sys': {'run_time': f'{days} Days {hours} Hours'}
+                'sys': {'run_time': f'{days} 天 {hours} 小时'},
+                'time': datetime.now().strftime('%H:%M:%S')
                 }
         return data
