@@ -18,6 +18,9 @@ from rest_framework.response import Response
 from rest_framework import status, exceptions
 
 # 获取在配置文件中定义的logger，用来记录日志
+from monitor.models import ErrorLogs
+from oauth.utils import get_request_ip
+
 logger = logging.getLogger('error')
 
 
@@ -75,11 +78,35 @@ def exception_handler(exc, context):
     elif isinstance(exc, DatabaseError) or isinstance(exc, RedisError):
         # 数据库异常
         view = context['view']
-        logger.error('[%s] %s' % (view, traceback.format_exc()))
+        # 数据库记录异常
+        detail = traceback.format_exc()
+        write_error_logs(exc, context, detail)
+        logger.error('[%s] %s' % (view, detail))
         response = Response({'detail': '服务器内部错误'}, status=status.HTTP_507_INSUFFICIENT_STORAGE)
     else:
         # 未知错误
         view = context['view']
-        logger.error('[%s] %s' % (view, traceback.format_exc()))
+        # 数据库记录异常
+        detail = traceback.format_exc()
+        write_error_logs(exc, context, detail)
+        logger.error('[%s] %s' % (view, detail))
         response = Response({'detail': '服务端未知错误'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     return response
+
+
+def write_error_logs(exc, context, detail):
+    """
+    记录错误日志信息
+    :param exc: 异常
+    :param context: 抛出异常的上下文
+    :param detail: 异常详情
+    :return:
+    """
+    data = {
+        'username': context['request'].user.username if context['request'].user.username else 'AnonymousUser',
+        'view': context['view'].get_view_name(),
+        'desc': str(exc),
+        'ip': get_request_ip(context['request']),
+        'detail': detail
+    }
+    ErrorLogs.objects.create(**data)

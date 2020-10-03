@@ -24,7 +24,7 @@ class ServiceMonitorAPIView(APIView):
     """
 
     def get(self, request):
-        service_info = {}
+        service_info = dict()
         service_info['platform'] = platform.platform()
         service_info['ip'] = self.get_host_ip()
         return Response(service_info, status=status.HTTP_200_OK)

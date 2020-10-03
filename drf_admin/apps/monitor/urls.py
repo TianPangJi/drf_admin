@@ -9,9 +9,10 @@
 """
 from django.urls import path
 
-from monitor.views import users, service
+from monitor.views import users, service, error
 
 urlpatterns = [
     path('users/', users.OnlineUsersListAPIView.as_view()),
     path('service/', service.ServiceMonitorAPIView.as_view()),
+    path('error/', error.ErrorLogAPIView.as_view()),
 ]

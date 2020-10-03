@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     # 注册apps
     'oauth',
     'system',
+    'monitor',
 ]
 
 MIDDLEWARE = [
