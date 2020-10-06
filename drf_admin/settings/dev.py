@@ -67,6 +67,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     # django_user_agents
     'django_user_agents.middleware.UserAgentMiddleware',
+    # IP黑名单校验
+    'drf_admin.utils.middleware.IpBlackListMiddleware',
     # 在线用户监控
     'drf_admin.utils.middleware.OnlineUsersMiddleware',
     # 下面两个中间件放置在最后位置, 且两者保证顺序
@@ -136,7 +138,7 @@ CACHES = {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
         }
     },
-    # 用户信息
+    # 用户信息/ip黑名单
     'user_info': {
         'BACKEND': 'django_redis.cache.RedisCache',
         'LOCATION': f'redis://{REDIS_STR}{REDIS_HOST}:{REDIS_PORT}/2',
@@ -349,6 +351,8 @@ CHANNEL_LAYERS = {
         'CONFIG': {
             'hosts': [f'redis://{REDIS_STR}{REDIS_HOST}:{REDIS_PORT}/4'],
             'symmetric_encryption_keys': [SECRET_KEY],
+            'capacity': 1500,
+            'expiry': 10
         },
     },
 }

@@ -27,7 +27,7 @@ class IpBlackList(BaseModel):
     """
     ip黑名单
     """
-    ip = models.GenericIPAddressField(verbose_name='IP')
+    ip = models.GenericIPAddressField(unique=True, verbose_name='IP')
 
     objects = models.Manager()
 

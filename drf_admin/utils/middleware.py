@@ -12,6 +12,7 @@ import time
 
 from django.utils.deprecation import MiddlewareMixin
 from django_redis import get_redis_connection
+from rest_framework import status
 from rest_framework.response import Response
 
 from oauth.utils import get_request_browser, get_request_os, get_request_ip
@@ -63,7 +64,6 @@ class OperationLogMiddleware:
 class ResponseMiddleware(MiddlewareMixin):
     """
     自定义响应数据格式
-    eg: {}
     """
 
     def process_request(self, request):
@@ -112,3 +112,17 @@ class OnlineUsersMiddleware(MiddlewareMixin):
                 conn.hmset(f'online_user_{request.user.id}', online_info)
             conn.expire(f'online_user_{request.user.id}', 60 * 10)
         return response
+
+
+class IpBlackListMiddleware(MiddlewareMixin):
+    """
+    IP黑名单校验中间件
+    """
+
+    def process_request(self, request):
+        request_ip = get_request_ip(request)
+        # 在redis中判断IP是否在IP黑名单中/
+        conn = get_redis_connection('user_info')
+        if conn.sismember('ip_black_list', request_ip):
+            from django.http import HttpResponse
+            return HttpResponse('IP已被拉入黑名单, 请联系管理员', status=status.HTTP_400_BAD_REQUEST)

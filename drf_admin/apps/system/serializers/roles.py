@@ -7,7 +7,7 @@
 """
 from rest_framework import serializers
 
-from system.models import Roles, Permissions
+from system.models import Roles
 
 
 class RolesSerializer(serializers.ModelSerializer):
