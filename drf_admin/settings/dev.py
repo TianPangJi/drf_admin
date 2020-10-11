@@ -13,6 +13,8 @@ import datetime
 import os
 import sys
 
+import psutil
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -226,14 +228,16 @@ JWT_AUTH = {
     'JWT_ALLOW_REFRESH': True,  # 允许刷新Token
     'JWT_AUTH_HEADER_PREFIX': 'Bearer',  # 定义Token携带头信息, Authorization: Bearer ...
 }
-WHITE_LIST = ['/api/oauth/login/', '/docs/.*', '/swagger/.*']  # 权限认证白名单
-REGEX_URL = '^{url}$'  # 严格正则url
-
-DEFAULT_PWD = os.getenv('DEFAULT_PWD', '123456')  # 创建用户默认密码
 
 AUTHENTICATION_BACKENDS = [
     'oauth.utils.UsernameMobileAuthBackend',  # 自定义用户认证方法
 ]
+
+DEFAULT_PWD = os.getenv('DEFAULT_PWD', '123456')  # 创建用户默认密码
+BASE_API = 'api/'  # 项目BASE API, 如设置时必须以/结尾
+WHITE_LIST = [f'/{BASE_API}oauth/login/', '/docs/.*', '/swagger/.*']  # 权限认证白名单
+REGEX_URL = '^{url}$'  # 权限匹配时,严格正则url
+PROJECT_START_TIME = psutil.Process().create_time()
 
 # Swagger配置 https://github.com/axnsan12/drf-yasg/issues/58
 SWAGGER_SETTINGS = {
@@ -244,6 +248,22 @@ SWAGGER_SETTINGS = {
             'in': 'header',
             'name': 'Authorization'
         }
+    },
+}
+
+# channels配置(配置ASGI, 用于实现WebSocket)
+ASGI_APPLICATION = 'drf_admin.routing.application'
+
+# django-channels配置
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': "channels_redis.core.RedisChannelLayer",
+        'CONFIG': {
+            'hosts': [f'redis://{REDIS_STR}{REDIS_HOST}:{REDIS_PORT}/4'],
+            'symmetric_encryption_keys': [SECRET_KEY],
+            'capacity': 1500,
+            'expiry': 10
+        },
     },
 }
 
@@ -339,20 +359,4 @@ LOGGING = {
             'propagate': True,
         }
     }
-}
-
-# channels配置(配置ASGI, 用于实现WebSocket)
-ASGI_APPLICATION = 'drf_admin.routing.application'
-
-# django-channels配置
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': "channels_redis.core.RedisChannelLayer",
-        'CONFIG': {
-            'hosts': [f'redis://{REDIS_STR}{REDIS_HOST}:{REDIS_PORT}/4'],
-            'symmetric_encryption_keys': [SECRET_KEY],
-            'capacity': 1500,
-            'expiry': 10
-        },
-    },
 }

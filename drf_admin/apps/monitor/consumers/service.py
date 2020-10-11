@@ -13,6 +13,7 @@ from datetime import datetime
 import psutil
 from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
+from django.conf import settings
 
 
 class ResourcesConsumer(AsyncWebsocketConsumer):
@@ -61,7 +62,7 @@ class ResourcesConsumer(AsyncWebsocketConsumer):
         men_used = mem.used
         men_percent = mem.percent
         # 系统运行时间
-        run_time = datetime.now() - datetime.fromtimestamp(psutil.boot_time())
+        run_time = datetime.now() - datetime.fromtimestamp(settings.PROJECT_START_TIME)
         days = run_time.days
         hours = round(run_time.seconds / 60 / 60, 1)
         # 磁盘信息

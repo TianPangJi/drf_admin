@@ -5,7 +5,9 @@
 @file     : roles.py 
 @create   : 2020/6/27 17:55 
 """
+from rest_framework import status
 from rest_framework.filters import SearchFilter, OrderingFilter
+from rest_framework.response import Response
 
 from drf_admin.utils.views import AdminViewSet
 from system.models import Roles
@@ -55,3 +57,18 @@ class RolesViewSet(AdminViewSet):
             return RolesPartialSerializer
         else:
             return RolesSerializer
+
+    def update(self, request, *args, **kwargs):
+        if self.get_object().name == 'admin':
+            return Response(data={'detail': 'admin角色不可修改'}, status=status.HTTP_400_BAD_REQUEST)
+        return super().update(request, *args, **kwargs)
+
+    def destroy(self, request, *args, **kwargs):
+        if self.get_object().name == 'admin':
+            return Response(data={'detail': 'admin角色不可删除'}, status=status.HTTP_400_BAD_REQUEST)
+        return super().destroy(request, *args, **kwargs)
+
+    def partial_update(self, request, *args, **kwargs):
+        if self.get_object().name == 'admin':
+            return Response(data={'detail': 'admin角色, 默认拥有所有权限'}, status=status.HTTP_400_BAD_REQUEST)
+        return super().partial_update(request, *args, **kwargs)

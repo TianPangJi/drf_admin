@@ -27,6 +27,12 @@ class RbacPermission(BasePermission):
     自定义权限认证
     """
 
+    @staticmethod
+    def pro_uri(uri):
+        base_api = settings.BASE_API
+        uri = '/' + base_api + '/' + uri + '/'
+        return re.sub('/+', '/', uri)
+
     def has_permission(self, request, view):
         request_url = request.path
         # 如果请求url在白名单，放行
@@ -45,11 +51,11 @@ class RbacPermission(BasePermission):
                 return True
         # RBAC权限验证
         request_method = request.method
-        permission_urls = Permissions.objects.values('path').distinct()
+        permission_urls = Permissions.objects.filter(method=request_method).values('path').distinct()
         flag = False
         flag_url = ''
         for values in permission_urls:
-            if re.match(settings.REGEX_URL.format(url=values.get('path')), request_url):
+            if re.match(settings.REGEX_URL.format(url=self.pro_uri(values.get('path'))), request_url):
                 flag = True
                 flag_url = values.get('path')
         if flag:
