@@ -18,7 +18,7 @@ class ErrorLogs(BaseModel):
 
     class Meta:
         db_table = 'monitor_errorlogs'
-        verbose_name = '权限'
+        verbose_name = '错误日志'
         verbose_name_plural = verbose_name
         ordering = ['-id']
 

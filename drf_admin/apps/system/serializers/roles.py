@@ -26,7 +26,7 @@ class RolesSerializer(serializers.ModelSerializer):
 
 class RolesPartialSerializer(serializers.ModelSerializer):
     """
-    用户局部更新序列化器
+    用户局部更新序列化器(角色授权)
     """
 
     class Meta:

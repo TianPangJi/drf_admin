@@ -62,7 +62,10 @@ class ResourcesConsumer(AsyncWebsocketConsumer):
         men_used = mem.used
         men_percent = mem.percent
         # 系统运行时间
-        run_time = datetime.now() - datetime.fromtimestamp(settings.PROJECT_START_TIME)
+        date_now = datetime.now()
+        run_time = date_now - datetime.fromtimestamp(settings.PROJECT_START_TIME)
+        # 系统时间
+        now_date, now_time = date_now.strftime('%Y-%m-%d'), datetime.now().strftime('%H:%M:%S')
         days = run_time.days
         hours = round(run_time.seconds / 60 / 60, 1)
         # 磁盘信息
@@ -83,6 +86,6 @@ class ResourcesConsumer(AsyncWebsocketConsumer):
                          'percent': float(disk_percent)
                          },
                 'sys': {'run_time': f'{days} 天 {hours} 小时'},
-                'time': datetime.now().strftime('%H:%M:%S')
+                'time': {'date': now_date, 'time': now_time}
                 }
         return data

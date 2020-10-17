@@ -37,7 +37,7 @@ class RolesViewSet(AdminViewSet):
     角色修改, status: 200(成功), return: 修改增角色信息
 
     partial_update:
-    角色--局部修改
+    角色--局部修改(角色`授权)
 
     角色局部修改, status: 200(成功), return: 修改增角色信息
 
