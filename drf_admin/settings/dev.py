@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'oauth',
     'system',
     'monitor',
+    'cmdb',
 ]
 
 MIDDLEWARE = [
@@ -266,6 +267,9 @@ CHANNEL_LAYERS = {
         },
     },
 }
+
+# simpleui配置项
+SIMPLEUI_HOME_INFO = False  # 设置admin站点不显示simpleui的git页
 
 # 日志配置
 LOGS_DIR = os.path.join(os.path.dirname(BASE_DIR), 'logs')

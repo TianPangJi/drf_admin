@@ -30,15 +30,17 @@ class Assets(BaseModel):
     asset_type = models.CharField(choices=asset_type_choice, max_length=64, default='server', verbose_name="资产类型")
     asset_status = models.SmallIntegerField(choices=asset_status_choice, default=0, verbose_name='设备状态')
     manage_ip = models.GenericIPAddressField(null=True, blank=True, verbose_name='管理IP')
-    Departments = models.ForeignKey('system.Departments', null=True, blank=True, on_delete=models.SET_NULL,
-                                    verbose_name='所属部门')
+    department = models.ForeignKey('system.Departments', null=True, blank=True, on_delete=models.SET_NULL,
+                                   verbose_name='所属部门')
     admin = models.ForeignKey('oauth.Users', null=True, blank=True, on_delete=models.SET_NULL, verbose_name='资产管理员')
     cabinet = models.ForeignKey('Cabinets', null=True, blank=True, on_delete=models.SET_NULL, verbose_name='所在机柜')
     expire_day = models.DateField(null=True, blank=True, verbose_name="过保日期")
     memo = models.TextField(null=True, blank=True, verbose_name='备注')
 
+    objects = models.Manager()
+
     def __str__(self):
-        return f'{self.get_asset_type_display()}--{self.name})'
+        return f'{self.get_asset_type_display()}--{self.name}'
 
     class Meta:
         db_table = 'cmdb_assets'
@@ -62,11 +64,13 @@ class Servers(models.Model):
         ('vm', '虚拟机'),
     )
 
-    asset = models.OneToOneField('Assets', on_delete=models.CASCADE)  # 非常关键的一对一关联！asset被删除的时候一并删除server
-    server_type = models.CharField(choices=server_type_choice, default=0, verbose_name="服务器类型")
-    server_system_type = models.SmallIntegerField(choices=server_type_choice, default=0, verbose_name="服务器系统类型")
+    asset = models.OneToOneField('Assets', on_delete=models.CASCADE, related_name='server')  # 非常关键的一对一关联
+    server_type = models.CharField(max_length=16, choices=server_type_choice, default=0, verbose_name="服务器类型")
+    server_system_type = models.SmallIntegerField(choices=server_system_type_choice, default=0, verbose_name="服务器系统类型")
     model = models.CharField(max_length=128, null=True, blank=True, verbose_name='服务器型号')
     use = models.CharField(max_length=128, null=True, blank=True, verbose_name='用途')
+
+    objects = models.Manager()
 
     def __str__(self):
         return f'{self.get_server_system_type_display()}--{self.get_server_type_display()}--{self.asset.name}'
@@ -88,9 +92,11 @@ class SecurityDevices(models.Model):
         (4, '运维审计系统'),
     )
 
-    asset = models.OneToOneField('Assets', on_delete=models.CASCADE)
+    asset = models.OneToOneField('Assets', on_delete=models.CASCADE, related_name='security')
     device_type = models.SmallIntegerField(choices=device_type_choice, default=0, verbose_name="安全设备类型")
     model = models.CharField(max_length=128, default='未知型号', verbose_name='安全设备型号')
+
+    objects = models.Manager()
 
     def __str__(self):
         return f'{self.get_device_type_display()}--{self.asset.name}'
@@ -112,9 +118,11 @@ class StorageDevices(models.Model):
         (4, '磁带机'),
     )
 
-    asset = models.OneToOneField('Assets', on_delete=models.CASCADE)
+    asset = models.OneToOneField('Assets', on_delete=models.CASCADE, related_name='storage')
     device_type = models.SmallIntegerField(choices=device_type_choice, default=0, verbose_name="存储设备类型")
     model = models.CharField(max_length=128, default='未知型号', verbose_name='存储设备型号')
+
+    objects = models.Manager()
 
     def __str__(self):
         return f'{self.get_device_type_display()}--{self.asset.name}'
@@ -136,7 +144,7 @@ class NetworkDevices(models.Model):
         (4, 'VPN设备'),
     )
 
-    asset = models.OneToOneField('Assets', on_delete=models.CASCADE)
+    asset = models.OneToOneField('Assets', on_delete=models.CASCADE, related_name='network')
     device_type = models.SmallIntegerField(choices=device_type_choice, default=0, verbose_name="网络设备类型")
     vlan_ip = models.GenericIPAddressField(blank=True, null=True, verbose_name="VLanIP")
     intranet_ip = models.GenericIPAddressField(blank=True, null=True, verbose_name="内网IP")
@@ -144,6 +152,8 @@ class NetworkDevices(models.Model):
     firmware = models.CharField(max_length=128, blank=True, null=True, verbose_name="设备固件版本")
     port_num = models.SmallIntegerField(null=True, blank=True, verbose_name="端口个数")
     device_detail = models.TextField(null=True, blank=True, verbose_name="详细配置")
+
+    objects = models.Manager()
 
     def __str__(self):
         return f'{self.get_device_type_display()}--{self.asset.name}'
@@ -157,9 +167,12 @@ class NetworkDevices(models.Model):
 
 class IDC(BaseModel):
     """机房"""
+
     name = models.CharField(max_length=64, unique=True, verbose_name="机房名称")
     address = models.CharField(max_length=64, unique=True, verbose_name="机房所在位置")
     memo = models.CharField(max_length=128, blank=True, null=True, verbose_name='备注')
+
+    objects = models.Manager()
 
     def __str__(self):
         return self.name
@@ -174,8 +187,10 @@ class IDC(BaseModel):
 class Cabinets(BaseModel):
     """机柜"""
     name = models.CharField(max_length=64, unique=True, verbose_name="机柜名称")
-    idc = models.ForeignKey('IDC', on_delete=models.SET_NULL, verbose_name="所在机房")
+    idc = models.ForeignKey('IDC', blank=True, null=True, on_delete=models.SET_NULL, verbose_name="所在机房")
     memo = models.CharField(max_length=128, blank=True, null=True, verbose_name='备注')
+
+    objects = models.Manager()
 
     def __str__(self):
         return self.name
@@ -188,10 +203,13 @@ class Cabinets(BaseModel):
 
 
 class Accounts(models.Model):
+    """服务器登录账户表"""
     username = models.CharField(max_length=32, verbose_name='登录账户')
     password = models.CharField(max_length=64, verbose_name='登录密码')
-    server = models.ForeignKey('Servers', on_delete=models.CASCADE, verbose_name="服务器")
+    server = models.ForeignKey('Servers', on_delete=models.CASCADE, verbose_name="服务器", related_name='accounts')
     port = models.PositiveIntegerField(verbose_name='登录端口号')
+
+    objects = models.Manager()
 
     def __str__(self):
         return f'{self.server.asset.name}--{self.username}'
@@ -217,7 +235,6 @@ class Accounts(models.Model):
     def set_password(self, row_password):
         """加密密码并保存实例"""
         self.password = self.encrypt(row_password)
-        self.save()
 
     def get_password_display(self):
         """

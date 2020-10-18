@@ -45,6 +45,7 @@ urlpatterns = [
     path(f'{base_api}oauth/', include('oauth.urls')),  # 用户鉴权模块
     path(f'{base_api}system/', include('system.urls')),  # 系统管理模块
     path(f'{base_api}monitor/', include('monitor.urls')),  # 系统监控模块
+    path(f'{base_api}cmdb/', include('cmdb.urls')),  # 资源管理模块
 
     # swagger(API文档)
     re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
