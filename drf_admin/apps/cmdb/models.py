@@ -169,7 +169,6 @@ class IDC(BaseModel):
     """机房"""
 
     name = models.CharField(max_length=64, unique=True, verbose_name="机房名称")
-    address = models.CharField(max_length=64, unique=True, verbose_name="机房所在位置")
     memo = models.CharField(max_length=128, blank=True, null=True, verbose_name='备注')
 
     objects = models.Manager()

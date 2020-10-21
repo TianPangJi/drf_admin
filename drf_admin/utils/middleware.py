@@ -40,8 +40,9 @@ class OperationLogMiddleware:
             request_body.update(dict(request.POST))
             logger = self.operation_logger
         # 处理密码, log中密码已******替代真实密码
-        if request_body.get('password'):
-            request_body['password'] = '******'
+        for key in request_body:
+            if 'password' in key:
+                request_body['password'] = '******'
         response = self.get_response(request)
         try:
             response_body = response.data

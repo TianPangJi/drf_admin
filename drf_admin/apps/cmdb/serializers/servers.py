@@ -54,6 +54,23 @@ class ServersAssetsSerializers(WritableNestedModelSerializer):
 
     def to_representation(self, instance):
         ret = super().to_representation(instance)
+        # 添加中文显示
         ret['asset_type_display'] = instance.get_asset_type_display()
         ret['asset_status_display'] = instance.get_asset_status_display()
+        if instance.department:
+            ret['department_display'] = instance.department.name()
+        else:
+            ret['department_display'] = ''
+        if instance.admin:
+            ret['admin_display'] = instance.admin.username()
+        else:
+            ret['admin_display'] = ''
+        if instance.cabinet:
+            ret['cabinet_display'] = instance.cabinet.name()
+        else:
+            ret['cabinet_display'] = ''
+        if instance.cabinet.idc:
+            ret['idc'] = instance.cabinet.idc.name()
+        else:
+            ret['idc'] = ''
         return ret

@@ -6,9 +6,11 @@
 @create   : 2020/6/27 17:55 
 """
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import mixins
 from rest_framework.filters import SearchFilter, OrderingFilter
+from rest_framework.generics import GenericAPIView
 
-from drf_admin.apps.system.serializers.users import UsersSerializer, UsersPartialSerializer
+from drf_admin.apps.system.serializers.users import UsersSerializer, UsersPartialSerializer, ResetPasswordSerializer
 from drf_admin.utils.views import AdminViewSet
 from oauth.models import Users
 from system.filters.users import UsersFilter
@@ -63,3 +65,16 @@ class UsersViewSet(AdminViewSet):
             return UsersPartialSerializer
         else:
             return UsersSerializer
+
+
+class ResetPasswordAPIView(mixins.UpdateModelMixin, GenericAPIView):
+    """
+    patch:
+    用户--重置密码
+
+    用户重置密码, status: 200(成功), return: None
+    """
+    serializer_class = ResetPasswordSerializer
+
+    def patch(self, request, *args, **kwargs):
+        return self.partial_update(request, *args, **kwargs)

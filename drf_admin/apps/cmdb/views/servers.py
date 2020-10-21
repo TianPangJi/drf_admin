@@ -10,8 +10,10 @@
 from django.db.models import Q
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from cmdb.models import Assets
+from cmdb.models import Assets, Servers
 from cmdb.serializers.servers import ServersAssetsSerializers
 from drf_admin.utils.views import AdminViewSet
 from system.models import Departments
@@ -78,3 +80,29 @@ class ServersViewSet(AdminViewSet):
             department_ids_set.add(str(department.id))
             self.__get_user_departments(department, department_ids_set)
         return department_ids_set
+
+
+class ServersSystemTypeAPIView(APIView):
+    """
+    get:
+    服务器--models系统类型列表
+
+    服务器models中的系统类型列表信息, status: 200(成功), return: 服务器models中的系统类型列表
+    """
+
+    def get(self, request):
+        methods = [{'value': value[0], 'label': value[1]} for value in Servers.server_system_type_choice]
+        return Response(data={'results': methods})
+
+
+class ServersTypeAPIView(APIView):
+    """
+    get:
+    服务器--models类型列表
+
+    服务器models中的类型列表信息, status: 200(成功), return: 服务器models中的类型列表
+    """
+
+    def get(self, request):
+        methods = [{'value': value[0], 'label': value[1]} for value in Servers.server_type_choice]
+        return Response(data={'results': methods})
