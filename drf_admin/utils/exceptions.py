@@ -105,7 +105,7 @@ def write_error_logs(exc, context, detail):
     data = {
         'username': context['request'].user.username if context['request'].user.username else 'AnonymousUser',
         'view': context['view'].get_view_name(),
-        'desc': str(exc),
+        'desc': exc.__str__(),
         'ip': get_request_ip(context['request']),
         'detail': detail
     }

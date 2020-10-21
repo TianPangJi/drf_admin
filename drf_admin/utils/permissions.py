@@ -6,7 +6,6 @@
 @create   : 2020/6/28 21:52 
 """
 import re
-from collections import defaultdict
 from django.conf import settings
 from django_redis import get_redis_connection
 from rest_framework import status

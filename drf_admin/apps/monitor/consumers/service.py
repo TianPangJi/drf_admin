@@ -61,7 +61,7 @@ class ResourcesConsumer(AsyncWebsocketConsumer):
         men_free = mem.free
         men_used = mem.used
         men_percent = mem.percent
-        # 系统运行时间
+        # 项目不间断运行时间
         date_now = datetime.now()
         run_time = date_now - datetime.fromtimestamp(settings.PROJECT_START_TIME)
         # 系统时间

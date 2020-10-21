@@ -26,8 +26,7 @@ class MultipleDestroyMixin:
         del_queryset = queryset.filter(id__in=delete_ids)
         if len(delete_ids) != len(del_queryset):
             return Response(data={'detail': '删除数据不存在'}, status=status.HTTP_400_BAD_REQUEST)
-        for queryset in del_queryset:
-            queryset.delete()
+        del_queryset.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
@@ -51,7 +50,6 @@ class AdminViewSet(ModelViewSet, MultipleDestroyMixin):
 class TreeAPIView(ListAPIView):
     """
     定义Element Tree树结构
-
     """
 
     def list(self, request, *args, **kwargs):

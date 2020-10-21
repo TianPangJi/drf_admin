@@ -37,7 +37,7 @@ class RolesViewSet(AdminViewSet):
     角色修改, status: 200(成功), return: 修改增角色信息
 
     partial_update:
-    角色--局部修改(角色`授权)
+    角色--局部修改(角色授权)
 
     角色局部修改, status: 200(成功), return: 修改增角色信息
 
@@ -72,3 +72,14 @@ class RolesViewSet(AdminViewSet):
         if self.get_object().name == 'admin':
             return Response(data={'detail': 'admin角色, 默认拥有所有权限'}, status=status.HTTP_400_BAD_REQUEST)
         return super().partial_update(request, *args, **kwargs)
+
+    def multiple_delete(self, request, *args, **kwargs):
+        delete_ids = request.data.get('ids')
+        try:
+            admin = Roles.objects.get(name='admin')
+            if isinstance(delete_ids, list):
+                if admin.id in delete_ids:
+                    return Response(data={'detail': 'admin角色不可删除'}, status=status.HTTP_400_BAD_REQUEST)
+        except Roles.DoesNotExist:
+            pass
+        return super().multiple_delete(request, *args, **kwargs)
