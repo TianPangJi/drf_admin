@@ -7,6 +7,7 @@
 @file     : servers.py
 @create   : 2020/10/17 18:45
 """
+from django.contrib.auth.models import AnonymousUser
 from django.db.models import Q
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
@@ -15,6 +16,7 @@ from rest_framework.views import APIView
 
 from cmdb.models import Assets, Servers
 from cmdb.serializers.servers import ServersAssetsSerializers
+from drf_admin.common.departments import get_departments_id
 from drf_admin.utils.views import AdminViewSet
 from system.models import Departments
 
@@ -64,22 +66,19 @@ class ServersViewSet(AdminViewSet):
     ordering_fields = ('id', 'name', 'sn')
 
     def get_queryset(self):
+        # 解决drf-yasg加载报错
+        if isinstance(self.request.user, AnonymousUser):
+            return Assets.objects.none()
         # ①管理员角色用户可查看所有
         if {'name': 'admin'} in self.request.user.roles.values('name'):
             return Assets.objects.filter(asset_type='server')
         # ②每个用户只能查看到所属部门及其子部门下的服务器, 及该用户管理服务器
-        departments = self.__get_user_departments(self.request.user.department.id,
-                                                  set(str(self.request.user.department.id)))
-        return (Assets.objects.filter(asset_type='server').filter(
-            Q(department__in=departments) | Q(admin=self.request.user))).distinct()
-
-    def __get_user_departments(self, department_id, department_ids_set):
-        # 获取该请求用户所属部门及其子部门的部门id集合
-        departments = Departments.objects.filter(pid=department_id)
-        for department in departments:
-            department_ids_set.add(str(department.id))
-            self.__get_user_departments(department, department_ids_set)
-        return department_ids_set
+        if self.request.user.department:
+            departments = get_departments_id(self.request.user.department.id)
+            return (Assets.objects.filter(asset_type='server').filter(
+                Q(department__in=departments) | Q(admin=self.request.user))).distinct()
+        else:
+            return Assets.objects.filter(asset_type='server', admin=self.request.user)
 
 
 class ServersSystemTypeAPIView(APIView):

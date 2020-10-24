@@ -74,6 +74,7 @@ class ResetPasswordAPIView(mixins.UpdateModelMixin, GenericAPIView):
 
     用户重置密码, status: 200(成功), return: None
     """
+    queryset = Users.objects.all()
     serializer_class = ResetPasswordSerializer
 
     def patch(self, request, *args, **kwargs):

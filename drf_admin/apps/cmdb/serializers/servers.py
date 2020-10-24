@@ -54,7 +54,7 @@ class ServersAssetsSerializers(WritableNestedModelSerializer):
 
     def to_representation(self, instance):
         ret = super().to_representation(instance)
-        # 添加中文显示
+        # 添加choices中文显示
         ret['asset_type_display'] = instance.get_asset_type_display()
         ret['asset_status_display'] = instance.get_asset_status_display()
         if instance.department:
