@@ -26,6 +26,7 @@ django-user-agents==0.4.0
 djangorestframework==3.11.0
 djangorestframework-jwt==1.11.0
 dnspython==1.16.0
+drf-writable-nested==0.6.1
 drf-yasg==1.17.1
 eventlet==0.26.1
 greenlet==0.4.16
@@ -47,6 +48,7 @@ psutil==5.7.2
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
 pycparser==2.20
+pycryptodome==3.9.8
 PyHamcrest==2.0.2
 PyJWT==1.7.1
 pyOpenSSL==19.1.0
