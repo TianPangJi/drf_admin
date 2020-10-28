@@ -12,7 +12,8 @@ class Tasks(BaseModel):
         (1, '待下发'),
         (2, '进行中'),
         (3, '已超时'),
-        (4, '已完成'),
+        (4, '待验收'),
+        (5, '完成'),
     )
 
     name = models.CharField(max_length=32, verbose_name='任务名')
