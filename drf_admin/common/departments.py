@@ -17,6 +17,8 @@ def get_departments_id(department_id, departments_id: set = None):
     :param departments_id: 默认为None(所有ID集合)
     :return: id集合
     """
+    if departments_id is None:
+        departments_id = set()
     departments = Departments.objects.filter(pid=department_id)
     for department in departments:
         departments_id.add(department.id)
