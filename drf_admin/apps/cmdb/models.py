@@ -56,7 +56,7 @@ class Servers(models.Model):
         (0, 'Unix'),
         (1, 'Linux'),
         (2, 'Windows'),
-        (2, 'Netware'),
+        (3, 'Netware'),
     )
 
     server_type_choice = (

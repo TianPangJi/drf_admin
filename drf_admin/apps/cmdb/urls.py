@@ -18,5 +18,6 @@ urlpatterns = [
     path('servers/system-type/', servers.ServersSystemTypeAPIView.as_view()),
     path('servers/type/', servers.ServersTypeAPIView.as_view()),
     path('assets/status/', assets.AssetsStatusAPIView.as_view()),
+    path('assets/admin/', assets.AssetsAdminListAPIView.as_view()),
     path('', include(router.urls)),
 ]
