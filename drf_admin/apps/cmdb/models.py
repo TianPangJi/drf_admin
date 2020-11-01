@@ -217,7 +217,7 @@ class Accounts(models.Model):
         db_table = 'cmdb_accounts'
         verbose_name = '服务器登录账户'
         verbose_name_plural = verbose_name
-        ordering = ['-id']
+        ordering = ['id']
 
     @staticmethod
     def encrypt(row_password: str):
