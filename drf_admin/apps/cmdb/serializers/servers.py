@@ -9,7 +9,8 @@
 from drf_writable_nested import WritableNestedModelSerializer
 from rest_framework import serializers
 
-from cmdb.models import Accounts, Servers, Assets
+from cmdb.models import Accounts, Servers
+from cmdb.serializers.assets import BaseAssetsSerializer
 
 
 class AccountsSerializer(serializers.ModelSerializer):
@@ -46,37 +47,15 @@ class ServersSerializer(WritableNestedModelSerializer):
         return ret
 
 
-class ServersAssetsSerializer(WritableNestedModelSerializer):
+class ServersAssetsSerializer(BaseAssetsSerializer):
     """
     服务器资产序列化器
     """
     server = ServersSerializer()  # 使用model中指定的related_name, 防止意外Bug
-    asset_type = serializers.CharField(read_only=True, default='server')
 
-    class Meta:
-        model = Assets
-        fields = '__all__'
-
-    def to_representation(self, instance):
-        ret = super().to_representation(instance)
-        # 添加choices中文显示
-        ret['asset_type_display'] = instance.get_asset_type_display()
-        ret['asset_status_display'] = instance.get_asset_status_display()
-        if instance.department:
-            ret['department_display'] = instance.department.name
-        else:
-            ret['department_display'] = ''
-        if instance.admin:
-            ret['admin_display'] = instance.admin.username
-        else:
-            ret['admin_display'] = ''
-        if instance.cabinet:
-            ret['cabinet_display'] = instance.cabinet.name
-            if instance.cabinet.idc:
-                ret['idc'] = instance.cabinet.idc.name
-            else:
-                ret['idc'] = ''
-        else:
-            ret['cabinet_display'] = ''
-            ret['idc'] = ''
-        return ret
+    def save(self, **kwargs):
+        # 添加默认asset_type为server
+        instance = super(ServersAssetsSerializer, self).save(**kwargs)
+        instance.asset_type = 'server'
+        instance.save()
+        return instance
