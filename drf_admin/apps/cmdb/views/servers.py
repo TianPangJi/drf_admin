@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-
-""" 
+"""
 @author   : Wang Meng
 @github   : https://github.com/tianpangji 
 @software : PyCharm 
@@ -11,14 +10,11 @@ from django.contrib.auth.models import AnonymousUser
 from django.db.models import Q
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
-from rest_framework.response import Response
-from rest_framework.views import APIView
 
 from cmdb.models import Assets, Servers
 from cmdb.serializers.servers import ServersAssetsSerializers
 from drf_admin.common.departments import get_departments_id
-from drf_admin.utils.views import AdminViewSet
-from system.models import Departments
+from drf_admin.utils.views import AdminViewSet, ChoiceAPIView
 
 
 class ServersViewSet(AdminViewSet):
@@ -81,27 +77,21 @@ class ServersViewSet(AdminViewSet):
             return Assets.objects.filter(asset_type='server', admin=self.request.user)
 
 
-class ServersSystemTypeAPIView(APIView):
+class ServersSystemTypeAPIView(ChoiceAPIView):
     """
     get:
     服务器--models系统类型列表
 
     服务器models中的系统类型列表信息, status: 200(成功), return: 服务器models中的系统类型列表
     """
-
-    def get(self, request):
-        methods = [{'value': value[0], 'label': value[1]} for value in Servers.server_system_type_choice]
-        return Response(data={'results': methods})
+    choice = Servers.server_system_type_choice
 
 
-class ServersTypeAPIView(APIView):
+class ServersTypeAPIView(ChoiceAPIView):
     """
     get:
     服务器--models类型列表
 
     服务器models中的类型列表信息, status: 200(成功), return: 服务器models中的类型列表
     """
-
-    def get(self, request):
-        methods = [{'value': value[0], 'label': value[1]} for value in Servers.server_type_choice]
-        return Response(data={'results': methods})
+    choice = Servers.server_type_choice

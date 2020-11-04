@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 @author   : Wang Meng
 @github   : https://github.com/tianpangji

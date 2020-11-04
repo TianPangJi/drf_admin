@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 """ 
 @author   : Wang Meng
 @github   : https://github.com/tianpangji 
@@ -15,20 +14,18 @@ from rest_framework.views import APIView
 
 from cmdb.models import Assets, IDC, Cabinets
 from cmdb.serializers.assets import AssetsAdminSerializers
+from drf_admin.utils.views import ChoiceAPIView
 from oauth.models import Users
 
 
-class AssetsStatusAPIView(APIView):
+class AssetsStatusAPIView(ChoiceAPIView):
     """
     get:
     资产--models状态列表
 
     资产models中的状态列表信息, status: 200(成功), return: 资产models中的状态列表
     """
-
-    def get(self, request):
-        methods = [{'value': value[0], 'label': value[1]} for value in Assets.asset_status_choice]
-        return Response(data={'results': methods})
+    choice = Assets.asset_status_choice
 
 
 class AssetsAdminListAPIView(ListAPIView):
