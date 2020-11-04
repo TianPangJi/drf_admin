@@ -46,7 +46,6 @@ class DepartmentsViewSet(AdminViewSet, TreeAPIView):
 
     部门列表信息, status: 200(成功), return: 部门信息列表
     """
-
     queryset = Departments.objects.all()
     serializer_class = DepartmentsSerializer
     filter_backends = (SearchFilter, OrderingFilter)

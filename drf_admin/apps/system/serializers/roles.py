@@ -12,7 +12,9 @@ from system.models import Roles
 
 
 class RolesSerializer(serializers.ModelSerializer):
-    """角色管理序列化器"""
+    """
+    角色管理序列化器
+    """
     create_time = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S', read_only=True)
 
     class Meta:

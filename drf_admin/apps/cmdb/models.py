@@ -89,7 +89,7 @@ class SecurityDevices(models.Model):
         (0, '防火墙'),
         (1, '入侵检测设备'),
         (2, '互联网网关'),
-        (4, '运维审计系统'),
+        (3, '运维审计系统'),
     )
 
     asset = models.OneToOneField('Assets', on_delete=models.CASCADE, related_name='security')
@@ -115,7 +115,7 @@ class StorageDevices(models.Model):
         (0, '磁盘阵列'),
         (1, '网络存储器'),
         (2, '磁带库'),
-        (4, '磁带机'),
+        (3, '磁带机'),
     )
 
     asset = models.OneToOneField('Assets', on_delete=models.CASCADE, related_name='storage')
@@ -141,7 +141,7 @@ class NetworkDevices(models.Model):
         (0, '路由器'),
         (1, '交换机'),
         (2, '负载均衡'),
-        (4, 'VPN设备'),
+        (3, 'VPN设备'),
     )
 
     asset = models.OneToOneField('Assets', on_delete=models.CASCADE, related_name='network')

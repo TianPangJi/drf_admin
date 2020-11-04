@@ -45,7 +45,6 @@ class PermissionsViewSet(AdminViewSet, TreeAPIView):
 
     权限列表信息, status: 200(成功), return: 权限信息列表
     """
-
     queryset = Permissions.objects.all()
     serializer_class = PermissionsSerializer
     filter_backends = (SearchFilter, OrderingFilter)

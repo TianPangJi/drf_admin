@@ -6,18 +6,16 @@
 @file     : servers.py
 @create   : 2020/10/17 18:45
 """
-from django.contrib.auth.models import AnonymousUser
-from django.db.models import Q
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
 
-from cmdb.models import Assets, Servers
-from cmdb.serializers.servers import ServersAssetsSerializers
-from drf_admin.common.departments import get_departments_id
-from drf_admin.utils.views import AdminViewSet, ChoiceAPIView
+from cmdb.models import Servers
+from cmdb.serializers.servers import ServersAssetsSerializer
+from cmdb.views.assets import BaseAssetsAPIView
+from drf_admin.utils.views import ChoiceAPIView
 
 
-class ServersViewSet(AdminViewSet):
+class ServersViewSet(BaseAssetsAPIView):
     """
     create:
     服务器--新增
@@ -54,27 +52,14 @@ class ServersViewSet(AdminViewSet):
 
     服务器详情信息, status: 200(成功), return: 单个服务器信息详情
     """
-
-    serializer_class = ServersAssetsSerializers
+    serializer_class = ServersAssetsSerializer
     filter_backends = (DjangoFilterBackend, SearchFilter, OrderingFilter)
     filter_fields = ['asset_status']
     search_fields = ('name', 'sn', 'manage_ip')
     ordering_fields = ('id', 'name', 'sn')
 
     def get_queryset(self):
-        # 解决drf-yasg加载报错
-        if isinstance(self.request.user, AnonymousUser):
-            return Assets.objects.none()
-        # ①管理员角色用户可查看所有
-        if {'name': 'admin'} in self.request.user.roles.values('name'):
-            return Assets.objects.filter(asset_type='server')
-        # ②每个用户只能查看到所属部门及其子部门下的服务器, 及该用户管理服务器
-        if self.request.user.department:
-            departments = get_departments_id(self.request.user.department.id)
-            return (Assets.objects.filter(asset_type='server').filter(
-                Q(department__in=departments) | Q(admin=self.request.user))).distinct()
-        else:
-            return Assets.objects.filter(asset_type='server', admin=self.request.user)
+        return super().get_queryset(asset_type='server')
 
 
 class ServersSystemTypeAPIView(ChoiceAPIView):

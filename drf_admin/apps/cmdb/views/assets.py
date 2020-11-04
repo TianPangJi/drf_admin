@@ -6,6 +6,8 @@
 @file     : assets.py
 @create   : 2020/10/21 19:44
 """
+from django.contrib.auth.models import AnonymousUser
+from django.db.models import Q
 from rest_framework import status
 from rest_framework.filters import SearchFilter
 from rest_framework.generics import ListAPIView
@@ -13,8 +15,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from cmdb.models import Assets, IDC, Cabinets
-from cmdb.serializers.assets import AssetsAdminSerializers
-from drf_admin.utils.views import ChoiceAPIView
+from cmdb.serializers.assets import AssetsAdminSerializer
+from drf_admin.common.departments import get_departments_id
+from drf_admin.utils.views import ChoiceAPIView, AdminViewSet
 from oauth.models import Users
 
 
@@ -36,7 +39,7 @@ class AssetsAdminListAPIView(ListAPIView):
     资产管理员列表信息, status: 200(成功), return: 资产管理员列表信息
     """
     queryset = Users.objects.all()
-    serializer_class = AssetsAdminSerializers
+    serializer_class = AssetsAdminSerializer
     filter_backends = (SearchFilter,)
     search_fields = ('username',)
 
@@ -68,3 +71,31 @@ class IDCCabinetsTreeAPIView(APIView):
             else:
                 continue
         return Response(data={'results': data}, status=status.HTTP_200_OK)
+
+
+class BaseAssetsAPIView(AdminViewSet):
+    """
+    资产基类, 仅用于继承, 重写get_queryset且指定asset_type
+    eg:
+        def get_queryset(self):
+            return super().get_queryset(asset_type='server')
+    """
+
+    def get_queryset(self, **kwargs):
+        # 解决drf-yasg加载报错
+        if isinstance(self.request.user, AnonymousUser):
+            return Assets.objects.none()
+        asset_type = kwargs.get('asset_type')
+        assert asset_type is not None, '关键字参数asset_type, 为必传参数'
+        assert asset_type in [values[0] for values in
+                              Assets.asset_type_choice], 'asset_type应存在与Assets.asset_type_choice'
+        # 管理员角色用户可查看所有
+        if {'name': 'admin'} in self.request.user.roles.values('name'):
+            return Assets.objects.filter(asset_type=asset_type)
+        # 每个用户只能查看到所属部门及其子部门下的服务器, 及该用户管理服务器
+        if self.request.user.department:
+            departments = get_departments_id(self.request.user.department.id)
+            return (Assets.objects.filter(asset_type=asset_type).filter(
+                Q(department__in=departments) | Q(admin=self.request.user))).distinct()
+        else:
+            return Assets.objects.filter(asset_type='server', admin=self.request.user)

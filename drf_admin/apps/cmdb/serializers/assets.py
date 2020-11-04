@@ -11,8 +11,10 @@ from rest_framework import serializers
 from oauth.models import Users
 
 
-class AssetsAdminSerializers(serializers.ModelSerializer):
-    """资产管理员序列化器"""
+class AssetsAdminSerializer(serializers.ModelSerializer):
+    """
+    资产管理员序列化器
+    """
 
     class Meta:
         model = Users

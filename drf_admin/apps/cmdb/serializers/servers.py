@@ -12,8 +12,10 @@ from rest_framework import serializers
 from cmdb.models import Accounts, Servers, Assets
 
 
-class AccountsSerializers(serializers.ModelSerializer):
-    """服务器登录账户序列化器"""
+class AccountsSerializer(serializers.ModelSerializer):
+    """
+    服务器登录账户序列化器
+    """
     server = serializers.PrimaryKeyRelatedField(read_only=True)
 
     class Meta:
@@ -26,9 +28,11 @@ class AccountsSerializers(serializers.ModelSerializer):
         return ret
 
 
-class ServersSerializers(WritableNestedModelSerializer):
-    """服务器序列化器"""
-    accounts = AccountsSerializers(many=True)  # 使用model中指定的related_name, 防止意外Bug
+class ServersSerializer(WritableNestedModelSerializer):
+    """
+    服务器序列化器
+    """
+    accounts = AccountsSerializer(many=True)  # 使用model中指定的related_name, 防止意外Bug
     asset = serializers.PrimaryKeyRelatedField(read_only=True)
 
     class Meta:
@@ -42,9 +46,11 @@ class ServersSerializers(WritableNestedModelSerializer):
         return ret
 
 
-class ServersAssetsSerializers(WritableNestedModelSerializer):
-    """服务器资产序列化器"""
-    server = ServersSerializers()  # 使用model中指定的related_name, 防止意外Bug
+class ServersAssetsSerializer(WritableNestedModelSerializer):
+    """
+    服务器资产序列化器
+    """
+    server = ServersSerializer()  # 使用model中指定的related_name, 防止意外Bug
     asset_type = serializers.CharField(read_only=True, default='server')
 
     class Meta:

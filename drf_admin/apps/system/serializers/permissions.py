@@ -25,7 +25,6 @@ class PermissionsTreeSerializer(serializers.ModelSerializer):
     """
     权限数据序列化器(Element Tree)
     """
-
     id = serializers.IntegerField()
     label = serializers.CharField(max_length=20, source='name')
     pid = serializers.PrimaryKeyRelatedField(read_only=True)
