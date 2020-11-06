@@ -33,6 +33,9 @@ class UsersSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         # 数据验证
+        if attrs.get('username'):
+            if attrs.get('username').isdigit():
+                raise serializers.ValidationError('用户名不能为纯数字')
         if attrs.get('mobile'):
             if not re.match(r'^1[3-9]\d{9}$', attrs.get('mobile')):
                 raise serializers.ValidationError('手机格式不正确')

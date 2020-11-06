@@ -98,4 +98,4 @@ class BaseAssetsAPIView(AdminViewSet):
             return (Assets.objects.filter(asset_type=asset_type).filter(
                 Q(department__in=departments) | Q(admin=self.request.user))).distinct()
         else:
-            return Assets.objects.filter(asset_type='server', admin=self.request.user)
+            return Assets.objects.filter(asset_type=asset_type, admin=self.request.user)

@@ -58,7 +58,7 @@ class ServersViewSet(BaseAssetsAPIView):
     search_fields = ('name', 'sn', 'manage_ip')
     ordering_fields = ('id', 'name', 'sn')
 
-    def get_queryset(self):
+    def get_queryset(self, **kwargs):
         return super().get_queryset(asset_type='server')
 
 

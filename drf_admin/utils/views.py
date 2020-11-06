@@ -92,7 +92,7 @@ class ChoiceAPIView(APIView):
                 "'%s' 应该包含一个`choice`属性,或覆盖`get_choice()`方法."
                 % self.__class__.__name__
         )
-        assert isinstance(self.choice, tuple) and len(self.choice) > 1, 'choice数据错误, 应为二维元组'
+        assert isinstance(self.choice, tuple) and len(self.choice) > 0, 'choice数据错误, 应为二维元组'
         for values in self.choice:
             assert isinstance(values, tuple) and len(values) == 2, 'choice数据错误, 应为二维元组'
         return self.choice

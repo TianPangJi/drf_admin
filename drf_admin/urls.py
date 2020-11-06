@@ -17,11 +17,12 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include, re_path
+from django.views.decorators.clickjacking import xframe_options_exempt
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions
 
-# swagger API文档配置
+# swagger API文档配置 https://github.com/axnsan12/drf-yasg
 schema_view = get_schema_view(
     openapi.Info(
         title="DRF Admin API",
@@ -48,8 +49,12 @@ urlpatterns = [
     path(f'{base_api}cmdb/', include('cmdb.urls')),  # 资产管理模块
 
     # swagger(API文档)
-    re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
-    re_path(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-    re_path(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+
+    re_path(rf'^{base_api}swagger(?P<format>\.json|\.yaml)$',
+            xframe_options_exempt(schema_view.without_ui(cache_timeout=0)), name='schema-json'),
+    path(f'{base_api}swagger/',
+         xframe_options_exempt(schema_view.with_ui('swagger', cache_timeout=0)), name='schema-swagger-ui'),
+    path(f'{base_api}redoc/',
+         xframe_options_exempt(schema_view.with_ui('redoc', cache_timeout=0)), name='schema-redoc'),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
