@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'system',
     'monitor',
     'cmdb',
+    'information',
 ]
 
 MIDDLEWARE = [

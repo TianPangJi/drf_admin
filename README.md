@@ -38,10 +38,15 @@
 #### 系统预览
 ~~日后完善，留坑~~
 
+#### 启动项目
+~~日后完善，留坑~~
+
 #### 代码结构
 ~~日后完善，留坑~~
 
 #### 特别鸣谢
 - 感谢 [JetBrains](https://www.jetbrains.com/) 提供的非商业开源软件开发授权
-- 感谢 [PanJiaChen](https://github.com/PanJiaChen/vue-element-admin) 大佬提供的前端模板
-- 感谢 [EL-ADMIN](https://github.com/elunez/eladmin) 大佬提供的页面布局及前端模板
+- 感谢 [Django](https://github.com/django/django) 提供后端Django框架
+- 感谢 [DRF](https://github.com/encode/django-rest-framework) 提供后端DRF框架
+- 感谢 [PanJiaChen](https://github.com/PanJiaChen/vue-element-admin) 提供的前端模板
+- 感谢 [EL-ADMIN](https://github.com/elunez/eladmin) 提供的页面布局及前端模板

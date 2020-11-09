@@ -6,7 +6,6 @@
 @file     : routing.py
 @create   : 2020/7/29 20:21
 """
-
 from channels.routing import ProtocolTypeRouter, URLRouter
 from django.urls import re_path
 

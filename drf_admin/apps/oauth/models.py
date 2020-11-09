@@ -45,6 +45,6 @@ class Users(AbstractUser):
             'email': self.email,
             'permissions': self._get_user_permissions(),
             'department': self.department.name if self.department else '',
-            'mobile': self.mobile
+            'mobile': '' if self.mobile is None else self.mobile
         }
         return user_info

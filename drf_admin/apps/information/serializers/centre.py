@@ -57,6 +57,14 @@ class ChangeInformationSerializer(serializers.ModelSerializer):
         model = Users
         fields = ['name', 'mobile', 'email']
 
+    @staticmethod
+    def validate_mobile(mobile):
+        # 避免字段为 '' 时 models unique约束失败
+        if mobile == '':
+            return None
+        else:
+            return mobile
+
 
 class ChangeAvatarSerializer(serializers.ModelSerializer):
     """
