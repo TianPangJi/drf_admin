@@ -39,7 +39,7 @@
 ~~日后完善，留坑~~
 
 #### 启动项目
-~~日后完善，留坑~~
+[点击查看](https://github.com/TianPangJi/drf_admin/blob/master/doc/run_drf.md)
 
 #### 代码结构
 ~~日后完善，留坑~~
