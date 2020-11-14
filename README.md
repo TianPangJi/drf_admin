@@ -11,6 +11,9 @@
 |---  |--- | --- |
 |  github   |  https://github.com/TianPangJi/drf_admin   |  https://github.com/TianPangJi/fe_admin   |
 
+#### 项目文档
+[https://tianpangji.github.io](https://tianpangji.github.io)
+
 ####  系统功能
 - 系统管理
     - 用户管理: 提供用户的相关配置及用户筛选，新增用户后，默认密码为123456
@@ -36,12 +39,6 @@
     - 个人信息管理
 
 #### 系统预览
-~~日后完善，留坑~~
-
-#### 启动项目
-[点击查看](https://github.com/TianPangJi/drf_admin/blob/master/doc/run_drf.md)
-
-#### 代码结构
 <table>
     <tr>
         <td><img src="https://img-blog.csdnimg.cn/2020111416290077.png" border="0" /></td>
@@ -60,6 +57,39 @@
         <td><img src="https://img-blog.csdnimg.cn/20201114162859656.png" border="0" /></td>
     </tr>
 </table>
+
+#### 启动项目
+[点击查看](https://github.com/TianPangJi/drf_admin/blob/master/doc/run_drf.md)
+
+#### 代码结构
+```python
+"""
+├── celery_task                # Celery异步任务
+├── docs                       # 文档
+├── drf_admin                  # 项目主文件
+│   ├── apps                   # 项目app
+│   ├── common                 # 公共接口
+│   ├── media                  # 上传文件media
+│   ├── settings               # 配置文件
+│   ├── utils                  # 全局工具
+│   │   ├── exceptions.py      # 异常捕获
+│   │   ├── middleware.py      # 中间件
+│   │   ├── models.py          # 基类models文件
+│   │   ├── pagination.py      # 分页配置
+│   │   ├── permissions.py     # RBAC权限控制
+│   │   ├── routers.py         # 视图routers
+│   │   ├── views.py           # 基类视图
+│   │   └── websocket.py       # WebSocket用户验证
+│   ├── routing.py             # WebSocket路由
+│   ├── urls.py                # 项目根路由
+│   └── wsgi.py                # wsgi
+├── .gitignore                 # .gitignore文件
+├── LICENSE                    # LICENSE
+├── README.md                  # README
+├── manage.py                  # 项目入口、启动文件
+└── requirements.txt           # requirements文件
+"""
+```
 
 #### 特别鸣谢
 - 感谢 [JetBrains](https://www.jetbrains.com/) 提供的非商业开源软件开发授权
