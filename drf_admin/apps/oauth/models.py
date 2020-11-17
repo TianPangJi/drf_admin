@@ -8,7 +8,7 @@ class Users(AbstractUser):
     """
     name = models.CharField(max_length=20, default='', blank=True, verbose_name='真实姓名')
     mobile = models.CharField(max_length=11, unique=True, null=True, blank=True, default=None, verbose_name='手机号码')
-    image = models.ImageField(upload_to='%Y/%m', default='default.png', blank=True, verbose_name='头像')
+    image = models.ImageField(upload_to='avatar/%Y/%m', default='avatar/default.png', blank=True, verbose_name='头像')
     roles = models.ManyToManyField('system.Roles', db_table='oauth_users_to_system_roles', blank=True,
                                    verbose_name='角色')
     department = models.ForeignKey('system.Departments', null=True, blank=True, on_delete=models.SET_NULL,

@@ -6,12 +6,11 @@
 @file     : users.py
 @create   : 2020/9/9 20:08
 """
-from django_redis import get_redis_connection
 from rest_framework.filters import SearchFilter
 from rest_framework.generics import ListAPIView
 
+from monitor.models import OnlineUsers
 from monitor.serializers.users import OnlineUsersSerializer
-from oauth.models import Users
 
 
 class OnlineUsersListAPIView(ListAPIView):
@@ -22,12 +21,7 @@ class OnlineUsersListAPIView(ListAPIView):
     获取在线用户信息, status: 200(成功), return: 在线用户信息
     """
 
+    queryset = OnlineUsers.objects.all()
     serializer_class = OnlineUsersSerializer
     filter_backends = (SearchFilter,)
-    search_fields = ('username',)
-
-    def get_queryset(self):
-        conn = get_redis_connection('online_user')
-        user_ids = [value.decode().split('_')[-1] for value in conn.keys('online_user_*')]
-        queryset = Users.objects.filter(id__in=user_ids)
-        return queryset
+    search_fields = ('user__username', 'ip')

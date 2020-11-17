@@ -21,6 +21,6 @@ def get_departments_id(department_id, departments_id: set = None):
     departments = Departments.objects.filter(pid=department_id)
     for department in departments:
         departments_id.add(department.id)
-        get_departments_id(department, departments_id)
+        get_departments_id(department.id, departments_id)
     departments_id.add(department_id)
     return departments_id

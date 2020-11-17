@@ -8,6 +8,7 @@
 """
 import django_filters
 
+from drf_admin.common.departments import get_departments_id
 from oauth.models import Users
 from system.models import Departments
 
@@ -22,10 +23,7 @@ class UsersFilter(django_filters.rest_framework.FilterSet):
 
     def department_service_filter(self, queryset, name, value):
         """过滤该部门及所有子部门下的用户"""
-        department_ids_set = {value}
-        department_ids_set = self.department_id_filter(value, department_ids_set)
-        queryset = queryset.filter(department_id__in=department_ids_set)
-        return queryset
+        return queryset.filter(department_id__in=get_departments_id(value))
 
     def department_id_filter(self, department_id, department_ids_set):
         departments = Departments.objects.filter(pid=department_id)

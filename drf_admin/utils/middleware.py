@@ -15,6 +15,7 @@ from django_redis import get_redis_connection
 from rest_framework import status
 from rest_framework.response import Response
 
+from monitor.models import OnlineUsers
 from oauth.utils import get_request_browser, get_request_os, get_request_ip
 
 
@@ -105,13 +106,17 @@ class OnlineUsersMiddleware(MiddlewareMixin):
         if request.user.is_authenticated:
             conn = get_redis_connection('online_user')
             last_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
-            if conn.exists(f'online_user_{request.user.id}'):
-                conn.hset(f'online_user_{request.user.id}', 'last_time', last_time)
+            request_ip = get_request_ip(request)
+            # redis + django orm 实现在线用户监测
+            if conn.exists(f'online_user_{request.user.id}_{request_ip}'):
+                conn.hset(f'online_user_{request.user.id}_{request_ip}', 'last_time', last_time)
             else:
-                online_info = {'ip': get_request_ip(request), 'browser': get_request_browser(request),
+                online_info = {'ip': request_ip, 'browser': get_request_browser(request),
                                'os': get_request_os(request), 'last_time': last_time}
-                conn.hmset(f'online_user_{request.user.id}', online_info)
-            conn.expire(f'online_user_{request.user.id}', 60 * 10)
+                conn.hmset(f'online_user_{request.user.id}_{request_ip}', online_info)
+                OnlineUsers.objects.create(**{'user': request.user, 'ip': request_ip})
+            # key过期后, 使用redis空间通知, 使用户下线
+            conn.expire(f'online_user_{request.user.id}_{request_ip}', 10 * 60)
         return response
 
 

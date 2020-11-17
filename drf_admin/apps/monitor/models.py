@@ -36,3 +36,19 @@ class IpBlackList(BaseModel):
         verbose_name = 'IP黑名单'
         verbose_name_plural = verbose_name
         ordering = ['-id']
+
+
+class OnlineUsers(BaseModel):
+    """
+    在线用户
+    """
+    user = models.ForeignKey('oauth.Users', on_delete=models.CASCADE, verbose_name='用户')
+    ip = models.GenericIPAddressField(verbose_name='IP')
+
+    objects = models.Manager()
+
+    class Meta:
+        db_table = 'monitor_onlineusers'
+        verbose_name = '在线用户'
+        verbose_name_plural = verbose_name
+        ordering = ['-id']
