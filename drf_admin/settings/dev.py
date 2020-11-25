@@ -52,6 +52,8 @@ INSTALLED_APPS = [
     'channels',
     # django_user_agents
     'django_user_agents',
+    # 定时任务
+    'django_apscheduler',
     # 注册apps
     'oauth',
     'system',
