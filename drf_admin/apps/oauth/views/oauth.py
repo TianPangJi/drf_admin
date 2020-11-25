@@ -29,6 +29,8 @@ class UserLoginView(ObtainJSONWebToken):
         response = super().post(request, *args, **kwargs)
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
+            conn = get_redis_connection('user_info')
+            conn.incr('visits')
             return response
         else:
             if serializer.errors.get('non_field_errors'):
