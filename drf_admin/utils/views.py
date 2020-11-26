@@ -5,18 +5,26 @@
 @file     : views.py 
 @create   : 2020/7/1 22:37 
 """
-from rest_framework import status
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework import status, serializers
 from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
+
+from drf_admin.utils.swagger_schema import OperationIDAutoSchema
 
 
 class MultipleDestroyMixin:
     """
     自定义批量删除mixin
     """
+    swagger_schema = OperationIDAutoSchema
 
+    class MultipleDeleteSerializer(serializers.Serializer):
+        ids = serializers.ListField(required=True, write_only=True)
+
+    @swagger_auto_schema(request_body=MultipleDeleteSerializer)
     def multiple_delete(self, request, *args, **kwargs):
         delete_ids = request.data.get('ids')
         if not delete_ids:

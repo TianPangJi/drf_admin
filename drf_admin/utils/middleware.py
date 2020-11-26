@@ -78,8 +78,7 @@ class ResponseMiddleware(MiddlewareMixin):
         pass
 
     def process_response(self, request, response):
-        if isinstance(response, Response) and response.get('content-type') == 'application/json' and isinstance(
-                response.data, dict):
+        if isinstance(response, Response) and response.get('content-type') == 'application/json':
             if response.status_code >= 400:
                 msg = '请求失败'
                 detail = response.data.get('detail')
