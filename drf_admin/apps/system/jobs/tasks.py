@@ -9,3 +9,12 @@
             ** 建议仅在本文件中定义简介函数, 具体实现逻辑放入warehouse中 **
 """
 
+
+def database_backup():
+    """数据库备份"""
+    pass
+
+
+def project_data_reset():
+    """项目数据重置"""
+    pass

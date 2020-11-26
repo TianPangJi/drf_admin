@@ -51,3 +51,10 @@ class OnlineUsersSerializer(serializers.ModelSerializer):
         conn = get_redis_connection(f'online_user')
         last_time = conn.hget(f'online_user_{obj.user.id}_{obj.ip}', 'last_time')
         return last_time.decode() if last_time else ''
+
+    def to_representation(self, instance):
+        # 防止redis数据过期, 但数据库未删除无效数据(redis_key失效, 但redis空间通知未开启/django服务未启动情况)
+        ret = super().to_representation(instance)
+        if ret.get('last_time') == '':
+            instance.delete()
+        return ret
