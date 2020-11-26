@@ -19,9 +19,9 @@ router.register(r'departments', departments.DepartmentsViewSet, basename="depart
 urlpatterns = [
     path('users/reset-password/<int:pk>/', users.ResetPasswordAPIView.as_view()),  # 重置密码
     path('permissions/methods/', permissions.PermissionsMethodsAPIView.as_view()),  # 权限models方法列表信息
-    path('jobs/functions', jobs.JobFunctionsListAPIView.as_view()),  # 调度任务函数
+    path('jobs/functions/', jobs.JobFunctionsListAPIView.as_view()),  # 调度任务函数
     path('jobs/', jobs.JobsListCreateAPIView.as_view()),  # 调度任务列表,新增,清空
-    path('jobs/<uuid:pk>', jobs.JobUpdateDestroyAPIView.as_view()),  # 调度任务启动/恢复,删除
-    path('jobs/executions/', jobs.JobExecutionsList.as_view()),  # 调度任务执行过程记录
+    path('jobs/<uuid:pk>/', jobs.JobUpdateDestroyAPIView.as_view()),  # 调度任务启动/恢复,删除
+    path('jobs/executions/', jobs.JobExecutionsListAPIView.as_view()),  # 调度任务执行过程记录
     path('', include(router.urls)),
 ]

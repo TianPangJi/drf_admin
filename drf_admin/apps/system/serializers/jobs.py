@@ -26,7 +26,7 @@ class JobFunctionsSerializer(serializers.Serializer):
         return obj[0]
 
     def get_desc(self, obj):
-        return obj[0].__doc__
+        return obj[1].__doc__
 
 
 class JobsListSerializer(serializers.Serializer):
@@ -47,7 +47,7 @@ class JobsListSerializer(serializers.Serializer):
         return tasks.__dict__.get(obj.name).__doc__
 
     def get_next_run_time(self, obj):
-        return obj.next_run_time
+        return obj.next_run_time.strftime('%Y-%m-%d %H:%M:%S') if obj.next_run_time else obj.next_run_time
 
     def get_cron(self, obj):
         def get_cron(name):
@@ -66,8 +66,8 @@ class JobCreateSerializer(serializers.Serializer):
     id = serializers.SerializerMethodField()
     desc = serializers.SerializerMethodField()
     next_run_time = serializers.SerializerMethodField()
-    name = serializers.CharField(required=True)
-    cron = serializers.CharField(required=True, write_only=True)
+    name = serializers.CharField(required=True, error_messages={'required': '函数名称为必传项'})
+    cron = serializers.CharField(required=True, write_only=True, error_messages={'required': 'cron表达式为必传项'})
 
     def get_id(self, obj):
         return obj.id
@@ -76,7 +76,7 @@ class JobCreateSerializer(serializers.Serializer):
         return tasks.__dict__.get(obj.name).__doc__
 
     def get_next_run_time(self, obj):
-        return obj.next_run_time
+        return obj.next_run_time.strftime('%Y-%m-%d %H:%M:%S') if obj.next_run_time else obj.next_run_time
 
     def validate(self, attrs):
         name = attrs.get('name')
@@ -137,7 +137,7 @@ class JobUpdateSerializer(serializers.Serializer):
         status = attrs.get('status')
         if status is None:
             raise serializers.ValidationError('status参数为必传项')
-        if isinstance(status, bool):
+        if not isinstance(status, bool):
             raise serializers.ValidationError('status参数类型错误')
         return attrs
 
@@ -157,6 +157,6 @@ class JobUpdateSerializer(serializers.Serializer):
 class JobExecutionsSerializer(serializers.ModelSerializer):
     """任务执行历史记录序列化器"""
 
-    class Mate:
+    class Meta:
         model = DjangoJobExecution
         fields = '__all__'

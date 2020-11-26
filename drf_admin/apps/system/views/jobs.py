@@ -66,9 +66,25 @@ class JobsListCreateAPIView(ListCreateAPIView):
     delete:
     任务调度--清空任务
 
-    清空任务, status: 201(成功), return: None
+    清空任务, status: 204(成功), return: None
     """
-    queryset = scheduler.get_jobs()
+    filter_backends = (SearchFilter,)
+    search_fields = ('name', 'desc')
+
+    def filter_queryset(self, queryset):
+        search_params = self.request.query_params.get('search')
+        if search_params:
+            obj_list = list()
+            for obj in queryset:
+                doc = tasks.__dict__.get(obj.name).__doc__
+                if search_params in obj.name or search_params in doc:
+                    obj_list.append(obj)
+            return obj_list
+        else:
+            return queryset
+
+    def get_queryset(self):
+        return scheduler.get_jobs()
 
     def get_serializer_class(self):
         if self.request.method.lower() == 'get':
@@ -95,11 +111,13 @@ class JobUpdateDestroyAPIView(mixins.UpdateModelMixin, DestroyAPIView):
     删除, status: 204(成功), return: None
     """
     serializer_class = JobUpdateSerializer
-    queryset = scheduler.get_jobs()
+
+    def get_queryset(self):
+        return scheduler.get_jobs()
 
     def get_job_id(self):
-        look_url_kwarg = self.lookup_url_kwarg or self.lookup_field
-        return self.kwargs[look_url_kwarg]
+        lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
+        return self.kwargs[lookup_url_kwarg]
 
     def patch(self, request, *args, **kwargs):
         job = scheduler.get_job(self.get_job_id())
@@ -118,7 +136,7 @@ class JobUpdateDestroyAPIView(mixins.UpdateModelMixin, DestroyAPIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class JobExecutionsList(ListAPIView):
+class JobExecutionsListAPIView(ListAPIView):
     """
     get:
     任务调度--任务执行历史记录
