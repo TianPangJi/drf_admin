@@ -14,7 +14,7 @@ from django_apscheduler.models import DjangoJobExecution
 from rest_framework import serializers
 
 from system.jobs import tasks
-from system.views import scheduler
+from system.jobs.run import scheduler
 
 
 class JobFunctionsSerializer(serializers.Serializer):

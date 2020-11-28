@@ -19,9 +19,9 @@ from rest_framework.response import Response
 from rest_framework import mixins
 
 from system.jobs import tasks
+from system.jobs.run import scheduler
 from system.serializers.jobs import JobsListSerializer, JobCreateSerializer, JobFunctionsSerializer, \
     JobUpdateSerializer, JobExecutionsSerializer
-from system.views import scheduler
 
 
 class JobFunctionsListAPIView(ListAPIView):
@@ -56,7 +56,7 @@ class JobsListCreateAPIView(ListCreateAPIView):
     get:
     任务调度--任务列表
 
-    获取任务调度任务列表, status: 201(成功), return: 任务列表
+    获取任务调度任务列表, status: 200(成功), return: 任务列表
 
     post:
     任务调度--新增
