@@ -30,7 +30,16 @@ class PermissionsSerializer(serializers.ModelSerializer):
         if validated_data.get('menu') is False:
             if Permissions.objects.filter(pid=instance.id, menu=True):
                 raise serializers.ValidationError('菜单权限存在子菜单, 请先修改子菜单')
+        if validated_data.get('pid'):
+            if Permissions.objects.filter(id=validated_data.get('pid').id, menu=False):
+                raise serializers.ValidationError('菜单父权限必须为菜单权限')
         return super().update(instance, validated_data)
+
+    def create(self, validated_data):
+        if validated_data.get('pid'):
+            if Permissions.objects.filter(id=validated_data.get('pid').id, menu=False):
+                raise serializers.ValidationError('菜单父权限必须为菜单权限')
+        return super().create(validated_data)
 
 
 class PermissionsTreeSerializer(serializers.ModelSerializer):
