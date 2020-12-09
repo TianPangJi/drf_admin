@@ -27,7 +27,7 @@ class HomeAPIView(APIView):
     def get(self, request):
         data = dict()
         conn = get_redis_connection('user_info')
-        data['visits'] = conn.get('visits').decode() if conn.get('visits') else 0
+        data['visits'] = int(conn.get('visits').decode()) if conn.get('visits') else 0
         data['users'] = Users.objects.all().count()
         data['online_users'] = OnlineUsers.objects.all().count()
         data['assets'] = Assets.objects.all().count()
