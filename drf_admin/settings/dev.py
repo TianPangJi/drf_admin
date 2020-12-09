@@ -54,6 +54,8 @@ INSTALLED_APPS = [
     'django_user_agents',
     # 定时任务
     'django_apscheduler',
+    # crud变更记录
+    'easyaudit',
     # 注册apps
     'oauth',
     'system',
@@ -77,6 +79,8 @@ MIDDLEWARE = [
     'drf_admin.utils.middleware.IpBlackListMiddleware',
     # 在线用户监控
     'drf_admin.utils.middleware.OnlineUsersMiddleware',
+    # crud变更记录中间件
+    'easyaudit.middleware.easyaudit.EasyAuditMiddleware',
     # 下面两个中间件放置在最后位置, 且两者保证顺序
     'drf_admin.utils.middleware.OperationLogMiddleware',
     'drf_admin.utils.middleware.ResponseMiddleware',
@@ -273,6 +277,10 @@ CHANNEL_LAYERS = {
 
 # simpleui配置项
 SIMPLEUI_HOME_INFO = False  # 设置admin站点不显示simpleui的git页
+
+# django-easy-audit配置
+DJANGO_EASY_AUDIT_WATCH_AUTH_EVENTS = False
+DJANGO_EASY_AUDIT_WATCH_REQUEST_EVENTS = False
 
 # 日志配置
 LOGS_DIR = os.path.join(os.path.dirname(BASE_DIR), 'logs')
