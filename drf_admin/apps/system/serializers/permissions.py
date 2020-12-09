@@ -20,6 +20,18 @@ class PermissionsSerializer(serializers.ModelSerializer):
         model = Permissions
         fields = '__all__'
 
+    def validate(self, attrs):
+        if attrs.get('menu') is True:
+            if attrs.get('method', '') == '' or attrs.get('path', '') == '':
+                raise serializers.ValidationError('菜单权限, 方法与路径必须为空')
+        return attrs
+
+    def update(self, instance, validated_data):
+        if validated_data.get('menu') is False:
+            if Permissions.objects.filter(pid=instance.id, menu=True):
+                raise serializers.ValidationError('菜单权限存在子菜单, 请先修改子菜单')
+        return super().update(instance, validated_data)
+
 
 class PermissionsTreeSerializer(serializers.ModelSerializer):
     """
