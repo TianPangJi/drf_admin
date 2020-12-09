@@ -81,12 +81,13 @@ class JobCreateSerializer(serializers.Serializer):
     def validate(self, attrs):
         name = attrs.get('name')
         cron = attrs.get('cron')
-        obj_function = None
+        job_function = None
         for obj in getmembers(tasks):
             if isfunction(obj[1]) and obj[0] == name:
-                obj_function = obj[1]
-                attrs[obj_function] = obj_function
-        if obj_function is None:
+                job_function = obj[1]
+                attrs['job_function'] = job_function
+                break
+        if job_function is None:
             raise serializers.ValidationError('调度任务函数不存在')
         try:
             trigger = CronTrigger.from_crontab(cron)
@@ -107,21 +108,21 @@ class JobCreateSerializer(serializers.Serializer):
 
     def create(self, validated_data):
         while 1:
-            obj_id = str(uuid.uuid1())
-            if scheduler.get_job(obj_id):
+            job_id = str(uuid.uuid1())
+            if scheduler.get_job(job_id):
                 continue
             else:
                 break
-        scheduler.add_job(validated_data.get('obj_function'),
+        scheduler.add_job(validated_data.get('job_function'),
                           args=[],
                           kwargs=None,
                           trigger=validated_data.get('trigger'),
-                          id=obj_id,
+                          id=job_id,
                           max_instances=1,
                           replace_existing=True,
                           misfire_grace_time=10
                           )
-        return scheduler.get_job(obj_id)
+        return scheduler.get_job(job_id)
 
     def to_representation(self, instance):
         ret = super().to_representation(instance)
@@ -131,7 +132,7 @@ class JobCreateSerializer(serializers.Serializer):
 
 class JobUpdateSerializer(serializers.Serializer):
     """调度任务启动/暂停"""
-    status = serializers.BooleanField()
+    status = serializers.BooleanField(required=True, write_only=True)
 
     def validate(self, attrs):
         status = attrs.get('status')
@@ -156,6 +157,7 @@ class JobUpdateSerializer(serializers.Serializer):
 
 class JobExecutionsSerializer(serializers.ModelSerializer):
     """任务执行历史记录序列化器"""
+    run_time = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S', read_only=True)
 
     class Meta:
         model = DjangoJobExecution
