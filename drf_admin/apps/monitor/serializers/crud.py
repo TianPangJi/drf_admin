@@ -35,3 +35,9 @@ class CRUDSerializer(serializers.ModelSerializer):
     def get_content_type_display(self, obj):
         content_type = ContentType.objects.get(id=obj.content_type_id)
         return content_type.app_label + '.' + content_type.model
+
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        if ret.get('changed_fields') == 'null':
+            ret['changed_fields'] = ''
+        return ret
