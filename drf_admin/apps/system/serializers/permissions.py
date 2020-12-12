@@ -22,7 +22,7 @@ class PermissionsSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         if attrs.get('menu') is True:
-            if attrs.get('method', '') == '' or attrs.get('path', '') == '':
+            if attrs.get('method', '') != '' or attrs.get('path', '') != '':
                 raise serializers.ValidationError('菜单权限, 方法与路径必须为空')
         return attrs
 
