@@ -25,14 +25,9 @@ class Users(AbstractUser):
 
     def _get_user_permissions(self):
         # 获取用户权限
-        permissions = []
-        for roles in self.roles.values('name'):
-            if 'admin' == roles.get('name'):
-                permissions.append('admin')
-        for item in self.roles.values('permissions__sign').distinct():
-            sign = item.get('permissions__sign')
-            if sign:
-                permissions.append(sign)
+        permissions = list(filter(None, set(self.roles.values_list('permissions__sign', flat=True))))
+        if 'admin' in self.roles.values_list('name', flat=True):
+            permissions.append('admin')
         return permissions
 
     def get_user_info(self):
