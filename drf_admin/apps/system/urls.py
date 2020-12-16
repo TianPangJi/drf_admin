@@ -18,6 +18,7 @@ router.register(r'departments', departments.DepartmentsViewSet, basename="depart
 
 urlpatterns = [
     path('users/reset-password/<int:pk>/', users.ResetPasswordAPIView.as_view()),  # 重置密码
+    path('users/<int:pk>/permissions/', users.PermissionsAPIView.as_view()),  # 用户权限ID列表
     path('permissions/methods/', permissions.PermissionsMethodsAPIView.as_view()),  # 权限models方法列表信息
     path('jobs/functions/', jobs.JobFunctionsListAPIView.as_view()),  # 调度任务函数
     path('jobs/', jobs.JobsListCreateAPIView.as_view()),  # 调度任务列表,新增,清空

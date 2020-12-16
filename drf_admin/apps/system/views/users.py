@@ -8,13 +8,17 @@
 """
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import mixins
+from rest_framework.exceptions import ValidationError
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.generics import GenericAPIView
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from drf_admin.apps.system.serializers.users import UsersSerializer, UsersPartialSerializer, ResetPasswordSerializer
 from drf_admin.utils.views import AdminViewSet
 from oauth.models import Users
 from system.filters.users import UsersFilter
+from system.models import Permissions
 
 
 class UsersViewSet(AdminViewSet):
@@ -80,3 +84,23 @@ class ResetPasswordAPIView(mixins.UpdateModelMixin, GenericAPIView):
 
     def patch(self, request, *args, **kwargs):
         return self.partial_update(request, *args, **kwargs)
+
+
+class PermissionsAPIView(APIView):
+    """
+    get:
+    用户--获取用户拥有权限ID列表
+
+    获取用户拥有权限ID列表, status: 200(成功), return: 用户拥有权限ID列表
+    """
+
+    def get(self, request, pk):
+        try:
+            user = Users.objects.get(id=pk)
+        except Users.DoesNotExist:
+            raise ValidationError('无效的用户ID')
+        # admin角色
+        if 'admin' in user.roles.values_list('name', flat=True):
+            return Response(data=Permissions.objects.values_list('id', flat=True))
+        # 其他角色
+        return Response(data=list(filter(None, set(user.roles.values_list('permissions__id', flat=True)))))
