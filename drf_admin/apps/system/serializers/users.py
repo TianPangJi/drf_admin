@@ -1,21 +1,17 @@
 # -*- coding: utf-8 -*-
 """
 @author   : Wang Meng
-@github   : https://github.com/tianpangji 
-@software : PyCharm 
-@file     : users.py 
-@create   : 2020/7/1 22:33 
+@github   : https://github.com/tianpangji
+@software : PyCharm
+@file     : users.py
+@create   : 2020/7/1 22:33
 """
 import re
-import traceback
 
 from django.conf import settings
 from rest_framework import serializers
-from rest_framework.serializers import raise_errors_on_nested_writes
-from rest_framework.utils import model_meta
 
 from oauth.models import Users
-from system.models import Roles
 
 
 class UsersSerializer(serializers.ModelSerializer):
@@ -56,7 +52,7 @@ class UsersSerializer(serializers.ModelSerializer):
 
 class UsersPartialSerializer(serializers.ModelSerializer):
     """
-    用户局部更新序列化器
+    用户局部更新(激活/锁定)序列化器
     """
 
     class Meta:

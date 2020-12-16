@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 """
 @author   : Wang Meng
-@github   : https://github.com/tianpangji 
-@software : PyCharm 
-@file     : users.py 
-@create   : 2020/6/27 17:55 
+@github   : https://github.com/tianpangji
+@software : PyCharm
+@file     : users.py
+@create   : 2020/6/27 17:55
 """
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import mixins
@@ -37,12 +37,12 @@ class UsersViewSet(AdminViewSet):
     update:
     用户--修改
 
-    用户修改, status: 200(成功), return: 修改增用户信息
+    用户修改, status: 200(成功), return: 修改后的用户信息
 
     partial_update:
     用户--局部修改
 
-    用户局部修改, status: 200(成功), return: 修改增用户信息
+    用户局部修改(激活/锁定), status: 200(成功), return: 修改后的用户信息
 
     list:
     用户--获取列表
