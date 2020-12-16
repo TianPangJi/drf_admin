@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 """
 @author   : Wang Meng
-@github   : https://github.com/tianpangji 
-@software : PyCharm 
-@file     : roles.py 
-@create   : 2020/6/27 17:55 
+@github   : https://github.com/tianpangji
+@software : PyCharm
+@file     : roles.py
+@create   : 2020/6/27 17:55
 """
 from rest_framework import status
 from rest_framework.filters import SearchFilter, OrderingFilter
@@ -35,12 +35,12 @@ class RolesViewSet(AdminViewSet):
     update:
     角色--修改
 
-    角色修改, status: 200(成功), return: 修改增角色信息
+    角色修改, status: 200(成功), return: 修改后的角色信息
 
     partial_update:
     角色--局部修改(角色授权)
 
-    角色局部修改, status: 200(成功), return: 修改增角色信息
+    角色局部修改, status: 200(成功), return: 修改后的角色信息
 
     list:
     角色--获取列表
