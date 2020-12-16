@@ -38,17 +38,17 @@ class OnlineUsersSerializer(serializers.ModelSerializer):
         return obj.user.name
 
     def get_browser(self, obj):
-        conn = get_redis_connection(f'online_user')
+        conn = get_redis_connection('online_user')
         browser = conn.hget(f'online_user_{obj.user.id}_{obj.ip}', 'browser')
         return browser.decode() if browser else ''
 
     def get_os(self, obj):
-        conn = get_redis_connection(f'online_user')
+        conn = get_redis_connection('online_user')
         os = conn.hget(f'online_user_{obj.user.id}_{obj.ip}', 'os')
         return os.decode() if os else ''
 
     def get_last_time(self, obj):
-        conn = get_redis_connection(f'online_user')
+        conn = get_redis_connection('online_user')
         last_time = conn.hget(f'online_user_{obj.user.id}_{obj.ip}', 'last_time')
         return last_time.decode() if last_time else ''
 
