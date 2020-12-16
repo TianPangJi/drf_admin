@@ -35,3 +35,10 @@ class RolesPartialSerializer(serializers.ModelSerializer):
     class Meta:
         model = Roles
         fields = ['id', 'permissions']
+
+    def validate(self, attrs):
+        permissions = attrs.get('permissions')
+        for permission in permissions:
+            if permission.pid and permission.pid not in permissions:
+                raise serializers.ValidationError('缺失父节点权限')
+        return attrs
