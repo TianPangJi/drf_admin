@@ -8,6 +8,7 @@
 """
 from rest_framework import serializers
 
+from drf_admin.utils.views import TreeSerializer
 from system.models import Permissions
 
 
@@ -42,13 +43,10 @@ class PermissionsSerializer(serializers.ModelSerializer):
         return super().create(validated_data)
 
 
-class PermissionsTreeSerializer(serializers.ModelSerializer):
+class PermissionsTreeSerializer(TreeSerializer):
     """
     权限数据序列化器(Element Tree)
     """
-    id = serializers.IntegerField()
-    label = serializers.CharField(max_length=20, source='name')
-    pid = serializers.PrimaryKeyRelatedField(read_only=True)
 
     class Meta:
         model = Permissions

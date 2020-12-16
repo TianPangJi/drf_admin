@@ -47,13 +47,13 @@ class AdminViewSet(ModelViewSet, MultipleDestroyMixin):
     pass
 
 
-# class TreeSerializer(serializers.Serializer):
-#     """
-#     TreeAPIView使用的序列化器
-#     """
-#     id = serializers.IntegerField()
-#     label = serializers.CharField(max_length=20, source='name')
-#     pid = serializers.PrimaryKeyRelatedField(read_only=True)
+class TreeSerializer(serializers.ModelSerializer):
+    """
+    TreeAPIView使用的基类序列化器
+    """
+    id = serializers.IntegerField()
+    label = serializers.CharField(max_length=20, source='name')
+    pid = serializers.PrimaryKeyRelatedField(read_only=True)
 
 
 class TreeAPIView(ListAPIView):
