@@ -16,9 +16,10 @@ from rest_framework.views import APIView
 
 from cmdb.models import Assets, IDC, Cabinets
 from cmdb.serializers.assets import AssetsAdminSerializer
-from drf_admin.common.departments import get_departments_id
+from drf_admin.common.models import get_child_ids
 from drf_admin.utils.views import ChoiceAPIView, AdminViewSet
 from oauth.models import Users
+from system.models import Departments
 
 
 class AssetsStatusAPIView(ChoiceAPIView):
@@ -94,7 +95,7 @@ class BaseAssetsAPIView(AdminViewSet):
             return Assets.objects.filter(asset_type=asset_type)
         # 每个用户只能查看到所属部门及其子部门下的服务器, 及该用户管理服务器
         if self.request.user.department:
-            departments = get_departments_id(self.request.user.department.id)
+            departments = get_child_ids(self.request.user.department.id, Departments)
             return (Assets.objects.filter(asset_type=asset_type).filter(
                 Q(department__in=departments) | Q(admin=self.request.user))).distinct()
         else:

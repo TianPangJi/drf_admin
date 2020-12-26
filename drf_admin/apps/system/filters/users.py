@@ -8,8 +8,9 @@
 """
 import django_filters
 
-from drf_admin.common.departments import get_departments_id
+from drf_admin.common.models import get_child_ids
 from oauth.models import Users
+from system.models import Departments
 
 
 class UsersFilter(django_filters.rest_framework.FilterSet):
@@ -22,4 +23,4 @@ class UsersFilter(django_filters.rest_framework.FilterSet):
 
     def department_service_filter(self, queryset, name, value):
         """过滤该部门及所有子部门下的用户"""
-        return queryset.filter(department_id__in=get_departments_id(value))
+        return queryset.filter(department_id__in=get_child_ids(value, Departments))
