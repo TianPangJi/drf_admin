@@ -8,6 +8,7 @@
 """
 from rest_framework import serializers
 
+from drf_admin.common.models import get_child_ids
 from drf_admin.utils.views import TreeSerializer
 from system.models import Permissions
 
@@ -34,6 +35,9 @@ class PermissionsSerializer(serializers.ModelSerializer):
         if validated_data.get('pid'):
             if Permissions.objects.filter(id=validated_data.get('pid').id, menu=False):
                 raise serializers.ValidationError('菜单父权限必须为菜单权限')
+            permissions_id = get_child_ids(instance.id, Permissions)
+            if validated_data.get('pid') and validated_data.get('pid').id in permissions_id:
+                raise serializers.ValidationError('父权限不能为其本身或其子权限')
         return super().update(instance, validated_data)
 
     def create(self, validated_data):
