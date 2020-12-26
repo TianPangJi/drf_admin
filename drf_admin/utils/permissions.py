@@ -6,6 +6,7 @@
 @create   : 2020/6/28 21:52 
 """
 import re
+
 from django.conf import settings
 from django_redis import get_redis_connection
 from rest_framework import status
@@ -45,9 +46,8 @@ class RbacPermission(BasePermission):
         if not request.user.is_active:
             raise UserLock()
         # admin账户放行
-        for roles in request.user.roles.values('name'):
-            if 'admin' == roles.get('name'):
-                return True
+        if 'admin' in request.user.roles.values_list('name', flat=True):
+            return True
         # RBAC权限验证
         request_method = request.method
         permission_urls = Permissions.objects.filter(method=request_method).values('path').distinct()
