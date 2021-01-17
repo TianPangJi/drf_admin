@@ -10,7 +10,7 @@ class ErrorLogs(BaseModel):
     """
     username = models.CharField(max_length=32, verbose_name='用户')
     view = models.CharField(max_length=32, verbose_name='视图')
-    desc = models.CharField(max_length=128, verbose_name='描述')
+    desc = models.TextField(verbose_name='描述')
     ip = models.GenericIPAddressField(verbose_name='IP')
     detail = models.TextField(verbose_name='详情')
 
