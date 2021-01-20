@@ -10,6 +10,7 @@ import traceback
 
 from django.core.exceptions import PermissionDenied
 from django.http import Http404
+from rest_framework.exceptions import ErrorDetail
 
 from rest_framework.views import set_rollback
 from django.db import DatabaseError
@@ -34,19 +35,27 @@ def errors_handler(exc):
         if isinstance(exc.detail, list):
             msg = ''.join([str(x) for x in exc.detail])
         elif isinstance(exc.detail, dict):
-            msg = ''
-            for k, v in exc.detail.items():
-                if k == 'non_field_errors':
-                    if isinstance(v, list):
-                        msg += ''.join([str(x) for x in v])
+            def search_error(detail: dict, message: str):
+                for k, v in detail.items():
+                    if k == 'non_field_errors':
+                        if isinstance(v, list) and isinstance(v[0], ErrorDetail):
+                            message += ''.join([str(x) for x in v])
+                        else:
+                            message += str(v)
                     else:
-                        msg += str(v)
-                else:
-                    if isinstance(v, list):
-                        msg = str(k) + ':' + ''.join([str(x) for x in v])
-            if not msg:
-                msg = exc.detail
+                        if isinstance(v, list) and isinstance(v[0], ErrorDetail):
+                            message += str(k)
+                            message += ''.join([str(x) for x in v])
+                        elif isinstance(v, list) and isinstance(v[0], dict):
+                            for value_dict in v:
+                                message = search_error(value_dict, message)
+                return message
+
+            msg = ''
+            msg = search_error(exc.detail, msg)
         else:
+            msg = exc.detail
+        if not msg:
             msg = exc.detail
     except Exception:
         msg = exc.detail
