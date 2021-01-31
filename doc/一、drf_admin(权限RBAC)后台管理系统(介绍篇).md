@@ -12,7 +12,7 @@ fe_admin（前端）：[https://github.com/TianPangJi/fe_admin](https://github.c
 ## 系列文章
 * [一、drf_admin(权限RBAC)后台管理系统(介绍篇)](https://blog.csdn.net/Mr_w_ang/article/details/111303774)
 * [二、drf_admin(权限RBAC)后台管理系统(配置篇)](https://blog.csdn.net/Mr_w_ang/article/details/113483668)
-* [三、drf_admin(权限RBAC)后台管理系统(鉴权篇)]() 留坑
+* [三、drf_admin(权限RBAC)后台管理系统(鉴权篇)](https://blog.csdn.net/Mr_w_ang/article/details/113484448)
 * [四、drf_admin(权限RBAC)后台管理系统(RBAC权限篇)]() 留坑
 
 ## 系统功能
