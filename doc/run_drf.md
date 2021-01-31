@@ -1,6 +1,10 @@
 <h1 style="text-align: center">DRF-ADMIN 后台管理系统</h1>
 
 #### 后端运行
+* 开发使用版本
+    * Python 3.6.2
+    * Redis 3.2.100
+    * MySQL 待使用
 * 前置条件
     * 确保已本地已安装Python
     * 确保本地已安装Redis
