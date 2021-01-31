@@ -3,7 +3,7 @@
 ## drf_admin(权限RBAC)后台管理系统(介绍篇)
 drf_admin采用Python、Django、DRF等技术开发，志在用最短的时间、最简洁的代码，实现开箱即用的后台管理系统。
 
-欢迎访问[drf_admin](https://github.com/TianPangJi/drf_admin)；欢迎给点个小星星哦
+欢迎访问[drf_admin](https://github.com/TianPangJi/drf_admin)；欢迎给点个☆小星星☆哦
 
 ## 项目地址
 drf_admin（后端）：[https://github.com/TianPangJi/drf_admin](https://github.com/TianPangJi/drf_admin)
