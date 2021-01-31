@@ -58,20 +58,14 @@ class RbacPermission(BasePermission):
                 flag = True
                 flag_url = values.get('path')
         if flag:
-            try:
-                permission = Permissions.objects.get(path=flag_url, method=request_method)
-            except Permissions.DoesNotExist:
-                return True
-            else:
-                # Redis验证权限
-                conn = get_redis_connection('user_info')
-                permissions = conn.hget('user_info_%s' % request.user.id, 'permissions')
-                if permissions:
+            permissions = Permissions.objects.filter(path=flag_url, method=request_method)
+            # Redis验证权限
+            conn = get_redis_connection('user_info')
+            user_permissions = conn.hget('user_info_%s' % request.user.id, 'permissions')
+            if user_permissions and permissions:
+                for permission in permissions:
                     if permission.sign in permissions.decode().split(','):  # redis存储为bytes类型
                         return True
-                    else:
-                        return False
-                else:
-                    return False
+            return False
         else:
             return True

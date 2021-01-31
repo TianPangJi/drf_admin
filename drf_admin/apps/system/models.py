@@ -19,7 +19,7 @@ class Permissions(BaseModel):
         (False, u'接口')
     )
 
-    name = models.CharField(max_length=30, unique=True, verbose_name='权限名')
+    name = models.CharField(max_length=30, verbose_name='权限名')
     sign = models.CharField(max_length=30, unique=True, verbose_name='权限标识')
     menu = models.CharField(max_length=8, choices=menu_choices, verbose_name='是否为菜单')
     method = models.CharField(max_length=8, blank=True, default='', choices=method_choices, verbose_name='方法')
