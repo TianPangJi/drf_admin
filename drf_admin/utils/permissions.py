@@ -57,6 +57,7 @@ class RbacPermission(BasePermission):
             if re.match(settings.REGEX_URL.format(url=self.pro_uri(values.get('path'))), request_url):
                 flag = True
                 flag_url = values.get('path')
+                break
         if flag:
             permissions = Permissions.objects.filter(path=flag_url, method=request_method)
             # Redis验证权限
@@ -64,7 +65,7 @@ class RbacPermission(BasePermission):
             user_permissions = conn.hget('user_info_%s' % request.user.id, 'permissions')
             if user_permissions and permissions:
                 for permission in permissions:
-                    if permission.sign in permissions.decode().split(','):  # redis存储为bytes类型
+                    if permission.sign in user_permissions.decode().split(','):  # redis存储为bytes类型
                         return True
             return False
         else:
