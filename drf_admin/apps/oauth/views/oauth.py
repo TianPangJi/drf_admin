@@ -10,6 +10,7 @@ from django_redis import get_redis_connection
 from rest_framework import status
 from rest_framework.exceptions import APIException
 from rest_framework.response import Response
+from rest_framework.serializers import BaseSerializer
 from rest_framework.throttling import AnonRateThrottle
 from rest_framework.views import APIView
 from rest_framework_jwt.views import ObtainJSONWebToken
@@ -27,7 +28,7 @@ class UserLoginView(ObtainJSONWebToken):
     def post(self, request, *args, **kwargs):
         # 重写父类方法, 定义响应字段内容
         response = super().post(request, *args, **kwargs)
-        serializer = self.get_serializer(data=request.data)
+        serializer = self.get_serializer(data=request.data)  # type: BaseSerializer
         if serializer.is_valid():
             conn = get_redis_connection('user_info')
             conn.incr('visits')
