@@ -15,7 +15,7 @@ class Permissions(BaseModel):
         (u'GET', u'查')
     )
     menu_choices = (
-        (True, u'菜单'),
+        (True, u'菜单'),  # TODO: there might be an issue in django admin view
         (False, u'接口')
     )
 
@@ -50,6 +50,9 @@ class Roles(BaseModel):
 
     objects = models.Manager()
 
+    def __str__(self):
+        return self.name
+
     class Meta:
         db_table = 'system_roles'
         verbose_name = '角色'
@@ -65,6 +68,9 @@ class Departments(BaseModel):
     pid = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, verbose_name='父部门')
 
     objects = models.Manager()
+
+    def __str__(self):
+        return self.name
 
     class Meta:
         db_table = 'system_departments'
