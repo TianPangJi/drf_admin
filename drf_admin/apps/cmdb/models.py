@@ -15,6 +15,8 @@ class Assets(BaseModel):
         ('network', '网络设备'),
         ('storage', '存储设备'),
         ('security', '安全设备'),
+        ('virtual', '数字资产'),
+        ('others', '其他设备'),
     )
 
     asset_status_choice = (
@@ -23,17 +25,28 @@ class Assets(BaseModel):
         (2, '未知'),
         (3, '故障'),
         (4, '备用'),
+        (5, '过保'),
+        (6, '报废'),
     )
 
-    name = models.CharField(max_length=64, unique=True, verbose_name="资产名称")  # 不可重复
-    sn = models.CharField(max_length=128, unique=True, verbose_name="资产序列号")  # 不可重复
+    asset_attribute_choice = (
+        (False, "非固定资产"),
+        (True, "固定资产")
+    )
+
     asset_type = models.CharField(choices=asset_type_choice, max_length=64, default='server', verbose_name="资产类型")
-    asset_status = models.SmallIntegerField(choices=asset_status_choice, default=0, verbose_name='设备状态')
+    name = models.CharField(max_length=64, unique=True, verbose_name="资产名称")  # 不可重复
+    asset_type_detail = models.CharField(max_length=128, default="未填写", verbose_name="资产具体型号", help_text="规格型号/可识别特征")
+    sn = models.CharField(max_length=128, unique=True, verbose_name="资产序列号")  # 不可重复
+    asset_status = models.SmallIntegerField(choices=asset_status_choice, default=0, verbose_name='资产状态')
     manage_ip = models.GenericIPAddressField(null=True, blank=True, verbose_name='管理IP')
     department = models.ForeignKey('system.Departments', null=True, blank=True, on_delete=models.SET_NULL,
                                    verbose_name='所属部门')
     admin = models.ForeignKey('oauth.Users', null=True, blank=True, on_delete=models.SET_NULL, verbose_name='资产管理员')
+    asset_attribute = models.BooleanField(choices=asset_attribute_choice, verbose_name="是否为固定资产", default=True)
     cabinet = models.ForeignKey('Cabinets', null=True, blank=True, on_delete=models.SET_NULL, verbose_name='所在机柜')
+    purchase_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, verbose_name="采购价格",
+                                         help_text="采购单价")
     expire_day = models.DateField(null=True, blank=True, verbose_name="过保日期")
     memo = models.TextField(null=True, blank=True, verbose_name='备注')
 
@@ -144,7 +157,8 @@ class NetworkDevices(models.Model):
         (3, 'VPN设备'),
     )
 
-    asset = models.OneToOneField('Assets', on_delete=models.CASCADE, related_name='network')
+    asset = models.OneToOneField('Assets', on_delete=models.CASCADE, related_name='network', verbose_name="所属资产",
+                                 help_text="选择对应的资产")
     device_type = models.SmallIntegerField(choices=device_type_choice, default=0, verbose_name="网络设备类型")
     vlan_ip = models.GenericIPAddressField(blank=True, null=True, verbose_name="VLanIP")
     intranet_ip = models.GenericIPAddressField(blank=True, null=True, verbose_name="内网IP")
