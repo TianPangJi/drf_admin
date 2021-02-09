@@ -26,10 +26,12 @@ class PermissionsSerializer(serializers.ModelSerializer):
         if attrs.get('menu') is True:
             if attrs.get('method', '') != '' or attrs.get('path', '') != '':
                 raise serializers.ValidationError('菜单权限, 方法与路径必须为空')
-        path = str(attrs.get('path', ''))
-        if not all([path.startswith('/'), path.endswith('/')]):
-            raise serializers.ValidationError('请求路径必须以"/"开头及结尾')
-
+        else:
+            if attrs.get('method', '') == '' or attrs.get('path', '') == '':
+                raise serializers.ValidationError('接口权限, 方法与路径为必传参数')
+            path = str(attrs.get('path'))
+            if not all([path.startswith('/'), path.endswith('/')]):
+                raise serializers.ValidationError('请求路径必须以"/"开头及结尾')
         return attrs
 
     def update(self, instance, validated_data):
