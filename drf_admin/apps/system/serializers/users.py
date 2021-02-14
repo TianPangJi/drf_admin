@@ -21,11 +21,12 @@ class UsersSerializer(serializers.ModelSerializer):
     roles_list = serializers.SerializerMethodField()
     date_joined = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S', read_only=True)
     department_name = serializers.ReadOnlyField(source='department.name')
+    is_superuser = serializers.BooleanField(required=True)
 
     class Meta:
         model = Users
         fields = ['id', 'username', 'name', 'mobile', 'email', 'is_active', 'department', 'department_name',
-                  'date_joined', 'roles', 'roles_list']
+                  'date_joined', 'roles', 'roles_list', 'is_superuser']
 
     def validate(self, attrs):
         # 数据验证
