@@ -25,9 +25,9 @@ def update_permissions_to_redis(sender, instance, **kwargs):
     :return:
     """
     conn = get_redis_connection('user_info')
-    if str(instance.menu).lower() == 'false':
-        if instance.id:
-            # 更改权限
+    if instance.id:
+        if not instance.menu:
+            # 接口权限,判断权限path的变化,更新redis
             permission = Permissions.objects.get(id=instance.id)
             if permission.path != instance.path:
                 # 路径更改,删除原有记录并新增一条权限记录
@@ -65,18 +65,18 @@ def update_permissions_to_redis(sender, instance, **kwargs):
                             permission['method'] = instance.method
                             permission['sign'] = instance.sign
                     conn.hset('user_permissions_manage', instance.path, json.dumps(permissions))
-    else:
-        # 由接口权限改为菜单权限,删除原有记录
-        permission = Permissions.objects.get(id=instance.id)
-        if permission.menu and conn.hexists('user_permissions_manage', permission.path):
-            permissions = json.loads(conn.hget('user_permissions_manage', permission.path))
-            for index, value in enumerate(permissions):
-                if value.get('id') == instance.id:
-                    del permissions[index]
-            if permissions:
-                conn.hset('user_permissions_manage', permission.path, json.dumps(permissions))
-            else:
-                conn.hdel('user_permissions_manage', permission.path)
+        else:
+            # 菜单权限,判断是否由接口权限改为菜单权限,如果是则删除原有记录
+            permission = Permissions.objects.get(id=instance.id)
+            if not permission.menu and conn.hexists('user_permissions_manage', permission.path):
+                permissions = json.loads(conn.hget('user_permissions_manage', permission.path))
+                for index, value in enumerate(permissions):
+                    if value.get('id') == instance.id:
+                        del permissions[index]
+                if permissions:
+                    conn.hset('user_permissions_manage', permission.path, json.dumps(permissions))
+                else:
+                    conn.hdel('user_permissions_manage', permission.path)
 
 
 @receiver(post_save, sender=Permissions)
@@ -88,7 +88,7 @@ def create_permissions_to_redis(sender, instance, **kwargs):
     :param kwargs:
     :return:
     """
-    if str(instance.menu).lower() == 'false' and kwargs.get('created'):
+    if not instance.menu and kwargs.get('created'):
         conn = get_redis_connection('user_info')
         if conn.exists('user_permissions_manage') and conn.hexists('user_permissions_manage', instance.path):
             permissions = json.loads(conn.hget('user_permissions_manage', instance.path))
@@ -115,7 +115,7 @@ def delete_permissions_from_redis(sender, instance, **kwargs):
     :param kwargs:
     :return:
     """
-    if str(instance.menu).lower() == 'false':
+    if not instance.menu:
         conn = get_redis_connection('user_info')
         if conn.exists('user_permissions_manage') and conn.hexists('user_permissions_manage', instance.path):
             permissions = json.loads(conn.hget('user_permissions_manage', instance.path))
