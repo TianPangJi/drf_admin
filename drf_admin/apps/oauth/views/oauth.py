@@ -56,7 +56,6 @@ class UserInfoView(APIView):
         user_info = request.user.get_user_info()
         # 将用户信息缓存到redis
         conn = get_redis_connection('user_info')
-        user_info['permissions'] = ','.join(user_info.get('permissions'))
         if request.user.is_superuser and 'admin' not in user_info['permissions']:
             user_info['permissions'].append('admin')
         user_info['permissions'] = json.dumps(user_info['permissions'])
