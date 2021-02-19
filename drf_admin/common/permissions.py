@@ -19,18 +19,18 @@ def redis_storage_permissions(redis_conn):
         method = str(permission.get('method')).replace('\u200b', '')
         path = str(permission.get('path')).replace('\u200b', '')
         sign = str(permission.get('sign')).replace('\u200b', '')
-        id = permission.get('id')
-        if permissions_dict.get('path'):
+        _id = permission.get('id')
+        if permissions_dict.get(path):
             permissions_dict[path].append({
                 'method': method,
                 'sign': sign,
-                'id': id,
+                'id': _id,
             })
         else:
             permissions_dict[path] = [{
                 'method': method,
                 'sign': sign,
-                'id': id,
+                'id': _id,
             }]
     for key in permissions_dict:
         permissions_dict[key] = json.dumps(permissions_dict[key])
