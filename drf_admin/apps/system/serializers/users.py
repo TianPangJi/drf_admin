@@ -21,7 +21,7 @@ class UsersSerializer(serializers.ModelSerializer):
     roles_list = serializers.SerializerMethodField()
     date_joined = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S', read_only=True)
     department_name = serializers.ReadOnlyField(source='department.name')
-    is_superuser = serializers.BooleanField(required=True)
+    is_superuser = serializers.BooleanField(read_only=True)
 
     class Meta:
         model = Users
