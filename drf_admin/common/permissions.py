@@ -13,6 +13,10 @@ from system.models import Permissions
 
 def redis_storage_permissions(redis_conn):
     permissions = Permissions.objects.filter(menu=False).values('id', 'path', 'method', 'sign')
+    # 如果该用户下没有任何权限，直接跳过后续逻辑，以免报错
+    if len(permissions) == 0:
+        return None
+
     permissions_dict = dict()
     for permission in permissions:
         # 去除不可见字符
