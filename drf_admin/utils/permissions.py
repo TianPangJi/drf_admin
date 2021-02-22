@@ -35,17 +35,14 @@ class RbacPermission(BasePermission):
         return re.sub('/+', '/', uri)
 
     def has_permission(self, request, view):
+        # 验证用户是否被锁定
+        if not request.user.is_active:
+            raise UserLock()
         request_url = request.path
         # 如果请求url在白名单，放行
         for safe_url in settings.WHITE_LIST:
             if re.match(settings.REGEX_URL.format(url=safe_url), request_url):
                 return True
-        # 验证用户登录状态
-        if not request.user.is_authenticated:
-            return False
-        # 验证用户是否被锁定
-        if not request.user.is_active:
-            raise UserLock()
         # admin权限放行
         conn = get_redis_connection('user_info')
         if conn.exists('user_info_%s' % request.user.id):
@@ -71,7 +68,7 @@ class RbacPermission(BasePermission):
             return True
         # Step 3 redis权限验证
         permissions = json.loads(conn.hget('user_permissions_manage', redis_key).decode())
-        method_hit = False  # 同意接口配置不同权限验证
+        method_hit = False  # 同一接口配置不同权限验证
         for permission in permissions:
             if permission.get('method') == request_method:
                 method_hit = True

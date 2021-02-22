@@ -219,6 +219,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'drf_admin.utils.pagination.GlobalPagination',
     'DEFAULT_PERMISSION_CLASSES':
         (
+            'rest_framework.permissions.IsAuthenticated',  # 登录验证
             'drf_admin.utils.permissions.RbacPermission',  # 自定义权限认证
         ),
     'DEFAULT_AUTHENTICATION_CLASSES':
