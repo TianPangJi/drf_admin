@@ -10,7 +10,7 @@ import json
 
 from django_redis import get_redis_connection
 from rest_framework import status
-from rest_framework.exceptions import AuthenticationFailed
+from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from rest_framework.throttling import AnonRateThrottle
 from rest_framework.views import APIView
@@ -40,7 +40,7 @@ class UserLoginView(ObtainJSONWebToken):
                         response.data.get('non_field_errors')) > 0:
                     if response.data.get('non_field_errors')[0].strip() == '无法使用提供的认证信息登录。':
                         return Response(data={'detail': '用户名或密码错误'}, status=status.HTTP_400_BAD_REQUEST)
-            raise AuthenticationFailed(response.data, code=status.HTTP_400_BAD_REQUEST)
+            raise ValidationError(response.data)
 
 
 class UserInfoView(APIView):
