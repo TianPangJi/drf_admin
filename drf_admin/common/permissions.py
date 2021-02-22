@@ -14,7 +14,7 @@ from system.models import Permissions
 def redis_storage_permissions(redis_conn):
     permissions = Permissions.objects.filter(menu=False).values('id', 'path', 'method', 'sign')
     # 如果还没有任何权限控制，直接跳过后续逻辑，以免报错
-    if permissions.count() == 0:
+    if not permissions.exists():
         return None
 
     permissions_dict = dict()
