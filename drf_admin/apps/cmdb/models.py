@@ -1,10 +1,6 @@
-import base64
-
-from Crypto.Cipher import AES
-from django.conf import settings
 from django.db import models
 
-from drf_admin.utils.models import BaseModel
+from drf_admin.utils.models import BaseModel, BasePasswordModels
 
 
 class Assets(BaseModel):
@@ -201,7 +197,7 @@ class Cabinets(BaseModel):
         ordering = ['-id']
 
 
-class Accounts(models.Model):
+class Accounts(BasePasswordModels):
     """服务器登录账户表"""
     username = models.CharField(max_length=32, verbose_name='登录账户')
     password = models.CharField(max_length=64, verbose_name='登录密码')
@@ -218,31 +214,6 @@ class Accounts(models.Model):
         verbose_name = '服务器登录账户'
         verbose_name_plural = verbose_name
         ordering = ['id']
-
-    @staticmethod
-    def encrypt(row_password: str):
-        """
-        AES 加密登录密码
-        :param row_password: 原明文密码
-        :return: AES加密后密码
-        """
-        aes = AES.new(str.encode(settings.SECRET_KEY[4:20]), AES.MODE_ECB)
-        while len(row_password) % 16 != 0:
-            row_password += '\0'
-        return str(base64.encodebytes(aes.encrypt(str.encode(row_password))), encoding='utf8').replace('\n', '')
-
-    def set_password(self, row_password):
-        """加密密码并保存实例"""
-        self.password = self.encrypt(row_password)
-
-    def get_password_display(self):
-        """
-        AES 解密登录密码
-        :return: 原明文密码
-        """
-        aes = AES.new(str.encode(settings.SECRET_KEY[4:20]), AES.MODE_ECB)
-        return str(
-            aes.decrypt(base64.decodebytes(bytes(str(self.password), encoding='utf8'))).rstrip(b'\0').decode("utf8"))
 
 # ********************************如下具体资产硬件型号数量,类型等可做自动扫描, 暂不实现*****************************************
 

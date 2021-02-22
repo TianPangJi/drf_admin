@@ -5,6 +5,7 @@
 @file     : permissions.py 
 @create   : 2020/6/28 21:52 
 """
+import json
 import re
 
 from django.conf import settings
@@ -13,7 +14,7 @@ from rest_framework import status
 from rest_framework.exceptions import APIException
 from rest_framework.permissions import BasePermission
 
-from system.models import Permissions
+from drf_admin.common.permissions import redis_storage_permissions
 
 
 class UserLock(APIException):
@@ -45,28 +46,39 @@ class RbacPermission(BasePermission):
         # 验证用户是否被锁定
         if not request.user.is_active:
             raise UserLock()
-        # admin账户放行
-        if 'admin' in request.user.roles.values_list('name', flat=True):
-            return True
+        # admin权限放行
+        conn = get_redis_connection('user_info')
+        if conn.exists('user_info_%s' % request.user.id):
+            user_permissions = json.loads(conn.hget('user_info_%s' % request.user.id, 'permissions').decode())
+            if 'admin' in user_permissions:
+                return True
+        else:
+            user_permissions = []
+            if 'admin' in request.user.roles.values_list('name', flat=True):
+                return True
         # RBAC权限验证
+        # Step 1 验证redis中是否存储权限数据
         request_method = request.method
-        permission_urls = Permissions.objects.filter(method=request_method).values('path').distinct()
-        flag = False
-        flag_url = ''
-        for values in permission_urls:
-            if re.match(settings.REGEX_URL.format(url=self.pro_uri(values.get('path'))), request_url):
-                flag = True
-                flag_url = values.get('path')
+        if not conn.exists('user_permissions_manage'):
+            redis_storage_permissions(conn)
+        # Step 2 判断请求路径是否在权限控制中
+        url_keys = conn.hkeys('user_permissions_manage')
+        for url_key in url_keys:
+            if re.match(settings.REGEX_URL.format(url=self.pro_uri(url_key.decode())), request_url):
+                redis_key = url_key.decode()
                 break
-        if flag:
-            permissions = Permissions.objects.filter(path=flag_url, method=request_method)
-            # Redis验证权限
-            conn = get_redis_connection('user_info')
-            user_permissions = conn.hget('user_info_%s' % request.user.id, 'permissions')
-            if user_permissions and permissions:
-                for permission in permissions:
-                    if permission.sign in user_permissions.decode().split(','):  # redis存储为bytes类型
-                        return True
-            return False
         else:
             return True
+        # Step 3 redis权限验证
+        permissions = json.loads(conn.hget('user_permissions_manage', redis_key).decode())
+        method_hit = False  # 同意接口配置不同权限验证
+        for permission in permissions:
+            if permission.get('method') == request_method:
+                method_hit = True
+                if permission.get('sign') in user_permissions:
+                    return True
+        else:
+            if method_hit:
+                return False
+            else:
+                return True

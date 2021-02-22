@@ -25,7 +25,7 @@ class AccountsSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         ret = super().to_representation(instance)
-        ret['password'] = instance.get_password_display()
+        ret['password'] = instance.get_password_display('password')
         return ret
 
 

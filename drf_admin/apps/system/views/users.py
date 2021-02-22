@@ -100,7 +100,7 @@ class PermissionsAPIView(APIView):
         except Users.DoesNotExist:
             raise ValidationError('无效的用户ID')
         # admin角色
-        if 'admin' in user.roles.values_list('name', flat=True):
-            return Response(data=Permissions.objects.values_list('id', flat=True))
+        if 'admin' in user.roles.values_list('name', flat=True) or user.is_superuser:
+            return Response(data={'results': Permissions.objects.values_list('id', flat=True)})
         # 其他角色
-        return Response(data=list(filter(None, set(user.roles.values_list('permissions__id', flat=True)))))
+        return Response(data={'results': list(filter(None, set(user.roles.values_list('permissions__id', flat=True))))})

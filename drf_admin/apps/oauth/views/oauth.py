@@ -6,6 +6,8 @@
 @file: oauth.py 
 @create: 2020/6/24 20:48 
 """
+import json
+
 from django_redis import get_redis_connection
 from rest_framework import status
 from rest_framework.exceptions import APIException
@@ -54,11 +56,13 @@ class UserInfoView(APIView):
         user_info = request.user.get_user_info()
         # 将用户信息缓存到redis
         conn = get_redis_connection('user_info')
-        user_info['permissions'] = ','.join(user_info.get('permissions'))
+        if request.user.is_superuser and 'admin' not in user_info['permissions']:
+            user_info['permissions'].append('admin')
+        user_info['permissions'] = json.dumps(user_info['permissions'])
         user_info['avatar'] = request._current_scheme_host + user_info.get('avatar')
         conn.hmset('user_info_%s' % request.user.id, user_info)
         conn.expire('user_info_%s' % request.user.id, 60 * 60 * 24)  # 设置过期时间为1天
-        user_info['permissions'] = user_info.get('permissions').split(',') if user_info.get('permissions') else []
+        user_info['permissions'] = json.loads(user_info['permissions'])
         return Response(user_info, status=status.HTTP_200_OK)
 
 

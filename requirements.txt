@@ -17,7 +17,7 @@ chardet==3.0.4
 constantly==15.1.0
 coreapi==2.3.3
 coreschema==0.0.4
-cryptography==3.2
+cryptography==3.3.2
 daphne==2.5.0
 Django==2.2.13
 django-apscheduler==0.5.1

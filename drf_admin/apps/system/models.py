@@ -14,14 +14,10 @@ class Permissions(BaseModel):
         (u'PATCH', u'局部改'),
         (u'GET', u'查')
     )
-    menu_choices = (
-        (True, u'菜单'),
-        (False, u'接口')
-    )
 
     name = models.CharField(max_length=30, verbose_name='权限名')
     sign = models.CharField(max_length=30, unique=True, verbose_name='权限标识')
-    menu = models.CharField(max_length=8, choices=menu_choices, verbose_name='是否为菜单')
+    menu = models.BooleanField(verbose_name='是否为菜单')  # True为菜单,False为接口
     method = models.CharField(max_length=8, blank=True, default='', choices=method_choices, verbose_name='方法')
     path = models.CharField(max_length=200, blank=True, default='', verbose_name='请求路径正则')
     pid = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, verbose_name='父权限')

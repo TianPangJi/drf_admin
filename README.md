@@ -12,6 +12,7 @@
 |  github   |  https://github.com/TianPangJi/drf_admin   |  https://github.com/TianPangJi/fe_admin   |
 
 #### 项目文档
+* [快速开始技巧和指南](https://github.com/TianPangJi/drf_admin/blob/master/doc/quick_start.md)
 * [一、drf_admin(权限RBAC)后台管理系统(介绍篇)](https://blog.csdn.net/Mr_w_ang/article/details/111303774)
 * [二、drf_admin(权限RBAC)后台管理系统(配置篇)](https://blog.csdn.net/Mr_w_ang/article/details/113483668)
 * [三、drf_admin(权限RBAC)后台管理系统(鉴权篇)](https://blog.csdn.net/Mr_w_ang/article/details/113484448)

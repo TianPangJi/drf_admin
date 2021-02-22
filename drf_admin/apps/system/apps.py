@@ -6,3 +6,4 @@ class SystemConfig(AppConfig):
 
     def ready(self):
         import system.jobs.run
+        import system.signals

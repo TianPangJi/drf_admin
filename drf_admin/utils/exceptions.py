@@ -9,14 +9,13 @@ import logging
 import traceback
 
 from django.core.exceptions import PermissionDenied
-from django.http import Http404
-from rest_framework.exceptions import ErrorDetail
-
-from rest_framework.views import set_rollback
 from django.db import DatabaseError
+from django.http import Http404
 from redis.exceptions import RedisError
-from rest_framework.response import Response
 from rest_framework import status, exceptions
+from rest_framework.exceptions import ErrorDetail
+from rest_framework.response import Response
+from rest_framework.views import set_rollback
 
 # 获取在配置文件中定义的logger，用来记录日志
 from monitor.models import ErrorLogs
