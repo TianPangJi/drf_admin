@@ -1,6 +1,7 @@
-<h1 style="text-align: center">DRF-ADMIN 后台管理系统</h1>
+# DRF-ADMIN 后台管理系统
 
 #### 后端运行
+
 * 开发使用版本
     * Python 3.6.2(建议使用Python3.x以上版本)
     * Redis 3.2.100
@@ -19,12 +20,14 @@
 * 创建登录账户
     * python manage.py createsuperuser
 * 启动
+    * python manage.py runserver 127.0.0.1:8769
     * python manage.py runserver 0.0.0.0:8769
     * 如修改端口则前端代码也需修改
 * 接口文档
     * http://ip:port/api/swagger/
 
 #### 前端运行
+
 * 前置条件
     * 拉取前端代码**fe_admin**
     * 确保本地已安装node.js
