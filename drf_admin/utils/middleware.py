@@ -113,7 +113,7 @@ class OnlineUsersMiddleware(MiddlewareMixin):
                 online_info = {'ip': request_ip, 'browser': get_request_browser(request),
                                'os': get_request_os(request), 'last_time': last_time}
                 conn.hmset(f'online_user_{request.user.id}_{request_ip}', online_info)
-                if OnlineUsers.objects.filter(user=request.user,ip=request_ip).count() == 0:
+                if not OnlineUsers.objects.filter(user=request.user, ip=request_ip).exists():
                     OnlineUsers.objects.create(**{'user': request.user, 'ip': request_ip})
             # key过期后, 使用redis空间通知, 使用户下线
             conn.expire(f'online_user_{request.user.id}_{request_ip}', 10 * 60)
