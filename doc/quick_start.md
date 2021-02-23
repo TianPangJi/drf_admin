@@ -62,9 +62,37 @@ pdb.set_trace()
 
 http://localhost:8769/api/oauth/login/
 
-### swagger
+### swagger 链接
 
 http://localhost:8769/api/swagger/
+
+http://localhost:8769/api/redoc/
+
+#### 获取 Authorization Header 内容
+
+在本项目中DRF(Django REST Framework)使用的认证方式是 [JSON Web Token Authentication(JWT)](https://django-rest-framework-simplejwt.readthedocs.io/en/latest/getting_started.html#usage)
+首先使用/oauth/login/接口获取token内容，形如：
+```json
+{
+  "msg": "成功",
+  "errors": "",
+  "code": 200,
+  "data": {
+    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6ImFkbWluIiwiZXhwIjoxNjE0MDY5NzkxLCJlbWFpbCI6InViZXJ1cmV5X3Vwc0AxNjMuY29tIiwib3JpZ19pYXQiOjE2MTM5ODMzOTF9.r1q4xhItyocOHvzXmd2aQQf6P-ARAtpYzGi6FQsf69g"
+  }
+}
+```
+如果将上述响应内容中的"token"的值记作data，则 Authorization 头部内容应该为：`Bearer data`，比如：
+```text
+Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6ImFkbWluIiwiZXhwIjoxNjE0MDY5NzkxLCJlbWFpbCI6InViZXJ1cmV5X3Vwc0AxNjMuY29tIiwib3JpZ19pYXQiOjE2MTM5ODMzOTF9.r1q4xhItyocOHvzXmd2aQQf6P-ARAtpYzGi6FQsf69g
+```
+然后就可以利用此header请求其他需要认证的接口了。
+```shell
+curl -X GET "http://127.0.0.1:8769/api/oauth/info/" -H "accept: application/json" -H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6ImFkbWluIiwiZXhwIjoxNjE0MDY5NzkxLCJlbWFpbCI6InViZXJ1cmV5X3Vwc0AxNjMuY29tIiwib3JpZ19pYXQiOjE2MTM5ODMzOTF9.r1q4xhItyocOHvzXmd2aQQf6P-ARAtpYzGi6FQsf69g"
+```
+
+除 JWT 之外，DRF 还支持其他第三方认证插件，详情可参考[此链接](https://www.django-rest-framework.org/api-guide/authentication/) 。
+
 
 ## Django 中的自定义验证 | Customizing authentication in Django
 
