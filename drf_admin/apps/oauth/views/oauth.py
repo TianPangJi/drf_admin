@@ -8,6 +8,7 @@
 """
 import json
 
+from django.contrib.auth.models import AnonymousUser
 from django_redis import get_redis_connection
 from rest_framework import status
 from rest_framework.exceptions import APIException
@@ -44,6 +45,11 @@ class UserLoginView(ObtainJSONWebToken):
             raise APIException(serializer.errors)
 
 
+import logging
+
+logger = logging.getLogger('django.request')
+
+
 class UserInfoView(APIView):
     """
     get:
@@ -53,6 +59,15 @@ class UserInfoView(APIView):
     """
 
     def get(self, request):
+        # 如果用户为非认证用户，即AnonymousUser，type: django.contrib.auth.models.AnonymousUser
+        if not hasattr(request.user, 'get_user_info'):
+            if isinstance(request.user, AnonymousUser):
+                self.permission_denied(request)
+                # return Response(
+                #     data={'msg': 'not authed', 'errors': 'login or auth is required', 'code': 1, 'data': ''},
+                #     status=status.HTTP_401_UNAUTHORIZED)
+                # raise APIException('not authed')  # 使用此方式会得到500 HTTP status code，因此使用return Response的方式
+
         user_info = request.user.get_user_info()
         # 将用户信息缓存到redis
         conn = get_redis_connection('user_info')
