@@ -11,7 +11,7 @@ import json
 from django.contrib.auth.models import AnonymousUser
 from django_redis import get_redis_connection
 from rest_framework import status
-from rest_framework.exceptions import APIException
+from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from rest_framework.throttling import AnonRateThrottle
 from rest_framework.views import APIView
@@ -30,19 +30,18 @@ class UserLoginView(ObtainJSONWebToken):
     def post(self, request, *args, **kwargs):
         # 重写父类方法, 定义响应字段内容
         response = super().post(request, *args, **kwargs)
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
+        if response.status_code == 200:
             conn = get_redis_connection('user_info')
             conn.incr('visits')
             return response
         else:
-            if serializer.errors.get('non_field_errors'):
+            if response.data.get('non_field_errors'):
                 # 日后将增加用户多次登录错误,账户锁定功能(待完善)
-                if isinstance(serializer.errors.get('non_field_errors'), list) and len(
-                        serializer.errors.get('non_field_errors')) > 0:
-                    if serializer.errors.get('non_field_errors')[0].strip() == '无法使用提供的认证信息登录。':
+                if isinstance(response.data.get('non_field_errors'), list) and len(
+                        response.data.get('non_field_errors')) > 0:
+                    if response.data.get('non_field_errors')[0].strip() == '无法使用提供的认证信息登录。':
                         return Response(data={'detail': '用户名或密码错误'}, status=status.HTTP_400_BAD_REQUEST)
-            raise APIException(serializer.errors)
+            raise ValidationError(response.data)
 
 
 class UserInfoView(APIView):
