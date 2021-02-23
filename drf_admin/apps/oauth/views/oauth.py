@@ -45,11 +45,6 @@ class UserLoginView(ObtainJSONWebToken):
             raise APIException(serializer.errors)
 
 
-import logging
-
-logger = logging.getLogger('django.request')
-
-
 class UserInfoView(APIView):
     """
     get:
