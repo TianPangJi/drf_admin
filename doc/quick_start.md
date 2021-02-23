@@ -123,3 +123,8 @@ git push origin master
     git push origin master  # 将公共库上的更改推送到自己的私有库
     # 以上过程都是操作的自己的私有库
 ```
+
+## 关于静态文件的部署
+
+静态文件，比如图片，JavaScript，CSS、favicon.ico、robots.txt等，建议使用nginx或apache等，而不是依赖Django本身。
+可参考 [管理静态文件](https://docs.djangoproject.com/zh-hans/3.1/howto/static-files/) 和 [部署静态文件](https://docs.djangoproject.com/zh-hans/3.1/howto/static-files/deployment/) 。
