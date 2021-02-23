@@ -8,7 +8,6 @@
 """
 import json
 
-from django.contrib.auth.models import AnonymousUser
 from django_redis import get_redis_connection
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
