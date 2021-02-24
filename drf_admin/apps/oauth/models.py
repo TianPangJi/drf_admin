@@ -30,6 +30,10 @@ class Users(AbstractUser):
             permissions.append('admin')
         return permissions
 
+    @property
+    def roles_list(self):
+        return [{'id': role.id, 'desc': role.desc} for role in self.roles.all()]
+
     def get_user_info(self):
         # 获取用户信息
         user_info = {

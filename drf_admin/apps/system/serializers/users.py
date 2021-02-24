@@ -18,9 +18,9 @@ class UsersSerializer(serializers.ModelSerializer):
     """
     用户增删改查序列化器
     """
-    roles_list = serializers.SerializerMethodField()
     date_joined = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S', read_only=True)
     department_name = serializers.ReadOnlyField(source='department.name')
+    roles_list = serializers.ReadOnlyField()
     is_superuser = serializers.BooleanField(read_only=True)
 
     class Meta:
@@ -39,9 +39,6 @@ class UsersSerializer(serializers.ModelSerializer):
         if attrs.get('mobile') == '':
             attrs['mobile'] = None
         return attrs
-
-    def get_roles_list(self, obj):
-        return [{'id': role.id, 'desc': role.desc} for role in obj.roles.all()]
 
     def create(self, validated_data):
         user = super().create(validated_data)
