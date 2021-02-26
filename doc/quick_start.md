@@ -4,11 +4,28 @@
 
 可以先参考[运行本项目](run_drf.md)文档，文档中有关于运行环境和命令的一些描述。
 
+### 关于开发环境的代理设置和技巧
+
 如果本地使用代理，则可以使用代理安装，可能速度更快，也更自由。
 
 ```shell
 pip install pysocks5  # 启用pip socks5协议支持
 pip install --proxy socks5://127.0.0.1:10808 -r requirements.txt
+```
+
+JetBrains PyCharm的terminal可能不像系统中的bash和cmd一样自动使用系统代理（proxy）设置，可以使用如下命令行配置Git的代理设置：
+```shell
+git config --global https.proxy 'socks5://127.0.0.1:10808'  # for socks5
+git config --global https.proxy 'https://127.0.0.1:1080'   # for https
+```
+
+此proxy配置默认保存在`~/.gitconfig`文件，可以使用`git config --global --unset https.proxy`移除代理设置，或者直接编辑文件
+```text
+[user]
+    name = xxx
+    email = xxx
+[https]
+	proxy = 'socks5://127.0.0.1:10808'
 ```
 
 ## Pycharm 开发环境准备
