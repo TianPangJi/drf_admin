@@ -52,7 +52,9 @@ class OperationLogMiddleware:
                 response_body['data']['token'] = '******'
         except Exception:
             response_body = dict()
-        log_info = f'[{request.user} [Request: {request.method} {request.path} {request_body}] ' \
+
+        request_ip = get_request_ip(request)
+        log_info = f'[{request.user}@{request_ip} [Request: {request.method} {request.path} {request_body}] ' \
                    f'[Response: {response.status_code} {response.reason_phrase} {response_body}]]'
         if response.status_code >= 500:
             logger.error(log_info)
