@@ -110,6 +110,30 @@ curl -X GET "http://127.0.0.1:8769/api/oauth/info/" -H "accept: application/json
 
 除 JWT 之外，DRF 还支持其他第三方认证插件，详情可参考[此链接](https://www.django-rest-framework.org/api-guide/authentication/) 。
 
+## postman 配置
+
+因为大多数接口需要使用认证才可以调用，因此需要对postman进行一些必要的配置。
+
+1. 创建 Collections 时，可以指定 Authorization ，类型（Type）选择 "Bear Token", Token 的值配置为 "{{token}}"，意思是从postman环境变量中获取token的值。
+
+2. 配置 Pre-request Script，脚本内容为：
+```js
+const getTokenByPostRequest = {
+    url: 'http://127.0.0.1:8769/api/oauth/login/',
+    method: 'POST',
+    header: 'Content-Type: application/json',
+    body: {
+        mode: 'raw',
+        raw: JSON.stringify({"username": "admin", "password": "123456"}),
+    }
+};
+
+pm.sendRequest(getTokenByPostRequest, function (err, response) {
+        pm.environment.set("token", response.json().data.token);
+    }
+);
+```
+> 上述代码中的用户名和密码如果已经更改，则需要改为自己定义的用户名和密码。
 
 ## Django 中的自定义验证 | Customizing authentication in Django
 
