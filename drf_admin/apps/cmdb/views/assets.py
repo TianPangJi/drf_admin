@@ -90,13 +90,14 @@ class BaseAssetsAPIView(AdminViewSet):
         assert asset_type is not None, '关键字参数asset_type, 为必传参数'
         assert asset_type in [values[0] for values in
                               Assets.asset_type_choice], 'asset_type应存在与Assets.asset_type_choice'
-        # 管理员角色用户可查看所有
-        if {'name': 'admin'} in self.request.user.roles.values('name'):
-            return Assets.objects.filter(asset_type=asset_type)
-        # 每个用户只能查看到所属部门及其子部门下的服务器, 及该用户管理服务器
-        if self.request.user.department:
-            departments = get_child_ids(self.request.user.department.id, Departments)
-            return (Assets.objects.filter(asset_type=asset_type).filter(
-                Q(department__in=departments) | Q(admin=self.request.user))).distinct()
-        else:
-            return Assets.objects.filter(asset_type=asset_type, admin=self.request.user)
+        return Assets.objects.filter(asset_type=asset_type)
+        # # 管理员角色用户可查看所有
+        # if {'name': 'admin'} in self.request.user.roles.values('name'):
+        #     return Assets.objects.filter(asset_type=asset_type)
+        # # 每个用户只能查看到所属部门及其子部门下的服务器, 及该用户管理服务器
+        # if self.request.user.department:
+        #     departments = get_child_ids(self.request.user.department.id, Departments)
+        #     return (Assets.objects.filter(asset_type=asset_type).filter(
+        #         Q(department__in=departments) | Q(admin=self.request.user))).distinct()
+        # else:
+        #     return Assets.objects.filter(asset_type=asset_type, admin=self.request.user)
