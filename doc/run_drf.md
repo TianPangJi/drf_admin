@@ -1,9 +1,9 @@
 # DRF-ADMIN 后台管理系统
 
 ### 开发环境
-**本项目在win10中开发，未在Linux中运行，可能存在Bug(建议使用Windows运行)**
+**本项目在win10中开发，未在Linux中运行(Linux中可能存在Bug，建议使用Windows运行)**
 
-### 开发编辑器
+### 编辑器
 1. Pycharm
     * [安装教程](https://www.runoob.com/w3cnote/pycharm-windows-install.html)
 2. Visual Studio Code
@@ -20,14 +20,14 @@
         * 虚拟环境可使用venv、virtualenv
         * 安装Python3.6版本以上
     * Redis
-        * 安装redis3.2版本以上
-        * 开启redis空间通知功能，设置notify-keyspace-events KEA
+        * 安装Redis3.2版本以上
+        * 开启Redis空间通知功能，设置notify-keyspace-events KEA
     * Git
         * 安装Git，用于代码拉取及提交
 3. 项目启动
     * 拉取后端代码
         * [drf_admin](https://github.com/TianPangJi/drf_admin) ，在页面中直接Download ZIP
-        * 或使用如下命令clone代码
+        * 或使用如下Git命令clone代码
             ```shell script
             git clone https://github.com/TianPangJi/drf_admin.git
             ```
@@ -53,7 +53,7 @@
     * 接口文档Swagger
         * http://127.0.0.1:8769/api/swagger/
 
-#### 前端运行
+### 前端运行
 1. 版本说明
     * Node.js >10.0
 2. 环境安装
@@ -62,7 +62,7 @@
 3. 项目启动
     * 拉取前端代码
         * [fe_admin](https://github.com/TianPangJi/fe_admin) ，在页面中直接Download ZIP
-        * 或使用如下命令clone代码
+        * 或使用如下Git命令clone代码
             ```shell script
             git clone https://github.com/TianPangJi/fe_admin.git
             ```
