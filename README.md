@@ -1,4 +1,4 @@
-<h1 style="text-align: center">DRF-ADMIN 后台管理系统</h1>
+# DRF-ADMIN 后台管理系统
 
 #### 项目简介
 一个基于 Django、Django REST framework（DRF）、Channels、Redis、Vue的前后端分离的后台管理系统
@@ -6,18 +6,18 @@
 项目正在开发中......
 
 #### 项目源码
-
 |     |   后端源码  |   前端源码  |
 |---  |--- | --- |
 |  github   |  https://github.com/TianPangJi/drf_admin   |  https://github.com/TianPangJi/fe_admin   |
 
+#### 项目启动
+* [启动项目文档](https://github.com/TianPangJi/drf_admin/blob/master/doc/run_drf.md)
+
 #### 项目文档
-* [快速开始技巧和指南](https://github.com/TianPangJi/drf_admin/blob/master/doc/quick_start.md)
 * [一、drf_admin(权限RBAC)后台管理系统(介绍篇)](https://blog.csdn.net/Mr_w_ang/article/details/111303774)
 * [二、drf_admin(权限RBAC)后台管理系统(配置篇)](https://blog.csdn.net/Mr_w_ang/article/details/113483668)
 * [三、drf_admin(权限RBAC)后台管理系统(鉴权篇)](https://blog.csdn.net/Mr_w_ang/article/details/113484448)
 * [四、drf_admin(权限RBAC)后台管理系统(RBAC权限篇)]() 留坑
-
 
 ####  系统功能
 - 系统管理
@@ -29,7 +29,7 @@
 - 系统监控
     - 在线用户: 在线用户监控
     - IP黑名单: 实现系统IP黑名单拉黑功能
-    - CRUD日志: 实现CRUD日志记录功能
+    - ~~CRUD日志~~: 实现CRUD日志记录功能(打算去除)
     - 错误日志: 显示后台未知错误及其详情信息
     - 服务监控: 实时监控查看后台服务器性能
 - 资产管理
@@ -65,9 +65,6 @@
     </tr>
 </table>
 
-#### 启动项目
-[点击查看](https://github.com/TianPangJi/drf_admin/blob/master/doc/run_drf.md)
-
 #### 代码结构
 ```python
 """
@@ -85,18 +82,23 @@
 │   │   ├── pagination.py      # 分页配置
 │   │   ├── permissions.py     # RBAC权限控制
 │   │   ├── routers.py         # 视图routers
+│   │   ├── swagger_schema.py  # swagger
 │   │   ├── views.py           # 基类视图
 │   │   └── websocket.py       # WebSocket用户验证
 │   ├── routing.py             # WebSocket路由
 │   ├── urls.py                # 项目根路由
 │   └── wsgi.py                # wsgi
 ├── .gitignore                 # .gitignore文件
+├── init.json                  # 数据库基础数据文件
 ├── LICENSE                    # LICENSE
-├── README.md                  # README
 ├── manage.py                  # 项目入口、启动文件
+├── README.md                  # README
 └── requirements.txt           # requirements文件
 """
 ```
+
+#### 快速开始技巧和指南
+* [快速开始技巧和指南文档](https://github.com/TianPangJi/drf_admin/blob/master/doc/quick_start.md)
 
 #### 特别鸣谢
 - 感谢 [JetBrains](https://www.jetbrains.com/) 提供的非商业开源软件开发授权
