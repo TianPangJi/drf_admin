@@ -7,6 +7,7 @@
 @create   : 2021/2/14 17:40
 """
 import json
+import logging
 
 from django.db.models.signals import pre_save, pre_delete, post_save
 from django.dispatch import receiver
@@ -28,7 +29,10 @@ def update_permissions_to_redis(sender, instance, **kwargs):
     if instance.id:
         if not instance.menu:
             # 接口权限,判断权限path的变化,更新redis
-            permission = Permissions.objects.get(id=instance.id)
+            try:
+                permission = Permissions.objects.get(id=instance.id)
+            except Permissions.DoesNotExist:
+                return
             if permission.path != instance.path:
                 # 路径更改,删除原有记录并新增一条权限记录
                 if conn.hexists('user_permissions_manage', permission.path):
@@ -67,7 +71,10 @@ def update_permissions_to_redis(sender, instance, **kwargs):
                     conn.hset('user_permissions_manage', instance.path, json.dumps(permissions))
         else:
             # 菜单权限,判断是否由接口权限改为菜单权限,如果是则删除原有记录
-            permission = Permissions.objects.get(id=instance.id)
+            try:
+                permission = Permissions.objects.get(id=instance.id)
+            except Permissions.DoesNotExist:
+                return
             if not permission.menu and conn.hexists('user_permissions_manage', permission.path):
                 permissions = json.loads(conn.hget('user_permissions_manage', permission.path))
                 for index, value in enumerate(permissions):

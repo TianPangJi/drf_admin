@@ -36,9 +36,10 @@ class BasePasswordModels(models.Model):
         :return: AES加密后密码
         """
         aes = AES.new(str.encode(settings.SECRET_KEY[4:20]), AES.MODE_ECB)
-        while len(row_password) % 16 != 0:
-            row_password += '\0'
-        return str(base64.encodebytes(aes.encrypt(str.encode(row_password))), encoding='utf8').replace('\n', '')
+        bytes_row_password = str.encode(row_password)
+        while len(bytes_row_password) % 16 != 0:
+            bytes_row_password = bytes_row_password + b'\0'
+        return str(base64.encodebytes(aes.encrypt(bytes_row_password)), encoding='utf8').replace('\n', '')
 
     def set_password(self, field_name, field_value):
         """加密密码并保存实例"""
