@@ -33,7 +33,7 @@ class MultipleDestroyMixin:
             return Response(data={'detail': 'ids格式错误,必须为List'}, status=status.HTTP_400_BAD_REQUEST)
         queryset = self.get_queryset()
         del_queryset = queryset.filter(id__in=delete_ids)
-        if len(delete_ids) != len(del_queryset):
+        if len(delete_ids) != del_queryset.count():
             return Response(data={'detail': '删除数据不存在'}, status=status.HTTP_400_BAD_REQUEST)
         del_queryset.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
