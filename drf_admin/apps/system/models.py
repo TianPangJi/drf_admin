@@ -46,6 +46,9 @@ class Roles(BaseModel):
 
     objects = models.Manager()
 
+    def __str__(self):
+        return self.name
+
     class Meta:
         db_table = 'system_roles'
         verbose_name = '角色'
@@ -61,6 +64,9 @@ class Departments(BaseModel):
     pid = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, verbose_name='父部门')
 
     objects = models.Manager()
+
+    def __str__(self):
+        return self.name
 
     class Meta:
         db_table = 'system_departments'

@@ -4,11 +4,28 @@
 
 可以先参考[运行本项目](run_drf.md)文档，文档中有关于运行环境和命令的一些描述。
 
+### 关于开发环境的代理设置和技巧
+
 如果本地使用代理，则可以使用代理安装，可能速度更快，也更自由。
 
 ```shell
 pip install pysocks5  # 启用pip socks5协议支持
 pip install --proxy socks5://127.0.0.1:10808 -r requirements.txt
+```
+
+JetBrains PyCharm的terminal可能不像系统中的bash和cmd一样自动使用系统代理（proxy）设置，可以使用如下命令行配置Git的代理设置：
+```shell
+git config --global https.proxy 'socks5://127.0.0.1:10808'  # for socks5
+git config --global https.proxy 'https://127.0.0.1:1080'   # for https
+```
+
+此proxy配置默认保存在`~/.gitconfig`文件，可以使用`git config --global --unset https.proxy`移除代理设置，或者直接编辑文件
+```text
+[user]
+    name = xxx
+    email = xxx
+[https]
+	proxy = 'socks5://127.0.0.1:10808'
 ```
 
 ## Pycharm 开发环境准备
@@ -62,9 +79,61 @@ pdb.set_trace()
 
 http://localhost:8769/api/oauth/login/
 
-### swagger
+### swagger 链接
 
 http://localhost:8769/api/swagger/
+
+http://localhost:8769/api/redoc/
+
+#### 获取 Authorization Header 内容
+
+在本项目中DRF(Django REST Framework)使用的认证方式是 [JSON Web Token Authentication(JWT)](https://django-rest-framework-simplejwt.readthedocs.io/en/latest/getting_started.html#usage)
+首先使用/oauth/login/接口获取token内容，形如：
+```json
+{
+  "msg": "成功",
+  "errors": "",
+  "code": 200,
+  "data": {
+    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6ImFkbWluIiwiZXhwIjoxNjE0MDY5NzkxLCJlbWFpbCI6InViZXJ1cmV5X3Vwc0AxNjMuY29tIiwib3JpZ19pYXQiOjE2MTM5ODMzOTF9.r1q4xhItyocOHvzXmd2aQQf6P-ARAtpYzGi6FQsf69g"
+  }
+}
+```
+如果将上述响应内容中的"token"的值记作data，则 Authorization 头部内容应该为：`Bearer data`，比如：
+```text
+Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6ImFkbWluIiwiZXhwIjoxNjE0MDY5NzkxLCJlbWFpbCI6InViZXJ1cmV5X3Vwc0AxNjMuY29tIiwib3JpZ19pYXQiOjE2MTM5ODMzOTF9.r1q4xhItyocOHvzXmd2aQQf6P-ARAtpYzGi6FQsf69g
+```
+然后就可以利用此header请求其他需要认证的接口了。
+```shell
+curl -X GET "http://127.0.0.1:8769/api/oauth/info/" -H "accept: application/json" -H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6ImFkbWluIiwiZXhwIjoxNjE0MDY5NzkxLCJlbWFpbCI6InViZXJ1cmV5X3Vwc0AxNjMuY29tIiwib3JpZ19pYXQiOjE2MTM5ODMzOTF9.r1q4xhItyocOHvzXmd2aQQf6P-ARAtpYzGi6FQsf69g"
+```
+
+除 JWT 之外，DRF 还支持其他第三方认证插件，详情可参考[此链接](https://www.django-rest-framework.org/api-guide/authentication/) 。
+
+## postman 配置
+
+因为大多数接口需要使用认证才可以调用，因此需要对postman进行一些必要的配置。
+
+1. 创建 Collections 时，可以指定 Authorization ，类型（Type）选择 "Bear Token", Token 的值配置为 "{{token}}"，意思是从postman环境变量中获取token的值。
+
+2. 配置 Pre-request Script，脚本内容为：
+```js
+const getTokenByPostRequest = {
+    url: 'http://127.0.0.1:8769/api/oauth/login/',
+    method: 'POST',
+    header: 'Content-Type: application/json',
+    body: {
+        mode: 'raw',
+        raw: JSON.stringify({"username": "admin", "password": "123456"}),
+    }
+};
+
+pm.sendRequest(getTokenByPostRequest, function (err, response) {
+        pm.environment.set("token", response.json().data.token);
+    }
+);
+```
+> 上述代码中的用户名和密码如果已经更改，则需要改为自己定义的用户名和密码。
 
 ## Django 中的自定义验证 | Customizing authentication in Django
 
@@ -95,3 +164,8 @@ git push origin master
     git push origin master  # 将公共库上的更改推送到自己的私有库
     # 以上过程都是操作的自己的私有库
 ```
+
+## 关于静态文件的部署
+
+静态文件，比如图片，JavaScript，CSS、favicon.ico、robots.txt等，建议使用nginx或apache等，而不是依赖Django本身。
+可参考 [管理静态文件](https://docs.djangoproject.com/zh-hans/3.1/howto/static-files/) 和 [部署静态文件](https://docs.djangoproject.com/zh-hans/3.1/howto/static-files/deployment/) 。
