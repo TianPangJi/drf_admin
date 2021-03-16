@@ -23,6 +23,7 @@ RBAC(Role-Based Access Control,基于角色的访问控制)，通过角色绑定
 * 流程图
 <img src="https://img-blog.csdnimg.cn/2021031620183252.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L01yX3dfYW5n,size_16,color_FFFFFF,t_70#pic_center" border="0" />
 * 说明
+
     1. 前端请求登录，成功后端返回Token值，否则后端返回400
     2. 前端请求获取当前用户信息，成功后根据当前用户信息中的权限信息，进行判断路由及按钮权限判断
     3. 前端请求其他接口，后端先验证登录状态（失败则返回401），再验证用户权限（失败则返回403）
@@ -32,6 +33,7 @@ RBAC(Role-Based Access Control,基于角色的访问控制)，通过角色绑定
 * 权限流程图
 <img src="https://img-blog.csdnimg.cn/20210316201844116.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L01yX3dfYW5n,size_16,color_FFFFFF,t_70#pic_center" border="0" />
 * 说明
+
     1. 根据需求，创建不同角色，例如：admin、visitor
     2. 依据角色，给不同的角色分配不同的权限
     3. 根据用户的岗位及职责分配角色，使不同用户具有不同的权限
