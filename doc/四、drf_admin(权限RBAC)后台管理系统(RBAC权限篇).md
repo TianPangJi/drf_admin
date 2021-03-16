@@ -6,8 +6,8 @@ drf_admin采用Python、Django、DRF等技术开发，志在用最短的时间�
 欢迎访问[drf_admin](https://github.com/TianPangJi/drf_admin)；欢迎star，点个☆小星星☆哦。
 
 ## 项目地址
-drf_admin（后端）：[https://github.com/TianPangJi/drf_admin](https://github.com/TianPangJi/drf_admin)
-fe_admin（前端）：[https://github.com/TianPangJi/fe_admin](https://github.com/TianPangJi/fe_admin)
+* drf_admin（后端）：[https://github.com/TianPangJi/drf_admin](https://github.com/TianPangJi/drf_admin)
+* fe_admin（前端）：[https://github.com/TianPangJi/fe_admin](https://github.com/TianPangJi/fe_admin)
 
 ## 系列文章
 * [一、drf_admin(权限RBAC)后台管理系统(介绍篇)](https://blog.csdn.net/Mr_w_ang/article/details/111303774)
@@ -21,7 +21,7 @@ RBAC(Role-Based Access Control,基于角色的访问控制)，通过角色绑定
 优点
 ## 实现过程
 * 流程图
-![](image/实现过程流程图.png)
+<img src="https://img-blog.csdnimg.cn/2021031620183252.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L01yX3dfYW5n,size_16,color_FFFFFF,t_70#pic_center" border="0" />
 * 说明
     1. 前端请求登录，成功后端返回Token值，否则后端返回400
     2. 前端请求获取当前用户信息，成功后根据当前用户信息中的权限信息，进行判断路由及按钮权限判断
@@ -30,7 +30,7 @@ RBAC(Role-Based Access Control,基于角色的访问控制)，通过角色绑定
     
 ## 权限
 * 权限流程图
-![](image/权限流程图.png)
+<img src="https://img-blog.csdnimg.cn/20210316201844116.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L01yX3dfYW5n,size_16,color_FFFFFF,t_70#pic_center" border="0" />
 * 说明
     1. 根据需求，创建不同角色，例如：admin、visitor
     2. 依据角色，给不同的角色分配不同的权限
@@ -47,7 +47,7 @@ RBAC(Role-Based Access Control,基于角色的访问控制)，通过角色绑定
     5. Roles-Permissions(角色权限关联表)
     
     示例：
-    ![](image/权限-表设计.png)
+    <img src="https://img-blog.csdnimg.cn/20210316201859290.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L01yX3dfYW5n,size_16,color_FFFFFF,t_70#pic_center" border="0" />
 2. DRF权限官方文档
     1. [DRF官方(权限自定义)](https://www.django-rest-framework.org/api-guide/permissions/#custom-permissions)
 3. 代码实现
