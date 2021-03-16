@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 
 from drf_admin.utils.models import BaseModel, BasePasswordModels
@@ -28,7 +29,8 @@ class Assets(BaseModel):
     manage_ip = models.GenericIPAddressField(null=True, blank=True, verbose_name='管理IP')
     department = models.ForeignKey('system.Departments', null=True, blank=True, on_delete=models.SET_NULL,
                                    verbose_name='所属部门')
-    admin = models.ForeignKey('oauth.Users', null=True, blank=True, on_delete=models.SET_NULL, verbose_name='资产管理员')
+    admin = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL,
+                              verbose_name='资产管理员')
     cabinet = models.ForeignKey('Cabinets', null=True, blank=True, on_delete=models.SET_NULL, verbose_name='所在机柜')
     expire_day = models.DateField(null=True, blank=True, verbose_name="过保日期")
     memo = models.TextField(null=True, blank=True, verbose_name='备注')

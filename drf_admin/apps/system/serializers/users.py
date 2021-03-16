@@ -9,9 +9,10 @@
 import re
 
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
-from oauth.models import Users
+Users = get_user_model()
 
 
 class UsersSerializer(serializers.ModelSerializer):

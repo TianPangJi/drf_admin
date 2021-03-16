@@ -6,9 +6,10 @@
 @file     : centre.py
 @create   : 2020/11/7 14:06
 """
+from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
-from oauth.models import Users
+Users = get_user_model()
 
 
 class ChangePasswordSerializer(serializers.ModelSerializer):

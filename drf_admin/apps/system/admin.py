@@ -1,7 +1,9 @@
 from django.contrib import admin
+from django.contrib.auth import get_user_model
 
-from oauth.models import Users
 from system.models import Permissions, Roles, Departments
+
+Users = get_user_model()
 
 # Register your models here.
 admin.site.register(Users)

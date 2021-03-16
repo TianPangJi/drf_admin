@@ -6,6 +6,7 @@
 @file     : assets.py
 @create   : 2020/10/21 19:44
 """
+from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AnonymousUser
 from django.db.models import Q
 from rest_framework import status
@@ -18,8 +19,9 @@ from cmdb.models import Assets, IDC, Cabinets
 from cmdb.serializers.assets import AssetsAdminSerializer
 from drf_admin.common.models import get_child_ids
 from drf_admin.utils.views import ChoiceAPIView, AdminViewSet
-from oauth.models import Users
 from system.models import Departments
+
+Users = get_user_model()
 
 
 class AssetsStatusAPIView(ChoiceAPIView):

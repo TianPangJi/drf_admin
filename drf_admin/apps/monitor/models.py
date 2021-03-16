@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 
 from drf_admin.utils.models import BaseModel
@@ -42,7 +43,7 @@ class OnlineUsers(BaseModel):
     """
     在线用户
     """
-    user = models.ForeignKey('oauth.Users', on_delete=models.CASCADE, verbose_name='用户')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='用户')
     ip = models.GenericIPAddressField(verbose_name='IP')
 
     objects = models.Manager()

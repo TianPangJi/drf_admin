@@ -6,11 +6,13 @@
 @file     : assets.py
 @create   : 2020/10/31 9:29
 """
+from django.contrib.auth import get_user_model
 from drf_writable_nested import WritableNestedModelSerializer
 from rest_framework import serializers
 
 from cmdb.models import Assets
-from oauth.models import Users
+
+Users = get_user_model()
 
 
 class AssetsAdminSerializer(serializers.ModelSerializer):

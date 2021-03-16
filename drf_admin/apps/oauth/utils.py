@@ -9,9 +9,10 @@ import json
 import re
 
 import requests
+from django.contrib.auth import get_user_model
 from django.contrib.auth.backends import ModelBackend
 
-from oauth.models import Users
+Users = get_user_model()
 
 
 class UsernameMobileAuthBackend(ModelBackend):

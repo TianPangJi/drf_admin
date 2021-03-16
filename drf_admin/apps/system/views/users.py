@@ -6,6 +6,7 @@
 @file     : users.py
 @create   : 2020/6/27 17:55
 """
+from django.contrib.auth import get_user_model
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import mixins
 from rest_framework.exceptions import ValidationError
@@ -16,9 +17,10 @@ from rest_framework.views import APIView
 
 from drf_admin.apps.system.serializers.users import UsersSerializer, UsersPartialSerializer, ResetPasswordSerializer
 from drf_admin.utils.views import AdminViewSet
-from oauth.models import Users
 from system.filters.users import UsersFilter
 from system.models import Permissions
+
+Users = get_user_model()
 
 
 class UsersViewSet(AdminViewSet):

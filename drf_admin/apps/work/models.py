@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 
 from drf_admin.utils.models import BaseModel
@@ -21,9 +22,11 @@ class Tasks(BaseModel):
     expire_day = models.DateField(verbose_name="完成时间")
     status = models.SmallIntegerField(choices=status_choice, default=0, verbose_name='任务状态')
     progress = models.SmallIntegerField(default=0, verbose_name='任务进度')
-    creator = models.ForeignKey('oauth.Users', on_delete=models.SET_NULL, null=True, verbose_name='创建人')
-    reviewer = models.ForeignKey('oauth.Users', on_delete=models.SET_NULL, null=True, blank=True, verbose_name='审核人')
-    executor = models.ForeignKey('oauth.Users', on_delete=models.SET_NULL, null=True, blank=True, verbose_name='执行人')
+    creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, verbose_name='创建人')
+    reviewer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True,
+                                 verbose_name='审核人')
+    executor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True,
+                                 verbose_name='执行人')
     department = models.ForeignKey('system.Departments', on_delete=models.SET_NULL, null=True, verbose_name='所属部门')
 
     def __str__(self):
@@ -41,7 +44,7 @@ class TasksProgress(BaseModel):
 
     create_time = models.DateTimeField(auto_now_add=True, verbose_name="创建时间")
     detail = models.TextField(verbose_name='任务进展')
-    creator = models.ForeignKey('oauth.Users', on_delete=models.SET_NULL, null=True, verbose_name='创建人')
+    creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, verbose_name='创建人')
     task = models.ForeignKey('Tasks', on_delete=models.CASCADE, verbose_name='所属任务')
 
     class Meta:

@@ -7,10 +7,12 @@
 @create   : 2020/9/15 21:59
 """
 import django_filters
+from django.contrib.auth import get_user_model
 
 from drf_admin.common.models import get_child_ids
-from oauth.models import Users
 from system.models import Departments
+
+Users = get_user_model()
 
 
 class UsersFilter(django_filters.rest_framework.FilterSet):

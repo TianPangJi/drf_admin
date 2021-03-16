@@ -6,6 +6,7 @@
 @file     : home.py
 @create   : 2020/11/25 20:31
 """
+from django.contrib.auth import get_user_model
 from django_redis import get_redis_connection
 from rest_framework import status
 from rest_framework.response import Response
@@ -13,7 +14,8 @@ from rest_framework.views import APIView
 
 from cmdb.models import Assets
 from monitor.models import OnlineUsers
-from oauth.models import Users
+
+Users = get_user_model()
 
 
 class HomeAPIView(APIView):
