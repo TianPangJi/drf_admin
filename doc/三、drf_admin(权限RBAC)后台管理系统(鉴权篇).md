@@ -1,4 +1,5 @@
-## 三、drf_admin(权限RBAC)后台管理系统(鉴权篇) 
+本篇主要介绍drf-admin系统，鉴权方式（Web JWT）
+
 drf_admin采用Python、Django、DRF等技术开发，志在用最短的时间、最简洁的代码，实现开箱即用的后台管理系统。
 
 欢迎访问[drf_admin](https://github.com/TianPangJi/drf_admin)；欢迎star，点个☆小星星☆哦。

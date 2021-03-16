@@ -1,6 +1,5 @@
-<h1 style="text-align: center">drf_admin(权限RBAC)后台管理系统</h1>
+本篇主要介绍drf-admin系统，基于Django、Django REST framework（DRF）、Channels、Redis、Vue的前后端分离的后台管理系统，采用分模块开发方式， 权限控制采用RBAC
 
-## drf_admin(权限RBAC)后台管理系统(介绍篇)
 drf_admin采用Python、Django、DRF等技术开发，志在用最短的时间、最简洁的代码，实现开箱即用的后台管理系统。
 
 欢迎访问[drf_admin](https://github.com/TianPangJi/drf_admin)；欢迎给点个☆小星星☆哦

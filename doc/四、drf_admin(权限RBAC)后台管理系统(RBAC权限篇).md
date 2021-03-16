@@ -1,5 +1,4 @@
-## 四、drf_admin(权限RBAC)后台管理系统(RBAC权限篇)
-本篇主要介绍基于Django、DRF(Django REST framework)、RBAC，实现基于角色控制的权限管理
+本篇主要介绍drf-admin系统，基于Django、DRF(Django REST framework)、RBAC，实现基于角色控制的权限管理
 
 drf_admin采用Python、Django、DRF等技术开发，志在用最短的时间、最简洁的代码，实现开箱即用的后台管理系统。
 
