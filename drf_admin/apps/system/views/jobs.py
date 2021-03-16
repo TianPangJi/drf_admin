@@ -36,7 +36,8 @@ class JobFunctionsListAPIView(ListAPIView):
     search_fields = ('name', 'desc')
 
     def get_queryset(self):
-        return list(filter(None, [obj if isfunction(obj[1]) else None for obj in getmembers(tasks)]))
+        return list(filter(None, [obj if isfunction(obj[1]) and obj[0] != 'single_task' else None for obj in
+                                  getmembers(tasks)]))
 
     def filter_queryset(self, queryset):
         search_params = self.request.query_params.get('search')
