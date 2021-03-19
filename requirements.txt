@@ -27,7 +27,7 @@ django-filter==2.3.0
 django-redis==4.12.1
 django-simpleui==2020.9
 django-user-agents==0.4.0
-djangorestframework==3.11.0
+djangorestframework==3.11.2
 djangorestframework-jwt==1.11.0
 dnspython==1.16.0
 drf-writable-nested==0.6.1
