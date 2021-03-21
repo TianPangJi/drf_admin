@@ -45,6 +45,8 @@ class RbacPermission(BasePermission):
                 return True
         # admin权限放行
         conn = get_redis_connection('user_info')
+        if not conn.exists('user_permissions_manage'):
+            redis_storage_permissions(conn)
         if conn.exists('user_info_%s' % request.user.id):
             user_permissions = json.loads(conn.hget('user_info_%s' % request.user.id, 'permissions').decode())
             if 'admin' in user_permissions:
@@ -56,8 +58,6 @@ class RbacPermission(BasePermission):
         # RBAC权限验证
         # Step 1 验证redis中是否存储权限数据
         request_method = request.method
-        if not conn.exists('user_permissions_manage'):
-            redis_storage_permissions(conn)
         # Step 2 判断请求路径是否在权限控制中
         url_keys = conn.hkeys('user_permissions_manage')
         for url_key in url_keys:
