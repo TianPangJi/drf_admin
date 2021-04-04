@@ -41,7 +41,7 @@ importlib-metadata==1.7.0
 incremental==17.5.0
 inflection==0.5.0
 itypes==1.2.0
-Jinja2==2.11.2
+Jinja2==2.11.3
 kombu==4.6.11
 MarkupSafe==1.1.1
 monotonic==1.5
