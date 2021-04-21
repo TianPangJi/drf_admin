@@ -4,7 +4,7 @@ APScheduler==3.6.3
 asgiref==3.2.10
 async-timeout==3.0.1
 attrs==19.3.0
-autobahn==20.7.1
+autobahn==20.12.3
 Automat==20.2.0
 beautifulsoup4==4.9.3
 billiard==3.6.3.0
