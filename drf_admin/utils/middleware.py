@@ -100,7 +100,7 @@ class ResponseMiddleware(MiddlewareMixin):
 
 class OnlineUsersMiddleware(MiddlewareMixin):
     """
-    在线用户监测, (采用类心跳机制,10分钟内无任何操作则任务该用户已下线)
+    在线用户监测, (采用类心跳机制,10分钟内无任何操作则认为该用户已下线)
     """
 
     def process_response(self, request, response):
