@@ -35,7 +35,7 @@ drf-yasg==1.17.1
 eventlet==0.31.0
 greenlet==0.4.16
 hiredis==1.1.0
-hyperlink==19.0.0
+hyperlink==20.0.1
 idna==2.9
 importlib-metadata==1.7.0
 incremental==17.5.0
@@ -60,7 +60,7 @@ pyparsing==2.4.7
 pytz==2020.1
 PyYAML==5.4
 redis==3.5.3
-requests==2.24.0
+requests==2.25.1
 ruamel.yaml==0.16.10
 ruamel.yaml.clib==0.2.0
 service-identity==18.1.0
