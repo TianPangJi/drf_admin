@@ -83,6 +83,16 @@ def exception_handler(exc, context):
         data = errors_handler(exc)
         set_rollback()
         response = Response(data, status=exc.status_code, headers=headers)
+    elif isinstance(exc, AssertionError):
+        # assert断言异常捕获
+        headers = {}
+        if getattr(exc, 'auth_header', None):
+            headers['WWW-Authenticate'] = exc.auth_header
+        if getattr(exc, 'wait', None):
+            headers['Retry-After'] = '%d' % exc.wait
+        data = errors_handler(exc)
+        set_rollback()
+        response = Response(data, status=status.HTTP_400_BAD_REQUEST, headers=headers)
     elif isinstance(exc, DatabaseError) or isinstance(exc, RedisError):
         # 数据库异常
         view = context['view']
