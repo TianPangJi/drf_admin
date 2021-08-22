@@ -7,6 +7,7 @@
 @create   : 2020/7/29 20:24
 """
 import json
+import uuid
 from datetime import datetime
 
 import psutil
@@ -21,6 +22,7 @@ class ResourcesConsumer(AsyncWebsocketConsumer):
         if not self.scope['user']:
             await self.close()
         else:
+            self.scope['user'].username = self.scope['user'].username + uuid.uuid1().hex
             await self.channel_layer.group_add(
                 self.scope['user'].username,
                 self.channel_name,
