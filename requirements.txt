@@ -8,7 +8,7 @@ autobahn==20.12.3
 Automat==20.2.0
 beautifulsoup4==4.9.3
 billiard==3.6.3.0
-celery==4.4.7
+celery==5.2.2
 certifi==2020.6.20
 cffi==1.14.1
 channels==2.4.0
