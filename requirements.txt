@@ -67,7 +67,7 @@ service-identity==18.1.0
 six==1.15.0
 soupsieve==2.0.1
 sqlparse==0.3.1
-Twisted==22.1.0
+Twisted==22.2.0
 txaio==20.4.1
 tzlocal==2.1
 ua-parser==0.10.0
