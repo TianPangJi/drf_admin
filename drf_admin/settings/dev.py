@@ -29,7 +29,7 @@ SECRET_KEY = 'mppodn1q7pk7hh)da39+yc1$^rcovyc)$lt69*wprdz_mjayaa'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['*', '127.0.0.1']
 
 # Application definition
 
@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     'monitor',
     'cmdb',
     'information',
+    'chatbot',
 ]
 
 MIDDLEWARE = [
