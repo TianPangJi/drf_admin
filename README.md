@@ -1,4 +1,4 @@
-# DRF-ADMIN 后台管理系统
+# DRF-ADMIN 後台管理系統
 
 <p align="center">
   <a href="https://www.python.org/">
