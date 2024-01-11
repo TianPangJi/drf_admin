@@ -1,6 +1,6 @@
 import openai
 
-openai.api_key = "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"  # 替换为您的 OpenAI API 密钥
+openai.api_key = "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"  # 替换为您的 OpenAI API 密钥
 
 
 def get_gpt_response(prompt):
@@ -15,3 +15,5 @@ def get_gpt_response(prompt):
     # print(response.choices[0].message)
 
     return response.choices[0].message["content"]
+
+# print(get_gpt_response("你好"))

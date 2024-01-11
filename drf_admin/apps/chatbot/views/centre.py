@@ -22,6 +22,7 @@ class SaveMessageAPIView(mixins.UpdateModelMixin, GenericAPIView):
         return self.request.user
 
 class GetMessageAPIView(mixins.UpdateModelMixin, GenericAPIView):
+    #TODO: get message from database
     """
     post:
     个人中心--修改个人信息
@@ -32,7 +33,11 @@ class GetMessageAPIView(mixins.UpdateModelMixin, GenericAPIView):
     def get(self, request, *args, **kwargs):
         # return self.update(request, *args, **kwargs)
         # message=get_gpt_response(request.data['message'])
-        return Response({'userId': 1, 'sender': 'bot', 'message': 'message'})
+        messages = [
+            {'userId': 1, 'sender': 'bot', 'message': 'Sample Message 1'},
+            {'userId': 2, 'sender': 'user', 'message': 'Sample Message 2'}
+        ]
+        return Response(messages)
 
     def get_object(self):
         return self.request.user
