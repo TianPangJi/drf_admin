@@ -9,22 +9,6 @@ from chatbot.models import ChatMessage
 from chatbot.serializers.centre import ChatMessageSerializer  # 導入 Response
 
 
-class SaveMessageAPIView(mixins.UpdateModelMixin, GenericAPIView):
-    """
-    post:
-    个人中心--修改个人信息
-
-    个人中心修改个人信息, status: 200(成功), return: 修改后的个人信息
-    """
-
-    def put(self, request, *args, **kwargs):
-        # return self.update(request, *args, **kwargs)
-        message=get_gpt_response(request.data['message'])
-        return Response({'userId': 1, 'sender': 'bot', 'message': message})
-
-    def get_object(self):
-        return self.request.user
-    
 def save_chat_message(data):
     serializer = ChatMessageSerializer(data=data)
     if serializer.is_valid():
@@ -38,8 +22,8 @@ class ChatMessageUpdateAPIView(mixins.UpdateModelMixin, GenericAPIView):
     # serializer_class = ChatMessageSerializer(data=data)
 
     def put(self, request, *args, **kwargs):
-        bot_id = 0
-        chatroom_id = 0
+        bot_id = request.data.get('bot_id')
+        chatroom_id = request.data.get('chatroom_id')
         sender = request.data.get('sender')
         message = request.data.get('message')
         tag = '測試'
@@ -58,7 +42,6 @@ class ChatMessageUpdateAPIView(mixins.UpdateModelMixin, GenericAPIView):
             'message': get_gpt_response(message),
             'tag': tag,
         }
-
         try:
             with transaction.atomic():
                 # 保存用戶消息
@@ -82,20 +65,42 @@ class ChatMessageUpdateAPIView(mixins.UpdateModelMixin, GenericAPIView):
 class GetMessageAPIView(mixins.UpdateModelMixin, GenericAPIView):
     #TODO: get message from database
     """
-    post:
-    个人中心--修改个人信息
-
-    个人中心修改个人信息, status: 200(成功), return: 修改后的个人信息
+    根據 bot_id 和 chatroom_id 從數據庫檢索訊息。
     """
 
     def get(self, request, *args, **kwargs):
-        # return self.update(request, *args, **kwargs)
-        # message=get_gpt_response(request.data['message'])
-        messages = [
-            {'userId': 1, 'sender': 'bot', 'message': 'Sample Message 1'},
-            {'userId': 2, 'sender': 'user', 'message': 'Sample Message 2'}
+        # 從請求中檢索 bot_id 和 chatroom_id。
+        # 在這裡，我假設這些作為查詢參數發送。
+        # bot_id = request.query_params.get('bot_id')
+        bot_id='0'
+        # # chatroom_id = request.query_params.get('chatroom_id')
+        chatroom_id ='0'
+        if not bot_id or not chatroom_id:
+            return Response({"error": "缺少 bot_id 或 chatroom_id"}, status=400)
+
+        # 查詢 ChatMessage 模型
+        messages = ChatMessage.objects.filter(
+            bot_id=bot_id, chatroom_id=chatroom_id
+        ).order_by('timestamp')  # 如果需要，按時間戳排序
+
+        # 格式化數據
+        formatted_messages = [
+            {
+                'userId': message.id,  # 假設您在這裡想要訊息 ID
+                'sender': message.sender,
+                'message': message.message
+            }
+            for message in messages
         ]
-        return Response(messages)
+
+        return Response(formatted_messages)
+        # messages = [
+        #         {'userId': 1, 'sender': 'bot', 'message': 'Sample Message 1'},
+        #         {'userId': 2, 'sender': 'user', 'message': 'Sample Message 2'}
+        #     ]
+        # return Response(messages)
+
+
 
     def get_object(self):
         return self.request.user
