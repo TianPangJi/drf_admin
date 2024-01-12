@@ -46,6 +46,7 @@ kombu==4.6.11
 MarkupSafe==1.1.1
 monotonic==1.5
 msgpack==0.6.2
+openai==0.28.0
 packaging==20.4
 Pillow==9.0.1
 psutil==5.7.2
