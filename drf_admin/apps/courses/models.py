@@ -31,7 +31,7 @@ class Book(models.Model):
     difficulty = models.CharField(max_length=50, choices=DIFFICULTY_CHOICES, blank=True, null=True, verbose_name=_('書籍難度'))
 
     class Meta:
-        db_table = 'book'
+        db_table = 'books'
         verbose_name = _('書籍')
         verbose_name_plural = _('書籍')
         ordering = ['book_id']

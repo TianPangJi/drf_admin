@@ -48,7 +48,8 @@ urlpatterns = [
     path(f'{base_api}monitor/', include('monitor.urls')),  # 系统监控模块
     path(f'{base_api}cmdb/', include('cmdb.urls')),  # 资产管理模块
     path(f'{base_api}information/', include('information.urls')),  # 个人中心模块
-    path(f'{base_api}chatbot/', include('chatbot.urls')),  # 个人中心模块
+    path(f'{base_api}chatbot/', include('chatbot.urls')),  # 聊天機器人模組
+    path(f'{base_api}courses/', include('courses.urls')),  # 書籍模組
 
     # swagger(API文档)
     re_path(rf'^{base_api}swagger(?P<format>\.json|\.yaml)$',
