@@ -35,8 +35,6 @@ class BooksViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Upda
         - 成功時返回 HTTP 201 Created 狀態
         - 失敗時返回 HTTP 400 Bad Request 狀態
         """
-        print('post')
-        print(request.data)
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             serializer.save()

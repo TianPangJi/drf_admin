@@ -10,5 +10,6 @@ urlpatterns = [
     # path('save-message/', centre.SaveMessageAPIView.as_view()), 
     # path('get-message/', centre.GetMessageAPIView.as_view()), 
     path('books/', books.BooksViewSet.as_view()), 
+    path('books/<int:pk>/', books.BooksViewSet.as_view()), 
 
 ]
