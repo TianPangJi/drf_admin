@@ -1,6 +1,6 @@
 import openai
 # https://platform.openai.com/api-keys
-openai.api_key = "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"  # 替换为您的 OpenAI API 密钥
+openai.api_key = "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"  # 替换为您的 OpenAI API 密钥
 
 
 def get_gpt_response(prompt):
