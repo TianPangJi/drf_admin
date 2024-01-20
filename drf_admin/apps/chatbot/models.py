@@ -39,7 +39,7 @@ class ChatMessage(models.Model):
 
     class Meta:
         # 設置數據庫表名稱
-        db_table = 'chat_message'
+        db_table = 'chat_log'
         # 設置對象的可讀名稱
         verbose_name = '聊天訊息'
         verbose_name_plural = '聊天訊息'

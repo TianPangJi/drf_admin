@@ -63,6 +63,8 @@ INSTALLED_APPS = [
     'cmdb',
     'information',
     'chatbot',
+    # 'courses',
+    'drf_admin.apps.courses',
 ]
 
 MIDDLEWARE = [
