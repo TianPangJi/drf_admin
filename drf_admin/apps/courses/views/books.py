@@ -57,4 +57,19 @@ class BooksViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Upda
         - 根據提供的 ID 刪除指定的書籍記錄
         - 成功時返回 HTTP 204 No Content 狀態
         """
-        return self.destroy(request, *args, **kwargs)
+        if 'pk' in kwargs:
+            # 單獨刪除
+            return self.destroy(request, *args, **kwargs)
+        else:
+            # 批量刪除
+            ids = request.data.get('ids', [])
+            if not ids:
+                return Response({"detail": "未提供 ID 列表。"}, status=status.HTTP_400_BAD_REQUEST)
+
+            with transaction.atomic():
+                books = Book.objects.filter(book_id__in=ids)
+                if not books.exists():
+                    return Response({"detail": "找不到指定的書籍。"}, status=status.HTTP_404_NOT_FOUND)
+                books.delete()
+
+            return Response(status=status.HTTP_204_NO_CONTENT)
