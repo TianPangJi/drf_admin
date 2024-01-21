@@ -8,7 +8,7 @@ class StudentBookBot(models.Model):
     """
     學生書籍機器人模型
     """
-    id = models.BigAutoField(primary_key=True, verbose_name='機器人ID')
+    bot_id = models.BigAutoField(primary_key=True, verbose_name='機器人ID')
 
     student = models.ForeignKey(Users, on_delete=models.CASCADE, verbose_name='學生')
     book = models.ForeignKey(Book, on_delete=models.CASCADE, verbose_name='書籍')
