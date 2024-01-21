@@ -8,13 +8,13 @@ class StudentBookBot(models.Model):
     """
     學生書籍機器人模型
     """
-    bot_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name='機器人ID')
+    id = models.BigAutoField(primary_key=True, verbose_name='機器人ID')
 
     student = models.ForeignKey(Users, on_delete=models.CASCADE, verbose_name='學生')
     book = models.ForeignKey(Book, on_delete=models.CASCADE, verbose_name='書籍')
 
     class Meta:
-        unique_together = ('student', 'book', 'bot_id')
+        unique_together = ('student', 'book')
         verbose_name = '學生書籍機器人'
 
 
@@ -26,8 +26,8 @@ class StudentBookBot(models.Model):
 class ChatMessage(models.Model):
     # 機器人ID - 一個機器人，裡面有各個聊天室ID
     # student_book_bot = models.ForeignKey(StudentBookBot, on_delete=models.CASCADE, related_name='chat_messages', verbose_name='學生書籍機器人',default=1)
-    # student_book_bot = models.ForeignKey(StudentBookBot, on_delete=models.CASCADE, related_name='chat_messages', verbose_name='學生書籍機器人',default=1)
-    student_book_bot = models.CharField(max_length=100,default=1)
+    student_book_bot = models.ForeignKey(StudentBookBot, on_delete=models.CASCADE, related_name='chat_messages', verbose_name='學生書籍機器人',default=1)
+    # student_book_bot = models.CharField(max_length=100,default=1)
 
 
     # 聊天室ID - 同一個聊天室的訊息，聊天室ID都一樣
@@ -56,11 +56,11 @@ class ChatMessage(models.Model):
         if not self.message_id:
             # 生成訊息編號
             current_timestamp = now()
-            self.message_id = f"{self.bot_id}-{self.chatroom_id}-{current_timestamp.strftime('%Y%m%d%H%M%S%f')}"
+            self.message_id = f"{self.student_book_bot_id}-{self.chatroom_id}-{current_timestamp.strftime('%Y%m%d%H%M%S%f')}"
         super(ChatMessage, self).save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.bot_id}-{self.chatroom_id}-{self.message_id}"
+        return f"{self.student_book_bot_id}-{self.chatroom_id}-{self.message_id}"
 
     class Meta:
         # 設置對象的可讀名稱

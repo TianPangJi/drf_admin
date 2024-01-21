@@ -4,8 +4,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.db import transaction
 
-from chatbot.backend import get_gpt_response
-from chatbot.models import ChatMessage
+from chatbot.backend import create_student_book_bot, get_gpt_response
+from chatbot.models import ChatMessage, StudentBookBot
 from chatbot.serializers.centre import ChatMessageSerializer  # 導入 Response
 
 def save_chat_message(data):
@@ -23,21 +23,28 @@ class ChatMessageUpdateAPIView(mixins.UpdateModelMixin, GenericAPIView):
     - return: 修改聊天訊息
     """
     def put(self, request, *args, **kwargs):
-        bot_id = request.data.get('bot_id')
+        student_book_bot_id = request.data.get('student_book_bot_id')
         chatroom_id = request.data.get('chatroom_id')
         sender = request.data.get('sender')
         message = request.data.get('message')
         tag = '測試'
 
+        # 检查 StudentBookBot 中是否存在 student_book_bot_id
+        if not StudentBookBot.objects.filter(bot_id=student_book_bot_id).exists():
+            print('create_student_book_bot')
+            create_student_book_bot(request)
+            # return Response({"error": "无效的 student_book_bot_id"}, status=status.HTTP_400_BAD_REQUEST)
+
+
         user_data = {
-            'bot_id': bot_id,
+            'student_book_bot_id': student_book_bot_id,
             'chatroom_id': chatroom_id,
             'sender': sender,
             'message': message,
             'tag': tag,
         }
         bot_data = {
-            'bot_id': bot_id,
+            'student_book_bot_id': student_book_bot_id,
             'chatroom_id': chatroom_id,
             'sender': 'bot',
             'message': get_gpt_response(message),
@@ -76,15 +83,15 @@ class GetMessageAPIView(mixins.UpdateModelMixin, GenericAPIView):
         # 從請求中檢索 bot_id 和 chatroom_id。
         # 在這裡，我假設這些作為查詢參數發送。
         # bot_id = request.query_params.get('bot_id')
-        bot_id='0'
+        student_book_bot_id=1
         # # chatroom_id = request.query_params.get('chatroom_id')
         chatroom_id ='0'
-        if not bot_id or not chatroom_id:
-            return Response({"error": "缺少 bot_id 或 chatroom_id"}, status=400)
+        if not student_book_bot_id or not chatroom_id:
+            return Response({"error": "缺少 student_book_bot_id 或 chatroom_id"}, status=400)
 
         # 查詢 ChatMessage 模型
         messages = ChatMessage.objects.filter(
-            bot_id=bot_id, chatroom_id=chatroom_id
+            student_book_bot_id=student_book_bot_id, chatroom_id=chatroom_id
         ).order_by('timestamp')  # 如果需要，按時間戳排序
 
         # 格式化數據
