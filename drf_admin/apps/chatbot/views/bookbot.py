@@ -6,9 +6,11 @@ from chatbot.models import StudentBookBot
 from chatbot.serializers.bookbot import StudentBookBotSerializer
 
 class StudentBookBotView(APIView):
-    def get(self, request, user_id, book_id, format=None):
+    def get(self, request, format=None):
         try:
-            student_book_bot = StudentBookBot.objects.get(student_id=user_id, book_id=book_id)
+            student = request.query_params.get('student')
+            book = request.query_params.get('book')
+            student_book_bot = StudentBookBot.objects.get(student=student, book=book)
             serializer = StudentBookBotSerializer(student_book_bot)
             return Response(serializer.data)
         except StudentBookBot.DoesNotExist:
