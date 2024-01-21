@@ -29,22 +29,15 @@ class ChatMessageUpdateAPIView(mixins.UpdateModelMixin, GenericAPIView):
         message = request.data.get('message')
         tag = '測試'
 
-        # 检查 StudentBookBot 中是否存在 student_book_bot_id
-        if not StudentBookBot.objects.filter(bot_id=student_book_bot_id).exists():
-            print('create_student_book_bot')
-            create_student_book_bot(request)
-            # return Response({"error": "无效的 student_book_bot_id"}, status=status.HTTP_400_BAD_REQUEST)
-
-
         user_data = {
-            'student_book_bot_id': student_book_bot_id,
+            'bot_id': student_book_bot_id,
             'chatroom_id': chatroom_id,
             'sender': sender,
             'message': message,
             'tag': tag,
         }
         bot_data = {
-            'student_book_bot_id': student_book_bot_id,
+            'bot_id': student_book_bot_id,
             'chatroom_id': chatroom_id,
             'sender': 'bot',
             'message': get_gpt_response(message),
@@ -82,16 +75,16 @@ class GetMessageAPIView(mixins.UpdateModelMixin, GenericAPIView):
     def get(self, request, *args, **kwargs):
         # 從請求中檢索 bot_id 和 chatroom_id。
         # 在這裡，我假設這些作為查詢參數發送。
-        # bot_id = request.query_params.get('bot_id')
-        student_book_bot_id=1
+        bot_id = request.query_params.get('bot_id')
+        # student_book_bot_id=1
         # # chatroom_id = request.query_params.get('chatroom_id')
         chatroom_id ='0'
-        if not student_book_bot_id or not chatroom_id:
-            return Response({"error": "缺少 student_book_bot_id 或 chatroom_id"}, status=400)
+        if not bot_id or not chatroom_id:
+            return Response({"error": "缺少 bot_id 或 chatroom_id"}, status=400)
 
         # 查詢 ChatMessage 模型
         messages = ChatMessage.objects.filter(
-            student_book_bot_id=student_book_bot_id, chatroom_id=chatroom_id
+            bot_id=bot_id, chatroom_id=chatroom_id
         ).order_by('timestamp')  # 如果需要，按時間戳排序
 
         # 格式化數據

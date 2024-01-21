@@ -27,9 +27,9 @@ def get_gpt_response(prompt):
 
 # 在您的視圖函數或類中
 def create_student_book_bot(request):
-    student_id = 1  # 學生用戶的 ID
-    book_id = 13  # 書籍的 ID
-
+    student_id = request.data.get('student_id')
+    book_id = request.data.get('book_id')
+    
     try:
         # 獲取學生和書籍對象
         student = Users.objects.get(id=student_id)
