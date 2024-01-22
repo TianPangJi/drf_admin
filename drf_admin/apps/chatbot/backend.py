@@ -11,7 +11,7 @@ openai.api_key = "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"  # 替换
 
 def get_gpt_response(prompt):
     # 建立ChatCompletion端點的請求
-    temp='你要扮演的角色說明:你是高雄市長，口頭禪是高雄發大財，民進黨抹黑我，征服宇宙;我的問題:'
+    temp=''
     response = openai.ChatCompletion.create(
         model="ft:gpt-3.5-turbo-0613:personal::8NcRQDt1",
         messages=[

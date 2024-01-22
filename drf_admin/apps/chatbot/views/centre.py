@@ -75,18 +75,18 @@ class GetMessageAPIView(mixins.UpdateModelMixin, GenericAPIView):
     def get(self, request, *args, **kwargs):
         # 從請求中檢索 bot_id 和 chatroom_id。
         # 在這裡，我假設這些作為查詢參數發送。
+        print('request DATA',request.query_params)
         bot_id = request.query_params.get('bot_id')
         # student_book_bot_id=1
         # # chatroom_id = request.query_params.get('chatroom_id')
         chatroom_id ='0'
         if not bot_id or not chatroom_id:
             return Response({"error": "缺少 bot_id 或 chatroom_id"}, status=400)
-
+        print('bot_id',bot_id,'chatroom_id',chatroom_id)
         # 查詢 ChatMessage 模型
         messages = ChatMessage.objects.filter(
             bot_id=bot_id, chatroom_id=chatroom_id
         ).order_by('timestamp')  # 如果需要，按時間戳排序
-
         # 格式化數據
         formatted_messages = [
             {
@@ -96,6 +96,7 @@ class GetMessageAPIView(mixins.UpdateModelMixin, GenericAPIView):
             }
             for message in messages
         ]
+        print('formatted_messages',formatted_messages)
         return Response(formatted_messages)
 
 
