@@ -10,6 +10,7 @@
     * [安裝教程](https://blog.csdn.net/qq_34195507/article/details/94558862)
 
 ### 後端運行
+####[操作影片](https://drive.google.com/file/d/1R7ilOs6_h92KCHC8I-FpJSNTmU9JYaYz/view?usp=drive_link)
 1. 版本說明
     * Python 3.6.2(建議使用Python3.x以上版本)
     * Redis 3.2.100
@@ -61,6 +62,11 @@
             ```
     * 接口文檔Swagger
         * http://127.0.0.1:8769/api/swagger/
+    * 如果聊天功能出現接口錯誤，去重開一個api，並更改
+        ```shell
+            drf_admin\apps\chatbot\backend.py
+            openai.api_key = "TOKEN"  # 替换为您的 OpenAI API 密钥
+            ```
 
 ### 前端運行
 1. 版本說明
