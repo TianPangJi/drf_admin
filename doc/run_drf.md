@@ -12,14 +12,14 @@
 ### 後端運行
 ####[操作影片](https://drive.google.com/file/d/1R7ilOs6_h92KCHC8I-FpJSNTmU9JYaYz/view?usp=drive_link)
 1. 版本說明
-    * Python 3.6.2(建議使用Python3.x以上版本)
+    * Python 3.9.0(建議使用Python3.x以上版本)
     * Redis 3.2.100
     * ~~MySQL~~ 待使用
 2. 環境安裝
     * Python
         * 建議使用Python虛擬環境，不占用系統Python
         * 虛擬環境可使用venv、virtualenv
-        * 安裝Python3.6版本以上
+        * 安裝Python3.9.0
     * Redis
         * 安裝Redis3.2版本以上
         * 開啟Redis空間通知功能，設置notify-keyspace-events KEA
