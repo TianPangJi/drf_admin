@@ -1,5 +1,7 @@
 from rest_framework import serializers
 from chatbot.models import ChatMessage
+from courses.serializers.books import BooksSerializer
+from system.serializers.users import UsersSerializer
 
 class ChatMessageSerializer(serializers.ModelSerializer):
     class Meta:
