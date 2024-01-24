@@ -6,7 +6,7 @@ from chatbot.models import StudentBookBot
 from drf_admin.apps.courses.models import Book
 from oauth.models import Users
 # https://platform.openai.com/api-keys
-openai.api_key = "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"  # 替换为您的 OpenAI API 密钥
+openai.api_key = "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"  # 替换为您的 OpenAI API 密钥
 
 
 def get_gpt_response(prompt):

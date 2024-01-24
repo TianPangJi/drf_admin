@@ -31,7 +31,7 @@
             ```shell
             git clone https://github.com/peter1421/drf_admin
             ```
-    * 虛擬環境配置
+    * 虛擬環境配置(python 3.9.0)
         * ```shell
             python -m  venv venv 
             venv/Scripts/Activate.ps1
@@ -46,6 +46,10 @@
     * 數據庫遷移
         * ```shell
             python manage.py migrate
+            ```
+    * 如果有出問題 重新裝一次openai
+        * ```shell
+            pip install openai
             ```
     * ~~初始化數據庫基礎數據~~(已有現成的資料庫)
         * ```shell
