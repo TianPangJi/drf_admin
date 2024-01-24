@@ -4,8 +4,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.db import transaction
 
-from chatbot.backend import create_student_book_bot, get_gpt_response
-from chatbot.models import ChatMessage, StudentBookBot
+from chatbot.backend import get_gpt_response
+from chatbot.models import ChatMessage
 from chatbot.serializers.centre import ChatMessageSerializer  # 導入 Response
 
 def save_chat_message(data):

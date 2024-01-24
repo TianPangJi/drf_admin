@@ -47,9 +47,9 @@
         * ```shell
             python manage.py migrate
             ```
-    * 初始化數據庫基礎數據
+    * ~~初始化數據庫基礎數據~~(已有現成的資料庫)
         * ```shell
-            python manage.py loaddata init.json
+            python manage.py loaddata init.json(略過)
             ```
     * 啟動Django項目
         * ```shell
