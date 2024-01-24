@@ -29,10 +29,10 @@
 #### 项目源码
 |     |   后端源码  |   前端源码  |
 |---  |--- | --- |
-|  github   |  https://github.com/TianPangJi/drf_admin   |  https://github.com/TianPangJi/fe_admin   |
+|  github   |  https://github.com/peter1421/drf_admin   |  https://github.com/peter1421/fe_admin   |
 
 #### 项目启动
-* [启动项目文档](https://github.com/TianPangJi/drf_admin/blob/master/doc/run_drf.md)
+* [启动项目文档](https://github.com/peter1421/drf_admin/blob/master/doc/run_drf.md)
 
 #### 项目文档
 * [一、drf_admin(权限RBAC)后台管理系统(介绍篇)](https://blog.csdn.net/Mr_w_ang/article/details/111303774)

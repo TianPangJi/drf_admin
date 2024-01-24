@@ -1,91 +1,96 @@
-# DRF-ADMIN 后台管理系统
+# DRF-ADMIN 後台管理系統
 
-### 开发环境
-**本项目在win10中开发，未在Linux中运行(Linux中可能存在Bug，建议使用Windows运行)**
+### 開發環境
+**本項目在win10中開發，未在Linux中運行(Linux中可能存在Bug，建議使用Windows運行)**
 
-### 编辑器
+### 編輯器
 1. Pycharm
-    * [安装教程](https://www.runoob.com/w3cnote/pycharm-windows-install.html)
+    * [安裝教程](https://www.runoob.com/w3cnote/pycharm-windows-install.html)
 2. Visual Studio Code
-    * [安装教程](https://blog.csdn.net/qq_34195507/article/details/94558862)
+    * [安裝教程](https://blog.csdn.net/qq_34195507/article/details/94558862)
 
-### 后端运行
-1. 版本说明
-    * Python 3.6.2(建议使用Python3.x以上版本)
+### 後端運行
+1. 版本說明
+    * Python 3.6.2(建議使用Python3.x以上版本)
     * Redis 3.2.100
     * ~~MySQL~~ 待使用
-2. 环境安装
+2. 環境安裝
     * Python
-        * 建议使用Python虚拟环境，不占用系统Python
-        * 虚拟环境可使用venv、virtualenv
-        * 安装Python3.6版本以上
+        * 建議使用Python虛擬環境，不占用系統Python
+        * 虛擬環境可使用venv、virtualenv
+        * 安裝Python3.6版本以上
     * Redis
-        * 安装Redis3.2版本以上
-        * 开启Redis空间通知功能，设置notify-keyspace-events KEA
+        * 安裝Redis3.2版本以上
+        * 開啟Redis空間通知功能，設置notify-keyspace-events KEA
     * Git
-        * 安装Git，用于代码拉取及提交
-3. 项目启动
-    * 拉取后端代码
-        * [drf_admin](https://github.com/TianPangJi/drf_admin) ，在页面中直接Download ZIP
-        * 或使用如下Git命令clone代码
-            ```shell script
-            git clone https://github.com/TianPangJi/drf_admin.git
+        * 安裝Git，用於代碼拉取及提交
+3. 項目啟動
+    * 拉取後端代碼
+        * [drf_admin](https://github.com/peter1421/drf_admin)，在頁面中直接Download ZIP
+        * 或使用如下Git命令clone代碼
+            ```shell
+            git clone https://github.com/peter1421/drf_admin
             ```
-    * 安装Python第三方包
-        * ```shell script
+    * 虛擬環境配置
+        * ```shell
+            python -m  venv venv 
+            venv/Scripts/Activate.ps1
+            ```
+    * 安裝Python第三方包
+        * ```shell
             pip install -r requirements.txt
             ```
     * 配置Django配置文件
-        * 默认使用SQLite，如使用MySQL，请更改settings/dev.py下的DATABASES参数
-        * redis配置，配置settings/dev.py下REDIS_HOST、REDIS_PORT、REDIS_PWD等参数
-    * 数据库迁移
-        * ```shell script
+        * 默認使用SQLite，如使用MySQL，請更改settings/dev.py下的DATABASES參數
+        * redis配置，配置settings/dev.py下REDIS_HOST、REDIS_PORT、REDIS_PWD等參數
+    * 數據庫遷移
+        * ```shell
             python manage.py migrate
             ```
-    * 初始化数据库基础数据
-        * ```shell script
+    * 初始化數據庫基礎數據
+        * ```shell
             python manage.py loaddata init.json
             ```
-    * 启动Django项目
-        * ```shell script
+    * 啟動Django項目
+        * ```shell
             python manage.py runserver 0.0.0.0:8769
             ```
-    * 接口文档Swagger
+    * 接口文檔Swagger
         * http://127.0.0.1:8769/api/swagger/
 
-### 前端运行
-1. 版本说明
+### 前端運行
+1. 版本說明
     * Node.js >10.0
-2. 环境安装
-    * Node.js，安装https://nodejs.org/en/download/
-    * 拉取前端代码
-3. 项目启动
-    * 拉取前端代码
-        * [fe_admin](https://github.com/TianPangJi/fe_admin) ，在页面中直接Download ZIP
-        * 或使用如下Git命令clone代码
-            ```shell script
-            git clone https://github.com/TianPangJi/fe_admin.git
+2. 環境安裝
+    * Node.js，安裝https://nodejs.org/en/download/
+    * 拉取前端代碼
+3. 項目啟動
+    * 拉取前端代碼
+        * [fe_admin](https://github.com/peter1421/fe_admin)，在頁面中直接Download ZIP
+        * 或使用如下Git命令clone代碼
+            ```shell
+            git clone https://github.com/peter1421/fe_admin
             ```
-    * 安装第三方包
-        * ```shell script
+    * 安裝第三方包
+        * ```shell
           npm i  
             ```
-    * 启动Vue项目
-        * 如后端使用8769端口则，无需修改配置文件，如若修改后端启动端口，则需修改**.env.development**文件中的端口
-        * ```shell script
+    * 啟動Vue項目
+        * 如後端使用8769端口則，無需修改配置文件，如若修改後端啟動端口，則需修改**.env.development**文件中的端口
+        * ```shell
             npm run dev
             ```
 
-### 后置说明
-1. 页面登录地址
+### 後置說明
+1. 頁面登錄地址
     * http://localhost:9527/
-2. 账户、角色、权限
-    * Django 初始化数据库基础数据后，会生成2个账户、2个角色、项目权限
-3. 账户
-    * **admin/123456**，(admin为用户名，123456为密码，该账户为超级管理员用户，具有项目所用权限)
-    * **visitor/123456**，(visitor为用户名，123456为密码，该账户为测试访客用户，具有项目部分权限)
+2. 賬戶、角色、權限
+    * Django 初始化數據庫基礎數據後，會生成2個賬戶、2個角色、項目權限
+3. 賬戶
+    * **admin/123456**，(admin為用戶名，123456為密碼，該賬戶為超級管理員用戶，具有項目所用權限)
+    * **visitor/123456**，(visitor為用戶名，123456為密碼，該賬戶為測試訪客用戶，具有項目部分權限)
 4. 角色
-    * **admin**，(admin角色，默认拥有项目所有权限；可给用户授予角色来给用户配置权限)
-    * **visitor**，(visitor角色，默认拥有项目部分权限；可给用户授予角色来给用户配置权限)
-5. 登录
-    * 现在可以使用账户登录系统去体验了，加油搬砖人!!
+    * **admin**，(admin角色，默認擁有項目所有權限；可給用戶授予角色來給用戶配置權限)
+    * **visitor**，(visitor角色，默認擁有項目部分權限；可給用戶授予角色來給用戶配置權限)
+5. 登錄
+    * 現在可以使用賬戶登錄系統去體驗了，加油搬磚人!!
