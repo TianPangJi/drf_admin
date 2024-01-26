@@ -27,7 +27,8 @@ sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
 SECRET_KEY = 'mppodn1q7pk7hh)da39+yc1$^rcovyc)$lt69*wprdz_mjayaa'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
+# DEBUG = True
 
 ALLOWED_HOSTS = ['*', '127.0.0.1']
 
@@ -93,9 +94,12 @@ MIDDLEWARE = [
 CORS_ORIGIN_WHITELIST = (
     'http://127.0.0.1:9527',
     'http://localhost:9527',
+    'http://0.0.0.0:9527',
+    'http://140.115.126.57:9527',
 )
 # 允许携带cookie
 CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_ALL_ORIGINS = True
 
 ROOT_URLCONF = 'drf_admin.urls'
 
