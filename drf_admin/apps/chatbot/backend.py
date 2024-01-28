@@ -1,7 +1,9 @@
 import openai
-# https://platform.openai.com/api-keys
-openai.api_key = "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"  # 替换为您的 OpenAI API 密钥
+from django.conf import settings
 
+# https://platform.openai.com/api-keys
+# openai.api_key = "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"  # 替换为您的 OpenAI API 密钥
+openai.api_key=settings.OPENAI_API_KEY
 
 
 def get_gpt_response(prompt):
