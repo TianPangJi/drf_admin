@@ -4,8 +4,9 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.db import transaction
 
-from chatbot.backend import get_gpt_response
-from chatbot.models import ChatMessage
+
+from chatbot.backend import  get_gpt_response
+from chatbot.models import ChatMessage, StudentBookBot
 from chatbot.serializers.centre import ChatMessageSerializer  # 導入 Response
 
 def save_chat_message(data):
@@ -22,13 +23,16 @@ class ChatMessageUpdateAPIView(mixins.UpdateModelMixin, GenericAPIView):
     - status: 200(成功)
     - return: 修改聊天訊息
     """
+    
     def put(self, request, *args, **kwargs):
+        print('request.data',request.data)
         student_book_bot_id = request.data.get('student_book_bot_id')
         chatroom_id = request.data.get('chatroom_id')
         sender = request.data.get('sender')
         message = request.data.get('message')
         tag = '測試'
-
+        print('student_book_bot_id',student_book_bot_id)
+        # todo selializer = ChatMessageSerializer(data=request.data)
         user_data = {
             'bot_id': student_book_bot_id,
             'chatroom_id': chatroom_id,
@@ -36,6 +40,9 @@ class ChatMessageUpdateAPIView(mixins.UpdateModelMixin, GenericAPIView):
             'message': message,
             'tag': tag,
         }
+        print('87')
+        print(' get_gpt_response(message)', get_gpt_response(message))
+        print('877')
         bot_data = {
             'bot_id': student_book_bot_id,
             'chatroom_id': chatroom_id,
@@ -43,12 +50,15 @@ class ChatMessageUpdateAPIView(mixins.UpdateModelMixin, GenericAPIView):
             'message': get_gpt_response(message),
             'tag': tag,
         }
+        print('user_data',user_data)
         try:
             with transaction.atomic():
                 # 保存用戶消息
                 user_response = save_chat_message(user_data)
                 # 保存機器人回復
                 bot_response = save_chat_message(bot_data)
+                print('user_response',user_response)
+                print('bot_response',bot_response)
                 return Response({
                     'user_message': user_response,
                     'bot_message': bot_response
