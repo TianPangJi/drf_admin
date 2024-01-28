@@ -3,7 +3,7 @@ name: Bug回報
 about: Bug回報
 title: ''
 labels: bug
-assignees: peter1421
+assignees: ''
 
 ---
 
