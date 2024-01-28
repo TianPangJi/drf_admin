@@ -49,6 +49,7 @@ class BooksViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Upda
         - 成功時返回 HTTP 200 OK 狀態
         - 失敗時返回 HTTP 400 Bad Request 狀態
         """
+        print(request.data)
         return self.update(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
