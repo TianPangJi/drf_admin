@@ -14,7 +14,8 @@ import os
 import sys
 
 import psutil
-
+# 导入config.py中的所有变量
+from .config import *
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -383,3 +384,5 @@ LOGGING = {
         }
     }
 }
+
+OPENAI_API_KEY=OPENAI_API_KEY
