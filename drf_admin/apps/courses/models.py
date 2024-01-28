@@ -6,24 +6,6 @@ class Book(models.Model):
     """
     書籍
     """
-    DIFFICULTY_CHOICES = [
-        ('繪本', _('繪本')),
-        ('橋梁書', _('橋梁書')),
-        ('初階文字書', _('初階文字書')),
-        ('中階文字書', _('中階文字書')),
-        ('高階文字書', _('高階文字書')),
-    ]
-
-    CATEGORY_CHOICES = [
-        ('小說', _('小說')),
-        ('非小說', _('非小說')),
-        ('科學', _('科學')),
-        ('歷史', _('歷史')),
-        ('故事', _('故事')),
-        ('人社', _('人社')),
-        ('其他', _('其他')),
-        # 可根據需求添加更多選項
-    ]
 
     book_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=200, blank=False, verbose_name=_('書籍名稱'))
@@ -32,8 +14,8 @@ class Book(models.Model):
     author = models.CharField(max_length=100, blank=True, null=True, verbose_name=_('書籍作者'))
     publisher = models.CharField(max_length=100, blank=True, null=True, verbose_name=_('書籍出版社'))
     publish_date = models.DateField(blank=True, null=True, verbose_name=_('書籍出版日期'))
-    category = models.CharField(max_length=100, choices=CATEGORY_CHOICES, blank=True, null=True, verbose_name=_('書籍分類'))
-    difficulty = models.CharField(max_length=50, choices=DIFFICULTY_CHOICES, blank=True, null=True, verbose_name=_('書籍難度'))
+    category = models.CharField(max_length=100,  blank=True, null=True, verbose_name=_('書籍分類'))
+    difficulty = models.CharField(max_length=50,blank=True, null=True, verbose_name=_('書籍難度'))
 
     class Meta:
         verbose_name = _('書籍')
