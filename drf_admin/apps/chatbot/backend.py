@@ -1,12 +1,7 @@
-import uuid
 import openai
-from rest_framework.response import Response
-from rest_framework import status
-from chatbot.models import StudentBookBot
-from drf_admin.apps.courses.models import Book
-from oauth.models import Users
 # https://platform.openai.com/api-keys
 openai.api_key = "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"  # 替换为您的 OpenAI API 密钥
+
 
 
 def get_gpt_response(prompt):
