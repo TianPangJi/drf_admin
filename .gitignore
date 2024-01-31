@@ -131,3 +131,4 @@ dmypy.json
 # Pyre type checker
 .pyre/
 config.py
+drf_admin/db.sqlite3
